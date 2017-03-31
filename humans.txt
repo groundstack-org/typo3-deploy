@@ -1,0 +1,19 @@
+/* TEAM */
+	Chef: Gabriele Heinrich-Hauer
+	Contact: www.hauer-heinrich.de
+	From: Passau, Bavaria, Germany
+
+	Web designer: 
+	Contact: www.hauer-heinrich.de
+	From: Bavaria, Germany
+
+	Developer: Christian Hackl
+	Contact: www.hauer-heinrich.de
+	Facebook: https://de-de.facebook.com/people/Christian-Hackl/100007889897625
+	From: Passau, Bavaria, Germany		
+
+/* SITE */
+	Last update: 2016/02/04
+	Language: Deutsch / English
+	Standards: HTML5, CSS3
+	Software: Sublime Text, FileZilla, FireBug
