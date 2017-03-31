@@ -84,6 +84,16 @@ if (file_exists(\$databaseCredentialsFile)) {
       ");
     }
 
+    if(!file_exists("typo3/humans.txt")) {
+      downloadFile("https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt", "typo3/humans.txt");
+    }
+    if(!file_exists("typo3/robots.txt")) {
+      downloadFile("https://raw.githubusercontent.com/Teisi/typo3-deploy/master/robots.txt");
+    }
+    if(!file_exists("typo3/.htaccess")) {
+      downloadFile("https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt", "typo3/humans.txt");
+    }
+
     unlink("typo3/typo3_src");
     unlink("typo3/typo3");
     unlink("typo3/index.php");
