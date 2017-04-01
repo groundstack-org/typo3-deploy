@@ -91,7 +91,7 @@
               <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName"><br />
               <label class="label label-name" for="db-name">Datenbank Benutzername</label><br />
               <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser"><br />
-              <label class="label label-name" for="db-password">Datenbank Benutzerpassword</label><br />
+              <label class="label label-name" for="db-password">Datenbank Benutzerpassword (character '&' not allowed)</label><br />
               <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort"><br />
               <label class="label label-name" for="db-host">Datenbank Host</label><br />
               <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost"><br />
@@ -100,7 +100,7 @@
             </li>
             <li class="form-install-tool">
               <label>Install Tool Password wird in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
-              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool Password</label><br />
+              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool Password (character '&' not allowed)</label><br />
               <input id="install-tool-pw" class="input" type="password" name="t3_install_tool" value=""><br />
             </li>
   					<li class="from_submit">
@@ -134,7 +134,8 @@ if(isset($_POST['sent'])) {
     $t3_db_host = escape_input($_POST['t3_db_host']);
     $t3_db_socket = escape_input($_POST['t3_db_socket']);
 
-    $t3_db_socket = escape_input($_POST['t3_install_tool']);
+    $t3_install_tool = escape_input($_POST['t3_install_tool']);
+    $t3_install_tool = md5($t3_install_tool);
   }
   echo "post data: " . $t3_version;
 
