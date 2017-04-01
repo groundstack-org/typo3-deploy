@@ -1,7 +1,6 @@
 RewriteEngine On
 # RewriteCond %{HTTPS} off
 # RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
-# test
 
 #####
 #
@@ -199,7 +198,7 @@ FileETag None
 # | Add your own rules here.
 # ----------------------------------------------------------------------
 
-Redirect /sitemap.txt http://haydn-oberneder.de/sitemap.xml
+Redirect /sitemap.txt http://www.YOUR_DOMAIN.de/sitemap.xml
 
 # ----------------------------------------------------------------------
 # | Komprimierung und Caching                                                    |
@@ -309,7 +308,7 @@ Redirect /sitemap.txt http://haydn-oberneder.de/sitemap.xml
   AddOutputFilterByType DEFLATE text/html
   AddOutputFilterByType DEFLATE text/xml
   AddOutputFilterByType DEFLATE text/css
-  AddOutputFilterByType DEFLATE text/vtt 
+  AddOutputFilterByType DEFLATE text/vtt
   AddOutputFilterByType DEFLATE text/x-component
   AddOutputFilterByType DEFLATE application/xml
   AddOutputFilterByType DEFLATE application/xhtml+xml
@@ -319,16 +318,16 @@ Redirect /sitemap.txt http://haydn-oberneder.de/sitemap.xml
   AddOutputFilterByType DEFLATE application/x-javascript
   AddOutputFilterByType DEFLATE application/x-httpd-php
   AddOutputFilterByType DEFLATE application/x-httpd-fastphp
-  AddOutputFilterByType DEFLATE application/atom+xml 
+  AddOutputFilterByType DEFLATE application/atom+xml
   AddOutputFilterByType DEFLATE application/json
-  AddOutputFilterByType DEFLATE application/ld+json 
-  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject 
-  AddOutputFilterByType DEFLATE application/x-font-ttf 
-  AddOutputFilterByType DEFLATE application/x-web-app-manifest+json 
-  AddOutputFilterByType DEFLATE font/opentype 
+  AddOutputFilterByType DEFLATE application/ld+json
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/x-web-app-manifest+json
+  AddOutputFilterByType DEFLATE font/opentype
   AddOutputFilterByType DEFLATE image/svg
   AddOutputFilterByType DEFLATE image/svg+xml
-  AddOutputFilterByType DEFLATE image/x-icon 
+  AddOutputFilterByType DEFLATE image/x-icon
 
   # Exception: Images
   SetEnvIfNoCase REQUEST_URI \.(?:gif|jpg|jpeg|png)$ no-gzip dont-vary
@@ -368,11 +367,11 @@ Redirect /sitemap.txt http://haydn-oberneder.de/sitemap.xml
 </IfModule>
 
 # If your server don't support ETags deactivate with "None" (and remove header)
-<IfModule mod_expires.c> 
-  <IfModule mod_headers.c> 
-    Header unset ETag 
-  </IfModule> 
-  FileETag None 
+<IfModule mod_expires.c>
+  <IfModule mod_headers.c>
+    Header unset ETag
+  </IfModule>
+  FileETag None
 </IfModule>
 
 # ----------------------------------------------------------------------
@@ -452,23 +451,23 @@ AddDefaultCharset UTF-8
 
 # ----------------------------------------------------------------------
 #   Wichtige Dateien gegen den Zugriff von außen blocken
-# ----------------------------------------------------------------------  
- 
+# ----------------------------------------------------------------------
+
 # Kein Zugriff auf die readme.html
 <files readme.html>
   Order Allow,Deny
   Deny from all
   Satisfy all
 </Files>
- 
+
 # Kein Zugriff auf die liesmich.html für die DE Edition
 <Files liesmich.html>
   Order Allow,Deny
   Deny from all
   Satisfy all
 </Files>
- 
-# Kein Zugriff auf das Error-Log 
+
+# Kein Zugriff auf das Error-Log
 <files error_log>
   Order allow,deny
   Deny from all
@@ -484,20 +483,20 @@ AddDefaultCharset UTF-8
 #<Files wp-login.php>
   #AuthName "Admin-Bereich"
   #AuthType Basic
-  #AuthUserFile dein/pfad/zur/.htpasswd 
+  #AuthUserFile dein/pfad/zur/.htpasswd
   #require valid-user
 #</Files>
 
 # ----------------------------------------------------------------------
 #   Hotlinking verbieten - WICHTIG: Füge Deine Domain hinzu, ansonsten werden keine Bilder angezeigt!
-# ---------------------------------------------------------------------- 
+# ----------------------------------------------------------------------
 # <IfModule mod_rewrite.c>
 #   RewriteEngine on
 #   RewriteCond %{HTTP_REFERER} !^$
 #   RewriteCond %{HTTP_REFERER} !^https://(www\.)?YOUR_DOMAIN\.de(/.*)?$ [NC]
 #   RewriteRule \.(jpg|jpeg|gif||png)$ - [F]
 # </ifModule>
- 
+
 #  # XML-RPC Schnittstelle komplett abschalten
 # <Files xmlrpc.php>
 #   Order Deny,Allow
