@@ -44,6 +44,7 @@
     .form-btn:active { opacity: 0.9; }
     .input { margin-bottom: 10px; }
     .btn-delete {  }
+    #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
     .hidden { display: none; }
     .warning { background-color: orange; color: #fff; }
     .error { background-color: darkred; color; #fff; }
@@ -101,7 +102,9 @@
             <li class="form-install-tool">
               <label>Install Tool Password wird in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
               <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool Password (character '&' not allowed)</label><br />
-              <input id="install-tool-pw" class="input" type="password" name="t3_install_tool" value=""><br />
+              <input type="password" class="input left form-control" id="install-tool-pw" name="t3_install_tool" value="" /> <br /><br />
+              <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" >Generate a password</a>
+              <div class="left" id="install-tool-pw-element"></div>
             </li>
   					<li class="from_submit">
   						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden">Send</button>
@@ -375,6 +378,50 @@ if(isset($_POST['sent'])) {
     }).fail(function() {
       label_info_version.text(label_info_version_init_text);
       console.log("getJSON failed!");
+    });
+  })(jQuery);
+  /*!
+   * pGenerator jQuery Plugin v1.0.5
+   * https://github.com/M1Sh0u/pGenerator
+   *
+   * Created by Mihai MATEI <mihai.matei@outlook.com>
+   * Released under the MIT License (Feel free to copy, modify or redistribute this plugin.)
+   */
+   (function($){var numbers_array=[],upper_letters_array=[],lower_letters_array=[],special_chars_array=[],$pGeneratorElement=null;var methods={init:function(options,callbacks)
+   {var settings=$.extend({'bind':'click','passwordElement':null,'displayElement':null,'passwordLength':16,'uppercase':!0,'lowercase':!0,'numbers':!0,'specialChars':!0,'additionalSpecialChars':[],'onPasswordGenerated':function(generatedPassword){}},options);for(var i=48;i<58;i++){numbers_array.push(i)}
+   for(i=65;i<91;i++){upper_letters_array.push(i)}
+   for(i=97;i<123;i++){lower_letters_array.push(i)}
+   special_chars_array=[33,35,36,42,123,125,47,63,58,59,95].concat(settings.additionalSpecialChars);return this.each(function(){$pGeneratorElement=$(this);$pGeneratorElement.bind(settings.bind,function(e){e.preventDefault();methods.generatePassword(settings)})})},generatePassword:function(settings)
+   {var password=new Array(),selOptions=settings.uppercase+settings.lowercase+settings.numbers+settings.specialChars,selected=0,no_lower_letters=new Array();var optionLength=Math.floor(settings.passwordLength/selOptions);if(settings.uppercase){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(upper_letters_array[randomFromInterval(0,upper_letters_array.length-1)]))}
+   no_lower_letters=no_lower_letters.concat(upper_letters_array);selected++}
+   if(settings.numbers){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(numbers_array[randomFromInterval(0,numbers_array.length-1)]))}
+   no_lower_letters=no_lower_letters.concat(numbers_array);selected++}
+   if(settings.specialChars){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(special_chars_array[randomFromInterval(0,special_chars_array.length-1)]))}
+   no_lower_letters=no_lower_letters.concat(special_chars_array);selected++}
+   var remained=settings.passwordLength-(selected*optionLength);if(settings.lowercase){for(var i=0;i<remained;i++){password.push(String.fromCharCode(lower_letters_array[randomFromInterval(0,lower_letters_array.length-1)]))}}else{for(var i=0;i<remained;i++){password.push(String.fromCharCode(no_lower_letters[randomFromInterval(0,no_lower_letters.length-1)]))}}
+   password=shuffle(password).join('');if(settings.passwordElement!==null){$(settings.passwordElement).val(password)}
+   if(settings.displayElement!==null){if($(settings.displayElement).is("input")){$(settings.displayElement).val(password)}else{$(settings.displayElement).text(password)}}
+   settings.onPasswordGenerated(password)}};function shuffle(o)
+   {for(var j,x,i=o.length;i;j=parseInt(Math.random()*i),x=o[--i],o[i]=o[j],o[j]=x);return o}
+   function randomFromInterval(from,to)
+   {return Math.floor(Math.random()*(to-from+1)+from)}
+   $.fn.pGenerator=function(method)
+   {if(methods[method]){return methods[method].apply(this,Array.prototype.slice.call(arguments,1))}
+   else if(typeof method==='object'||!method){return methods.init.apply(this,arguments)}
+   else{$.error('Method '+method+' does not exist on jQuery.pGenerator')}}})(jQuery);
+   (function($) {
+    $('#generate-install-pw').pGenerator({
+        'bind': 'click',
+        'passwordElement': '#install-tool-pw',
+        'displayElement': '#install-tool-pw-element',
+        'passwordLength': 16,
+        'uppercase': true,
+        'lowercase': true,
+        'numbers':   true,
+        'specialChars': true,
+        'onPasswordGenerated': function(generatedPassword) {
+        alert('My new generated password is ' + generatedPassword);
+        }
     });
   })(jQuery);
 </script>
