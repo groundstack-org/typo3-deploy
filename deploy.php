@@ -1,7 +1,3 @@
-<?php
-  $t3_version = "7.6.16";
-?>
-
 <!doctype html>
 <html>
 <head>
@@ -18,11 +14,35 @@
 
     body { font-family: sans-serif; }
     span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
-    div, #header, #main, #footer, #main-wrapper { float: left; width: 100%; }
+    div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
     #main-wrapper { padding: 15px 6%; }
     #header { border-bottom: 2px solid; margin-bottom: 10px; }
     #main > span { padding: 0 6%; }
     #main > div { margin: 10px 0; padding: 5px; border: 1px solid; }
+    #form { padding-top: 15px; padding-bottom: 30px; }
+    #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
+    select { background-color: #8BC3A3; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      -webkit-appearance: none;
+      -moz-appearance: none; }
+    select.t3_version { background-image: linear-gradient(45deg, transparent 50%, blue 50%), linear-gradient(135deg, blue 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
+      background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), 100% 0;
+      background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; }
+    select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(135deg, transparent 50%, white 50%), linear-gradient(to right, #000, #000);
+      background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, 100% 0;
+      background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; border-color: grey; outline: 0; }
+    .form-btn { width: 115px; display: block; height: auto; padding: 6px; color: #fff; background: #8BC3A3; border: none; border-radius: 3px; outline: none;
+      -webkit-transition: all 0.3s;
+      -moz-transition: all 0.3s;
+      transition: all 0.3s;
+      box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
+      -moz-box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
+      -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
+    .form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
+    .form-btn:active { opacity: 0.9; }
+    .btn-delete {  }
     .hidden { display: none; }
     .warning { background-color: orange; color: #fff; }
     .error { background-color: darkred; color; #fff; }
@@ -30,6 +50,13 @@
     .exists { background-color: grey; }
     .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
   </style>
+  <script>
+		var js_var = "delete";
+		var deleteScript = function() {
+			window.location.href = "deploy.php?php_var=" + escape(js_var);
+		}
+	</script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -38,198 +65,241 @@
       <h1>Typo3 simple deployment</h1>
     </header>
     <main id="main">
+      <div id="form">
+        <p>
+    			<strong>Nach Abschluss:</strong><br />
+    			Diese Datei unbedingt manuel löschen! ODER <button class="btn-delete form-btn" onclick="deleteScript()">Lösche mich!</button><br />
+    		</p>
+        <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+  				<ul class="">
+  					<li class="choose-version">
+  						<label class="" for="text_id">Hier Ihre gewünschte Version angeben:<br />(Bitte in dieser Form: 6.2.12)</label>
+  						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
+  					</li>
+  					<li style="display: none;">
+  						<label class="">Was möchten Sie machen?</label>
+  						<fieldset>
+  							<input type="radio" id="full" name="selection" value="full" checked="checked" required><label for="mc">Komplett Installation</label><br />
+  							<input type="radio" id="only-symlink" name="selection" value="symlinks"><label for="vi">Nur Symlinks erstellen</label><br />
+  							<input type="radio" id="only-download" name="selection" value="download"><label for="ae">Nur Typo3 downloaden und entpacken</label>
+  						</fieldset>
+  					</li>
+  					<li class="">
+  						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden">Send</button>
+  					</li>
+  				</ul>
+  			</form>
+      </div>
 <?php
+$t3_version = "empty";
 
-$t3_src_dir_name = "typo3_sources";
-$t3_version_dir = "typo3_src-{$t3_version}";
-$t3_zip_file = "{$t3_version_dir}.tar.gz";
-$typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/typo3_src-{$t3_version}.tar.gz";
-
-
-error_reporting(E_ALL);
-function downloadFile($url, $path) {
-    $newfname = $path;
-    $file = fopen($url, 'rb');
-    if($file) {
-        $newf = fopen($newfname, 'wb');
-        if($newf) {
-            while(!feof($file)) {
-                fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
-            }
-        }
-    }
-    if ($file) {
-        fclose($file);
-    }
-    if ($newf) {
-        fclose($newf);
-    }
+if (isset($_GET['php_var'])) {
+    unlink("deploy.php");
 }
+if(isset($_POST['sent'])) {
+  $t3_version = "";
 
-function deleteFile($path, $filename) {
-  $filepath = $path.$filename;
-  echo "<div class='delete-file-dir'>";
-  echo "<span class=''>Try to delete: '$filepath'...</span>";
-  unlink($filepath);
-
-  if(!file_exists($filepath)) {
-    echo "<span class='success'>Successfully deleted: '$filepath' or dosen't exists.</span>";
-  } else {
-    echo "<span class='warning'>Can't delete: '$filepath'!</span>";
+  function test_input($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
   }
 
-  echo "</div>";
-}
-
-function createSymlink($target, $link) {
-  echo "<div class='create-symlink'>";
-  echo "<span class=''>Try to create symlink: '{$link}' to '{$target}'...</span>";
-  symlink($target, $link);
-
-  if(file_exists($link)) {
-    echo "<span class='success'>Successfully created symlink '{$link}'.</span>";
-  } else {
-    echo "<span class='warning'>Can't create symlink '{$link}'.</span>";
+  if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $t3_version = test_input($_POST['t3_version']);
   }
+  echo "post data: " . $t3_version;
 
-  echo "</div>";
-}
+  $t3_src_dir_name = "typo3_sources";
+  $t3_version_dir = "typo3_src-{$t3_version}";
+  $t3_zip_file = "{$t3_version_dir}.tar.gz";
+  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/typo3_src-{$t3_version}.tar.gz";
 
-function createDir($dirname, $path = "") {
-  $filepath = $path.$dirname;
-  echo "<div class='create-dir'>";
-  echo "<span class=''>Try to create dir: '$filepath'...</span>";
-  mkdir($filepath);
-
-  if(file_exists($filepath)) {
-    echo "<span class='success'>Successfully created dir '$filepath'.</span>";
-  } else {
-    echo "<span class='warning'>Can't create dir '$filepath'.</span>";
-    exit();
-  }
-
-  echo "</div>";
-}
-function createFile($filename, $path = "") {
-  echo "<div class='create-file'>";
-  echo "<span class=''>Try to create file: '{$path}{$file}'...</span>";
-
-  if(file_exists($file)) {
-    echo "<span class='success'>Successfully created file '{$path}{$file}'.</span>";
-  } else {
-    echo "<span class='warning'>Can't create file '{$path}{$file}'!</span>";
-  }
-
-  echo "</div>";
-}
-function createExternalFile($url, $path_filename) {
-  echo "<div class='download-external-file'>";
-  echo "<span class=''>Try to download file: '{$url}'...</span>";
-  downloadFile($url, $path_filename);
-
-  if(file_exists($path_filename)) {
-    echo "<span class='success'>Successfully downloaded file '{$path_filename}'.</span>";
-  } else {
-    echo "<span class='warning'>Can't download file '{$path_filename}'!</span>";
-  }
-
-  echo "</div>";
-}
-
-function check_file_dir($filetype = "dir", $file, $path = "") {
-  $filepath = $path.$file;
-  echo "<div class='check-file-dir'>";
-  if(file_exists($filepath) && $filetype != "external_file") {
-    echo "<span class='exists'>File / Dir '{$filepath}' already exists!</span>";
-    echo "</div>";
-    return true;
-  } else {
-    if($filetype === "dir") {
-      createDir($file, $path);
-    } else if($filetype === "file") {
-      createFile($file, $path);
-    } else if($filetype === "symlink") {
-      createSymlink($path, $file);
-    } else if($filetype === "external_file") {
-      if(file_exists($file)) {
-        echo "<span class='exists'>File / Dir '{$file}' already exists!</span>";
-      } else {
-        createExternalFile($path, $file);
+  function downloadFile($url, $path) {
+      $newfname = $path;
+      $file = fopen($url, 'rb');
+      if($file) {
+          $newf = fopen($newfname, 'wb');
+          if($newf) {
+              while(!feof($file)) {
+                  fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
+              }
+          }
       }
+      if ($file) {
+          fclose($file);
+      }
+      if ($newf) {
+          fclose($newf);
+      }
+  }
+
+  function deleteFile($path, $filename) {
+    $filepath = $path.$filename;
+    echo "<div class='delete-file-dir'>";
+    echo "<span class=''>Try to delete: '$filepath'...</span>";
+    unlink($filepath);
+
+    if(!file_exists($filepath)) {
+      echo "<span class='success'>Successfully deleted: '$filepath' or dosen't exists.</span>";
     } else {
-      echo "<span class='error'>Wrong filetype: {$filetype}!</span>";
+      echo "<span class='warning'>Can't delete: '$filepath'!</span>";
     }
+
     echo "</div>";
   }
-}
 
-check_file_dir("dir", "typo3_config");
-check_file_dir("dir", "typo3");
-check_file_dir("dir", "typo3conf", "typo3/");
-check_file_dir("dir", $t3_src_dir_name);
+  function createSymlink($target, $link) {
+    echo "<div class='create-symlink'>";
+    echo "<span class=''>Try to create symlink: '{$link}' to '{$target}'...</span>";
+    symlink($target, $link);
 
-check_file_dir("external_file", "typo3/humans.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt");
-check_file_dir("external_file", "typo3/robots.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/robots.txt");
-check_file_dir("external_file", "typo3/.htaccess", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/.htaccess");
+    if(file_exists($link)) {
+      echo "<span class='success'>Successfully created symlink '{$link}'.</span>";
+    } else {
+      echo "<span class='warning'>Can't create symlink '{$link}'.</span>";
+    }
 
-check_file_dir("external_file", $t3_zip_file, $typo3_source);
-
-if (file_exists($t3_zip_file)) {
-  echo "<span>File {$t3_zip_file} exists</span>";
-
-  if(!file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
-    exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
+    echo "</div>";
   }
 
-  if (file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
-    echo "<span class='success'>Successfully extracted!</span>";
-    deleteFile("", $t3_zip_file);
+  function createDir($dirname, $path = "") {
+    $filepath = $path.$dirname;
+    echo "<div class='create-dir'>";
+    echo "<span class=''>Try to create dir: '$filepath'...</span>";
+    mkdir($filepath);
 
-    if(!file_exists("typo3/typo3conf/AdditionalConfiguration.php")) {
-      file_put_contents("typo3/typo3conf/AdditionalConfiguration.php", "
-<?php
-\$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db.php';
-if (file_exists(\$databaseCredentialsFile)) {
-    require_once (\$databaseCredentialsFile);
-}
-      ");
+    if(file_exists($filepath)) {
+      echo "<span class='success'>Successfully created dir '$filepath'.</span>";
+    } else {
+      echo "<span class='warning'>Can't create dir '$filepath'.</span>";
+      exit();
     }
 
-    if (!file_exists("typo3/FIRST_INSTALL")) {
-      file_put_contents("typo3/FIRST_INSTALL", "");
+    echo "</div>";
+  }
+  function createFile($filename, $path = "") {
+    echo "<div class='create-file'>";
+    echo "<span class=''>Try to create file: '{$path}{$file}'...</span>";
+
+    if(file_exists($file)) {
+      echo "<span class='success'>Successfully created file '{$path}{$file}'.</span>";
+    } else {
+      echo "<span class='warning'>Can't create file '{$path}{$file}'!</span>";
     }
 
-    if (!file_exists("typo3_config/typo3_db.php")) {
-      file_put_contents("typo3_config/typo3_db.php", "
-<?php
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = 'DATABASENAME';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = 'localhost';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = 'DATABASEUSERPASSWORT';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = 'DATABASEKUSERNAME';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '';
+    echo "</div>";
+  }
+  function createExternalFile($url, $path_filename) {
+    echo "<div class='download-external-file'>";
+    echo "<span class=''>Try to download file: '{$url}'...</span>";
+    downloadFile($url, $path_filename);
 
-// \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '';
-
-      ");
+    if(file_exists($path_filename)) {
+      echo "<span class='success'>Successfully downloaded file '{$path_filename}'.</span>";
+    } else {
+      echo "<span class='warning'>Can't download file '{$path_filename}'!</span>";
     }
 
-    deleteFile("typo3/", "typo3_src");
-    deleteFile("typo3/", "typo3");
-    deleteFile("typo3/", "index.php");
+    echo "</div>";
+  }
 
-    check_file_dir("symlink", "typo3/typo3_src", "../" . $t3_src_dir_name . "/" . $t3_version_dir . "/");
-    check_file_dir("symlink", "typo3/typo3", "typo3_src/typo3/");
-    check_file_dir("symlink", "typo3/index.php", "typo3_src/index.php");
-    if(file_exists("typo3/index.php")) {
-      echo "<div class='readyToTakeOff'><span class=''>Have fun :)</span></div>";
+  function check_file_dir($filetype = "dir", $file, $path = "") {
+    $filepath = $path.$file;
+    echo "<div class='check-file-dir'>";
+    if(file_exists($filepath) && $filetype != "external_file") {
+      echo "<span class='exists'>File / Dir '{$filepath}' already exists!</span>";
+      echo "</div>";
+      return true;
+    } else {
+      if($filetype === "dir") {
+        createDir($file, $path);
+      } else if($filetype === "file") {
+        createFile($file, $path);
+      } else if($filetype === "symlink") {
+        createSymlink($path, $file);
+      } else if($filetype === "external_file") {
+        if(file_exists($file)) {
+          echo "<span class='exists'>File / Dir '{$file}' already exists!</span>";
+        } else {
+          createExternalFile($path, $file);
+        }
+      } else {
+        echo "<span class='error'>Wrong filetype: {$filetype}!</span>";
+      }
+      echo "</div>";
+    }
+  }
+
+  check_file_dir("dir", "typo3_config");
+  check_file_dir("dir", "typo3");
+  check_file_dir("dir", "typo3conf", "typo3/");
+  check_file_dir("dir", $t3_src_dir_name);
+
+  check_file_dir("external_file", "typo3/humans.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt");
+  check_file_dir("external_file", "typo3/robots.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/robots.txt");
+  check_file_dir("external_file", "typo3/.htaccess", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/.htaccess");
+
+  check_file_dir("external_file", $t3_zip_file, $typo3_source);
+
+  if (file_exists($t3_zip_file)) {
+    echo "<span>File {$t3_zip_file} exists</span>";
+
+    if(!file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
+      exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
+    }
+
+    if (file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
+      echo "<span class='success'>Successfully extracted!</span>";
+      deleteFile("", $t3_zip_file);
+
+      if(!file_exists("typo3/typo3conf/AdditionalConfiguration.php")) {
+        file_put_contents("typo3/typo3conf/AdditionalConfiguration.php", "
+  <?php
+  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db.php';
+  if (file_exists(\$databaseCredentialsFile)) {
+      require_once (\$databaseCredentialsFile);
+  }
+        ");
+      }
+
+      if (!file_exists("typo3/FIRST_INSTALL")) {
+        file_put_contents("typo3/FIRST_INSTALL", "");
+      }
+
+      if (!file_exists("typo3_config/typo3_db.php")) {
+        file_put_contents("typo3_config/typo3_db.php", "
+  <?php
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = 'DATABASENAME';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = 'localhost';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = 'DATABASEUSERPASSWORT';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = 'DATABASEKUSERNAME';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '';
+
+  // \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '';
+
+        ");
+      }
+
+      deleteFile("typo3/", "typo3_src");
+      deleteFile("typo3/", "typo3");
+      deleteFile("typo3/", "index.php");
+
+      check_file_dir("symlink", "typo3/typo3_src", "../" . $t3_src_dir_name . "/" . $t3_version_dir . "/");
+      check_file_dir("symlink", "typo3/typo3", "typo3_src/typo3/");
+      check_file_dir("symlink", "typo3/index.php", "typo3_src/index.php");
+      if(file_exists("typo3/index.php")) {
+        echo "<div class='readyToTakeOff'><span class=''>Have fun :)</span></div>";
+      }
+
+    } else {
+      echo "<span>Extraction faild!</span>";
     }
 
   } else {
-    echo "<span>Extraction faild!</span>";
+    echo "<span>File {$t3_zip_file} dosent exists!</span>";
   }
-
-} else {
-  echo "<span>File {$t3_zip_file} dosent exists!</span>";
 }
 
 ?>
@@ -238,6 +308,42 @@ if (file_exists(\$databaseCredentialsFile)) {
 
   </footer>
 </div>
-<script></script>
+<script>
+  (function($) {
+    var i = 0;
+    $.fn.reverse = [].reverse;
+    function validate(s) {
+      var rgx = /^[0-9]*\.?[0-9]*\.?[0-9]*$/;
+      if(s.match(rgx)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    $("#form-t3-install").attr("action", "deploy.php");
+    $.getJSON("https://get.typo3.org/json", function(data) {
+      var items = [];
+      $.each(data, function(key, val) {
+        i++;
+        $.each(val.releases, function(k, v) {
+          var s = v.version.toString();
+          if(validate(s)) {
+            items.push(v.version);
+          }
+        });
+        if(i > 3) {
+          return false;
+        }
+      });
+      items.sort().reverse();
+      $(".choose-version input").replaceWith("<select class='t3_version' name='t3_version' required></select>");
+      var selectT3Version = $("select.t3_version");
+      $.each(items, function(i, el) {
+        selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
+      });
+      selectT3Version.find("option:first-child").attr("selected='selected'");
+    });
+  })(jQuery);
+</script>
 </body>
 </html>
