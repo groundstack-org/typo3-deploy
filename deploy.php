@@ -42,6 +42,7 @@
       -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
     .form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
     .form-btn:active { opacity: 0.9; }
+    .input { margin-bottom: 10px; }
     .btn-delete {  }
     .hidden { display: none; }
     .warning { background-color: orange; color: #fff; }
@@ -73,7 +74,7 @@
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
   				<ul class="">
   					<li class="choose-version">
-  						<label class="" for="text_id">Hier Ihre gewünschte Version angeben:<br />(Bitte in dieser Form: 6.2.12)</label>
+  						<label class="t3_version_label" for="text_id">Hier Ihre gewünschte Version angeben:<br /><span class="info">(Bitte in dieser Form: 6.2.12)</label>
   						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
   					</li>
   					<li style="display: none;">
@@ -84,7 +85,25 @@
   							<input type="radio" id="only-download" name="selection" value="download"><label for="ae">Nur Typo3 downloaden und entpacken</label>
   						</fieldset>
   					</li>
-  					<li class="">
+            <li class="form-db-data">
+              <label>Datenbank Zugangsdaten werden in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
+              <label class="label label-name" for="db-name">Datenbank Name</label><br />
+              <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName"><br />
+              <label class="label label-name" for="db-name">Datenbank Benutzername</label><br />
+              <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser"><br />
+              <label class="label label-name" for="db-password">Datenbank Benutzerpassword</label><br />
+              <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort"><br />
+              <label class="label label-name" for="db-host">Datenbank Host</label><br />
+              <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost"><br />
+              <label class="label label-name" for="db-socket">Datenbank Socket</label><br />
+              <input id="db-socket" class="input" type="text" name="t3_db_socket" value=""><br />
+            </li>
+            <li class="form-install-tool">
+              <label>Install Tool Password wird in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
+              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool Password</label><br />
+              <input id="install-tool-pw" class="input" type="password" name="t3_install_tool" value=""><br />
+            </li>
+  					<li class="from_submit">
   						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden">Send</button>
   					</li>
   				</ul>
@@ -97,9 +116,9 @@ if (isset($_GET['php_var'])) {
     unlink("deploy.php");
 }
 if(isset($_POST['sent'])) {
-  $t3_version = "";
+  $t3_version = $t3_db_user = $t3_db_name = $t3_db_user = $t3_db_host = $t3_db_socket = $t3_install_tool = "";
 
-  function test_input($data) {
+  function escape_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
@@ -107,7 +126,15 @@ if(isset($_POST['sent'])) {
   }
 
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $t3_version = test_input($_POST['t3_version']);
+    $t3_version = escape_input($_POST['t3_version']);
+
+    $t3_db_user = escape_input($_POST['t3_db_user']);
+    $t3_db_name = escape_input($_POST['t3_db_name']);
+    $t3_db_password = escape_input($_POST['t3_db_password']);
+    $t3_db_host = escape_input($_POST['t3_db_host']);
+    $t3_db_socket = escape_input($_POST['t3_db_socket']);
+
+    $t3_db_socket = escape_input($_POST['t3_install_tool']);
   }
   echo "post data: " . $t3_version;
 
@@ -271,13 +298,13 @@ if(isset($_POST['sent'])) {
       if (!file_exists("typo3_config/typo3_db.php")) {
         file_put_contents("typo3_config/typo3_db.php", "
   <?php
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = 'DATABASENAME';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = 'localhost';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = 'DATABASEUSERPASSWORT';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = 'DATABASEKUSERNAME';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = '{$t3_db_user}';
+  \$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '{$t3_db_socket}';
 
-  // \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '';
+  \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
         ");
       }
@@ -310,7 +337,7 @@ if(isset($_POST['sent'])) {
 </div>
 <script>
   (function($) {
-    var i = 0;
+    var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
     $.fn.reverse = [].reverse;
     function validate(s) {
       var rgx = /^[0-9]*\.?[0-9]*\.?[0-9]*$/;
@@ -321,6 +348,7 @@ if(isset($_POST['sent'])) {
       }
     }
     $("#form-t3-install").attr("action", "deploy.php");
+    label_info_version.text("Please wait");
     $.getJSON("https://get.typo3.org/json", function(data) {
       var items = [];
       $.each(data, function(key, val) {
@@ -336,12 +364,16 @@ if(isset($_POST['sent'])) {
         }
       });
       items.sort().reverse();
-      $(".choose-version input").replaceWith("<select class='t3_version' name='t3_version' required></select>");
+      label_info_version.replaceWith("<select class='t3_version' name='t3_version' required></select>");
       var selectT3Version = $("select.t3_version");
       $.each(items, function(i, el) {
         selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
       });
       selectT3Version.find("option:first-child").attr("selected='selected'");
+      $(".t3_version_label .info").fadeOut('fast');
+    }).fail(function() {
+      label_info_version.text(label_info_version_init_text);
+      console.log("getJSON failed!");
     });
   })(jQuery);
 </script>
