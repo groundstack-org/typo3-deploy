@@ -2,6 +2,16 @@ RewriteEngine On
 # RewriteCond %{HTTPS} off
 # RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
 
+# RewriteCond %{HTTP_HOST} ^(www\.)?YOUR_DOMAIN\.de$ [NC]
+# RewriteCond %{HTTPS} !on [NC]
+# RewriteRule ^(.*)$ https://www.YOUR_DOMAIN.de/$1 [R=301,L]
+
+# With HSTS you can tell browsers when users visit your site to only request from the HTTPS version of the site, no interactions over HTTP.
+# Gilt dann für alle Webseiten die innerhalb einer Typo3 Installation liegen!
+# <IfModule mod_headers.c>
+#   Header set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
+# </IfModule>
+
 #####
 #
 # Example .htaccess file for TYPO3 CMS - for use with Apache Webserver
@@ -50,6 +60,8 @@ AddType image/svg+xml svgz
   AddType "text/css" .gzip
 </FilesMatch>
 AddEncoding gzip .gzip
+
+AddType text/cache-manifest .appcache
 
 # gzip Compression if availiable
 <IfModule mod_gzip.c>

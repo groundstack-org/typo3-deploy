@@ -4,7 +4,7 @@
   <meta charset="utf-8">
 
   <title>Typo3 deploy script</title>
-  <meta name="description" content="The HTML5 Herald">
+  <meta name="description" content="The Typo3 simple deploy script.">
 
   <style>
     *, *:before, *:after {padding:0;margin:0;-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent;position: relative;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;text-decoration:none;}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0;}hr{display:block;float:left;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;width:100%;}input,select{ vertical-align: middle; outline: 0; } input:focus {outline: 0 none;}html, body { font-size: 100.1%; min-height: 100%; min-width: 310px; position: relative; width: 100%; -webkit-overflow-scrolling: touch; }html {height: 100%;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}body {line-height:1;height: auto;-webkit-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; overflow-x:hidden; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; height: 100%; background-color: #FFF; }img { display: block; height: auto; max-width: 100%; }a { text-decoration: none; -webkit-transition: color 300ms; -moz-transition: color 300ms; -ms-transition: color 300ms; transition: color 300ms; }a img { border: none; }template, .template { display: none; opacity: 0; visibility: hidden; }.br-to-old { background: red; padding: 1%; position: relative; width: 100%; }.ie img[src*=".svg"] {width: 100%; }
@@ -51,6 +51,55 @@
     .success { background-color: green; }
     .exists { background-color: grey; }
     .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
+
+    /* START: Loading; */
+    @keyframes spin-a {
+      0%   { transform: rotate(90deg); }
+      0%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-b {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      25%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-c {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      50%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-d {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      75% { transform: rotate(360deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading { opacity: 0.9; position: relative; width: 100%; }
+    .loading > div { height: 60px; left: 50%; margin: 0 auto 0 -30px; position: absolute; top: 50%; width: 60px; }
+    .loading > div > div { background: #8BC3A3; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
+      transform-origin: 20px 20px;
+      animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c2 { top: 10px; left: auto; right: 10px;
+      transform-origin: -4px 20px;
+      animation: spin-b 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c3 { top: auto; left: auto; right: 10px; bottom: 10px;
+      transform-origin: -4px -4px;
+      animation: spin-c 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c4 { top: auto; bottom: 10px;
+      transform-origin: 20px -4px;
+      animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > span { color: #8BC3A3; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
+      position: absolute; top: 50%; text-align: center; width: 100px; }
+    /* END: Loading; */
+    #main > .loading { border: none; }
   </style>
   <script>
 		var js_var = "delete";
@@ -112,6 +161,15 @@
   				</ul>
   			</form>
       </div>
+      <div class="loading">
+        <div>
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="c3"></div>
+          <div class="c4"></div>
+        </div>
+        <span>...loading...</span>
+      </div>
 <?php
 $t3_version = "empty";
 
@@ -140,12 +198,11 @@ if(isset($_POST['sent'])) {
     $t3_install_tool = escape_input($_POST['t3_install_tool']);
     $t3_install_tool = md5($t3_install_tool);
   }
-  echo "post data: " . $t3_version;
 
   $t3_src_dir_name = "typo3_sources";
   $t3_version_dir = "typo3_src-{$t3_version}";
   $t3_zip_file = "{$t3_version_dir}.tar.gz";
-  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/typo3_src-{$t3_version}.tar.gz";
+  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/{$t3_zip_file}";
 
   function downloadFile($url, $path) {
       $newfname = $path;
@@ -263,6 +320,37 @@ if(isset($_POST['sent'])) {
     }
   }
 
+  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
+    file_put_contents("typo3_config/typo3_db.php", "
+<?php
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = '{$t3_db_user}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '{$t3_db_socket}';
+
+\$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
+
+    ");
+  }
+
+  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
+    file_put_contents("typo3_config/typo3_db.php", "
+<?php
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['charset'] = 'utf8';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['driver'] = 'mysqli';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = '{$t3_db_name}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['host'] = '{$t3_db_host}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['password'] = '{$t3_db_password}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['user'] = '{$t3_db_user}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['unix_socket'] = '{$t3_db_socket}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['port'] = 3306;
+
+\$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
+
+    ");
+  }
+
   check_file_dir("dir", "typo3_config");
   check_file_dir("dir", "typo3");
   check_file_dir("dir", "typo3conf", "typo3/");
@@ -278,7 +366,11 @@ if(isset($_POST['sent'])) {
     echo "<span>File {$t3_zip_file} exists</span>";
 
     if(!file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
-      exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
+      // unarchive from the tar
+      $phar = new PharData($t3_zip_file);
+      $phar->extractTo($t3_src_dir_name);
+
+      // exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
     }
 
     if (file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
@@ -300,17 +392,17 @@ if(isset($_POST['sent'])) {
       }
 
       if (!file_exists("typo3_config/typo3_db.php")) {
-        file_put_contents("typo3_config/typo3_db.php", "
-  <?php
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = '{$t3_db_user}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '{$t3_db_socket}';
-
-  \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
-
-        ");
+        $v = explode(".",$t3_version);
+        switch ($v[0]) {
+          case 6:
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+            break;
+          case 7:
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+            break;
+          default:
+            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+        }
       }
 
       deleteFile("typo3/", "typo3_src");
@@ -320,16 +412,17 @@ if(isset($_POST['sent'])) {
       check_file_dir("symlink", "typo3/typo3_src", "../" . $t3_src_dir_name . "/" . $t3_version_dir . "/");
       check_file_dir("symlink", "typo3/typo3", "typo3_src/typo3/");
       check_file_dir("symlink", "typo3/index.php", "typo3_src/index.php");
+
       if(file_exists("typo3/index.php")) {
         echo "<div class='readyToTakeOff'><span class=''>Have fun :)</span></div>";
       }
 
     } else {
-      echo "<span>Extraction faild!</span>";
+      echo "<span class='error'>Extraction faild!</span>";
     }
 
   } else {
-    echo "<span>File {$t3_zip_file} dosent exists!</span>";
+    echo "<span class='warning'>File {$t3_zip_file} dosent exists!</span>";
   }
 }
 
@@ -351,6 +444,15 @@ if(isset($_POST['sent'])) {
         return false;
       }
     }
+    $(".loading").fadeOut(0);
+    $("#submit").on("click touchend", function() {
+      $(".loading").fadeIn(500);
+    });
+    setInterval(function() {
+      if($(".readyToTakeOff, .error, .warning").length > 0) {
+        $(".loading").fadeOut(0);
+      }
+    }, 200);
     $("#form-t3-install").attr("action", "deploy.php");
     label_info_version.text("Please wait");
     $.getJSON("https://get.typo3.org/json", function(data) {
