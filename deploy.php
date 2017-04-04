@@ -320,7 +320,7 @@ if(isset($_POST['sent'])) {
     }
   }
 
-  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket) {
+  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
     file_put_contents("typo3_config/typo3_db.php", "
 <?php
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
@@ -334,17 +334,17 @@ if(isset($_POST['sent'])) {
     ");
   }
 
-  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket) {
+  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
     file_put_contents("typo3_config/typo3_db.php", "
 <?php
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['charset'] = 'utf8';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['driver'] = 'mysqli',
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['dbname'] = '{$t3_db_name}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['host'] = '{$t3_db_host}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['password'] = '{$t3_db_password}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['user'] = '{$t3_db_user}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['unix_socket'] = '{$t3_db_socket}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['port'] = 3306,
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['charset'] = 'utf8';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['driver'] = 'mysqli';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = '{$t3_db_name}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['host'] = '{$t3_db_host}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['password'] = '{$t3_db_password}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['user'] = '{$t3_db_user}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['unix_socket'] = '{$t3_db_socket}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['port'] = 3306;
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
@@ -395,13 +395,13 @@ if(isset($_POST['sent'])) {
         $v = explode(".",$t3_version);
         switch ($v[0]) {
           case 6:
-            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
             break;
           case 7:
-            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
             break;
           default:
-            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
         }
       }
 
