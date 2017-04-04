@@ -16,12 +16,12 @@
     span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
     div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
     #main-wrapper { padding: 15px 6%; }
-    #header { border-bottom: 2px solid; margin-bottom: 10px; }
+    #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
     #main > span { padding: 0 6%; }
-    #main > div { margin: 10px 0; padding: 5px; border: 1px solid; }
+    #main > div { margin: 10px 0; padding: 20px 2%; border: 1px solid; }
     #form { padding-top: 15px; padding-bottom: 30px; }
     #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
-    select { background-color: #8BC3A3; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
+    select { background-color: #96c123; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
@@ -33,7 +33,7 @@
     select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(135deg, transparent 50%, white 50%), linear-gradient(to right, #000, #000);
       background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, 100% 0;
       background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; border-color: grey; outline: 0; }
-    .form-btn { width: 115px; display: block; height: auto; padding: 6px; color: #fff; background: #8BC3A3; border: none; border-radius: 3px; outline: none;
+    .form-btn { font-size: 100%; width: 200px; display: block; height: auto; padding: 6px; color: #fff; background: #312e2b; border: none; border-radius: 3px; outline: none;
       -webkit-transition: all 0.3s;
       -moz-transition: all 0.3s;
       transition: all 0.3s;
@@ -42,7 +42,8 @@
       -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
     .form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
     .form-btn:active { opacity: 0.9; }
-    .input { margin-bottom: 10px; }
+    .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
+    .input:focus { background-color: #96c123; }
     .btn-delete {  }
     #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
     .hidden { display: none; }
@@ -51,6 +52,35 @@
     .success { background-color: green; }
     .exists { background-color: grey; }
     .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
+
+    .dropdown { display: inline-block; position: relative; overflow: hidden; height: 28px; width: 200px; background: #f2f2f2; border: 1px solid; border-color: white #f7f7f7 whitesmoke; border-radius: 3px;
+      background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+      background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+      background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+      background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+      -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }
+    .dropdown:before, .dropdown:after { content: ''; position: absolute; z-index: 2; top: 9px; right: 10px; width: 0; height: 0; border: 4px dashed; border-color: #888888 transparent; pointer-events: none; }
+    .dropdown:before { border-bottom-style: solid; border-top: none; }
+    .dropdown:after { margin-top: 7px; border-top-style: solid; border-bottom: none; }
+    .dropdown-select { color: #62717a; position: relative; width: 130%; margin: 0; padding: 2px 6px 8px 10px; height: 30px; font-size: 100%; text-shadow: 0 1px white; background: #f2f2f2; /* Fallback for IE 8 */ background: rgba(0, 0, 0, 0) !important; /* "transparent" doesn't work with Opera */ border: 0; border-radius: 0; -webkit-appearance: none; }
+    .dropdown-select:focus { z-index: 3; width: 100%; color: #394349; outline: 2px solid #49aff2; outline: 2px solid -webkit-focus-ring-color; outline-offset: -2px; }
+    .dropdown-select > option { margin: 3px; padding: 6px 8px; text-shadow: none; background: #f2f2f2; border-radius: 3px; cursor: pointer; }
+    @-moz-document url-prefix() {
+      .dropdown-select { padding-left: 6px; }
+    }
+    .dropdown-dark { background: #444; border-color: #111111 #0a0a0a black;
+      background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+      background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+      background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+      background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
+      -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); }
+    .dropdown-dark:before { border-bottom-color: #aaa; }
+    .dropdown-dark:after { border-top-color: #aaa; }
+    .dropdown-dark .dropdown-select { color: #fff; text-shadow: 0 1px black; background: #444; }
+    .dropdown-dark .dropdown-select:focus { color: #ccc; }
+    .dropdown-dark .dropdown-select > option { background: #444; text-shadow: 0 1px rgba(0, 0, 0, 0.4); }
 
     /* START: Loading; */
     @keyframes spin-a {
@@ -84,7 +114,7 @@
     }
     .loading { opacity: 0.9; position: relative; width: 100%; }
     .loading > div { height: 60px; left: 50%; margin: 0 auto 0 -30px; position: absolute; top: 50%; width: 60px; }
-    .loading > div > div { background: #8BC3A3; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
+    .loading > div > div { background: #96c123; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
       transform-origin: 20px 20px;
       animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
     .loading > div > .c2 { top: 10px; left: auto; right: 10px;
@@ -96,7 +126,7 @@
     .loading > div > .c4 { top: auto; bottom: 10px;
       transform-origin: 20px -4px;
       animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
-    .loading > span { color: #8BC3A3; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
+    .loading > span { color: #96c123; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
       position: absolute; top: 50%; text-align: center; width: 100px; }
     /* END: Loading; */
     #main > .loading { border: none; }
@@ -470,7 +500,7 @@ if(isset($_POST['sent'])) {
         }
       });
       items.sort().reverse();
-      label_info_version.replaceWith("<select class='t3_version' name='t3_version' required></select>");
+      label_info_version.replaceWith("<div class='dropdown dropdown-dark'><select class='t3_version dropdown-select' name='t3_version' required></select></div>");
       var selectT3Version = $("select.t3_version");
       $.each(items, function(i, el) {
         selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
