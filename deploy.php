@@ -5,7 +5,7 @@
 
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
-  <link rel="stylesheet" href="resources/css/typo3-simple-deploy.css">
+  <link rel="stylesheet" href="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css">
   <script>
 		var js_var = "delete";
 		var deleteScript = function() {
@@ -334,7 +334,7 @@ if(isset($_POST['sent'])) {
 
   </footer>
 </div>
-<script src="resources/javascript/pGenerator.min.js"></script>
-<script src="resources/javascript/typo3-simple-deploy.js"></script>
+<script src="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script>
+<script src="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script>
 </body>
 </html>
