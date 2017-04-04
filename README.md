@@ -19,3 +19,7 @@ Your existing files won't be overwritten during the deployment process.<br />
 6. Have fun.<br />
 
 ![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
+
+
+## Issues
+- Language english switch
