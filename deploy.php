@@ -287,6 +287,7 @@ if(isset($_POST['sent'])) {
 \$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['password'] = '{$t3_db_password}';
 \$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['user'] = '{$t3_db_user}';
 \$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['unix_socket'] = '{$t3_db_socket}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['port'] = 3306,
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
