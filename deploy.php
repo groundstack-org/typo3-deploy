@@ -5,7 +5,7 @@
 
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
-  <link rel="stylesheet" href="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css">
+  <link rel="stylesheet" href="https://rawgit.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css">
   <script>
 		var js_var = "delete";
 		var deleteScript = function() {
@@ -85,7 +85,9 @@ if(isset($_POST['sent'])) {
   $t3_version = $t3_db_user = $t3_db_name = $t3_db_user = $t3_db_host = $t3_db_socket = $t3_install_tool = "";
 
   function escape_input($data) {
-    return addslashes(htmlspecialchars(stripslashes(trim($data))));
+    $tmp_str_replace_orig = array('"', "'", "<", ">", " ");
+    $tmp_str_replace_target = array('', "", "", "", "");
+    return str_replace($tmp_str_replace_orig, $tmp_str_replace_target, htmlspecialchars(stripslashes(trim($data))));
   }
 
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -334,7 +336,7 @@ if(isset($_POST['sent'])) {
 
   </footer>
 </div>
-<script src="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script>
-<script src="https://raw.githubusercontent.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script>
+<script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script>
+<script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script>
 </body>
 </html>
