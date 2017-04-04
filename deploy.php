@@ -51,6 +51,55 @@
     .success { background-color: green; }
     .exists { background-color: grey; }
     .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
+
+    /* START: Loading; */
+    @keyframes spin-a {
+      0%   { transform: rotate(90deg); }
+      0%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-b {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      25%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-c {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      50%  { transform: rotate(270deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spin-d {
+      0%   { transform: rotate(90deg); }
+      25%  { transform: rotate(90deg); }
+      50%  { transform: rotate(180deg); }
+      75%  { transform: rotate(270deg); }
+      75% { transform: rotate(360deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .loading { opacity: 0.9; position: relative; width: 100%; }
+    .loading > div { height: 60px; left: 50%; margin: 0 auto 0 -30px; position: absolute; top: 50%; width: 60px; }
+    .loading > div > div { background: #8BC3A3; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
+      transform-origin: 20px 20px;
+      animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c2 { top: 10px; left: auto; right: 10px;
+      transform-origin: -4px 20px;
+      animation: spin-b 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c3 { top: auto; left: auto; right: 10px; bottom: 10px;
+      transform-origin: -4px -4px;
+      animation: spin-c 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > div > .c4 { top: auto; bottom: 10px;
+      transform-origin: 20px -4px;
+      animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+    .loading > span { color: #8BC3A3; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
+      position: absolute; top: 50%; text-align: center; width: 100px; }
+    /* END: Loading; */
+    #main > .loading { border: none; }
   </style>
   <script>
 		var js_var = "delete";
@@ -112,6 +161,15 @@
   				</ul>
   			</form>
       </div>
+      <div class="loading">
+        <div>
+          <div class="c1"></div>
+          <div class="c2"></div>
+          <div class="c3"></div>
+          <div class="c4"></div>
+        </div>
+        <span>...loading...</span>
+      </div>
 <?php
 $t3_version = "empty";
 
@@ -140,12 +198,11 @@ if(isset($_POST['sent'])) {
     $t3_install_tool = escape_input($_POST['t3_install_tool']);
     $t3_install_tool = md5($t3_install_tool);
   }
-  echo "post data: " . $t3_version;
 
   $t3_src_dir_name = "typo3_sources";
   $t3_version_dir = "typo3_src-{$t3_version}";
   $t3_zip_file = "{$t3_version_dir}.tar.gz";
-  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/typo3_src-{$t3_version}.tar.gz";
+  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/{$t3_zip_file}";
 
   function downloadFile($url, $path) {
       $newfname = $path;
@@ -309,7 +366,11 @@ if(isset($_POST['sent'])) {
     echo "<span>File {$t3_zip_file} exists</span>";
 
     if(!file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
-      exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
+      // unarchive from the tar
+      $phar = new PharData($t3_zip_file);
+      $phar->extractTo($t3_src_dir_name);
+
+      // exec("tar -xzvf {$t3_zip_file} -C {$t3_src_dir_name}");
     }
 
     if (file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
@@ -357,11 +418,11 @@ if(isset($_POST['sent'])) {
       }
 
     } else {
-      echo "<span>Extraction faild!</span>";
+      echo "<span class='error'>Extraction faild!</span>";
     }
 
   } else {
-    echo "<span>File {$t3_zip_file} dosent exists!</span>";
+    echo "<span class='warning'>File {$t3_zip_file} dosent exists!</span>";
   }
 }
 
@@ -383,6 +444,15 @@ if(isset($_POST['sent'])) {
         return false;
       }
     }
+    $(".loading").fadeOut(0);
+    $("#submit").on("click touchend", function() {
+      $(".loading").fadeIn(500);
+    });
+    setInterval(function() {
+      if($(".readyToTakeOff, .error, .warning").length > 0) {
+        $(".loading").fadeOut(0);
+      }
+    }, 200);
     $("#form-t3-install").attr("action", "deploy.php");
     label_info_version.text("Please wait");
     $.getJSON("https://get.typo3.org/json", function(data) {
