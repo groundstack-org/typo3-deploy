@@ -4,7 +4,7 @@
   <meta charset="utf-8">
 
   <title>Typo3 deploy script</title>
-  <meta name="description" content="The HTML5 Herald">
+  <meta name="description" content="The Typo3 simple deploy script.">
 
   <style>
     *, *:before, *:after {padding:0;margin:0;-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent;position: relative;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;text-decoration:none;}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0;}hr{display:block;float:left;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;width:100%;}input,select{ vertical-align: middle; outline: 0; } input:focus {outline: 0 none;}html, body { font-size: 100.1%; min-height: 100%; min-width: 310px; position: relative; width: 100%; -webkit-overflow-scrolling: touch; }html {height: 100%;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}body {line-height:1;height: auto;-webkit-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; overflow-x:hidden; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; height: 100%; background-color: #FFF; }img { display: block; height: auto; max-width: 100%; }a { text-decoration: none; -webkit-transition: color 300ms; -moz-transition: color 300ms; -ms-transition: color 300ms; transition: color 300ms; }a img { border: none; }template, .template { display: none; opacity: 0; visibility: hidden; }.br-to-old { background: red; padding: 1%; position: relative; width: 100%; }.ie img[src*=".svg"] {width: 100%; }
@@ -263,6 +263,36 @@ if(isset($_POST['sent'])) {
     }
   }
 
+  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket) {
+    file_put_contents("typo3_config/typo3_db.php", "
+<?php
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = '{$t3_db_user}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '{$t3_db_socket}';
+
+\$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
+
+    ");
+  }
+
+  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket) {
+    file_put_contents("typo3_config/typo3_db.php", "
+<?php
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['charset'] = 'utf8';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['driver'] = 'mysqli',
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['dbname'] = '{$t3_db_name}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['host'] = '{$t3_db_host}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['password'] = '{$t3_db_password}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['user'] = '{$t3_db_user}';
+\$GLOBALS['TYPO3_CONF_VARS']['DB'][Connections][default]['unix_socket'] = '{$t3_db_socket}';
+
+\$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
+
+    ");
+  }
+
   check_file_dir("dir", "typo3_config");
   check_file_dir("dir", "typo3");
   check_file_dir("dir", "typo3conf", "typo3/");
@@ -300,17 +330,17 @@ if(isset($_POST['sent'])) {
       }
 
       if (!file_exists("typo3_config/typo3_db.php")) {
-        file_put_contents("typo3_config/typo3_db.php", "
-  <?php
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['username'] = '{$t3_db_user}';
-  \$GLOBALS['TYPO3_CONF_VARS']['DB']['socket'] = '{$t3_db_socket}';
-
-  \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
-
-        ");
+        $v = explode(".",$t3_version);
+        switch ($v[0]) {
+          case 6:
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+            break;
+          case 7:
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+            break;
+          default:
+            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket);
+        }
       }
 
       deleteFile("typo3/", "typo3_src");
@@ -320,6 +350,7 @@ if(isset($_POST['sent'])) {
       check_file_dir("symlink", "typo3/typo3_src", "../" . $t3_src_dir_name . "/" . $t3_version_dir . "/");
       check_file_dir("symlink", "typo3/typo3", "typo3_src/typo3/");
       check_file_dir("symlink", "typo3/index.php", "typo3_src/index.php");
+
       if(file_exists("typo3/index.php")) {
         echo "<div class='readyToTakeOff'><span class=''>Have fun :)</span></div>";
       }
