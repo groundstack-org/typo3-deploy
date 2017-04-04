@@ -1,3 +1,10 @@
+<?php
+if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
+    echo "File successfully deleted!";
+    unlink("deploy.php");
+    exit();
+}
+?>
 <!doctype html>
 <html>
 <head>
@@ -6,12 +13,6 @@
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
   <link rel="stylesheet" href="https://rawgit.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css">
-  <script>
-		var js_var = "delete";
-		var deleteScript = function() {
-			window.location.href = "deploy.php?php_var=" + escape(js_var);
-		}
-	</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 
@@ -24,7 +25,7 @@
       <div id="form">
         <p>
     			<strong>Nach Abschluss:</strong><br />
-    			Diese Datei unbedingt manuel löschen! ODER <button class="btn-delete form-btn" onclick="deleteScript()">Lösche mich!</button><br />
+    			Diese Datei unbedingt manuel löschen! ODER <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn">Lösche mich!</button></a><br />
     		</p>
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
   				<ul class="">
@@ -78,9 +79,6 @@
 <?php
 $t3_version = "empty";
 
-if (isset($_GET['php_var'])) {
-    unlink("deploy.php");
-}
 if(isset($_POST['sent'])) {
   $t3_version = $t3_db_user = $t3_db_name = $t3_db_user = $t3_db_host = $t3_db_socket = $t3_install_tool = "";
 
