@@ -2,7 +2,8 @@
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   img[src*=".svg"] {width: 100%; }
 }
-
+a { color: #96c123; transition: color 500ms; }
+a:hover { color: #312e2b; }
 body { font-family: sans-serif; }
 span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
 div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }

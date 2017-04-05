@@ -24,39 +24,31 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
     <main id="main">
       <div id="form">
         <p>
-    			<strong>Nach Abschluss:</strong><br />
-    			Diese Datei unbedingt manuel löschen! ODER <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn">Lösche mich!</button></a><br />
-    		</p>
+    			<strong>After success:</strong><br />
+          Please delete this file (deploy.php)! Or click <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn">Delete me!</button></a><br />
+        </p>
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
   				<ul class="">
   					<li class="choose-version">
-  						<label class="t3_version_label" for="text_id">Hier Ihre gewünschte Version angeben:<br /><span class="info">(Bitte in dieser Form: 6.2.12)</label>
+  						<label class="t3_version_label" for="text_id">Enter your desired version:<br /><span class="info">(Please use this form: 6.2.12)</label>
   						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
   					</li>
-  					<li style="display: none;">
-  						<label class="">Was möchten Sie machen?</label>
-  						<fieldset>
-  							<input type="radio" id="full" name="selection" value="full" checked="checked" required><label for="mc">Komplett Installation</label><br />
-  							<input type="radio" id="only-symlink" name="selection" value="symlinks"><label for="vi">Nur Symlinks erstellen</label><br />
-  							<input type="radio" id="only-download" name="selection" value="download"><label for="ae">Nur Typo3 downloaden und entpacken</label>
-  						</fieldset>
-  					</li>
             <li class="form-db-data">
-              <label>Datenbank Zugangsdaten werden in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
-              <label class="label label-name" for="db-name">Datenbank Name</label><br />
+              <label>Database Access data are stored in 'typo3_config/typo3_db.php'.</label><br /><br />
+              <label class="label label-name" for="db-name">Database name</label><br />
               <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName"><br />
-              <label class="label label-name" for="db-name">Datenbank Benutzername</label><br />
+              <label class="label label-name" for="db-name">Database username</label><br />
               <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser"><br />
-              <label class="label label-name" for="db-password">Datenbank Benutzerpassword (character '&' not allowed)</label><br />
+              <label class="label label-name" for="db-password">Database userpassword (character '&' not allowed)</label><br />
               <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort"><br />
-              <label class="label label-name" for="db-host">Datenbank Host</label><br />
+              <label class="label label-name" for="db-host">Database host</label><br />
               <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost"><br />
-              <label class="label label-name" for="db-socket">Datenbank Socket</label><br />
+              <label class="label label-name" for="db-socket">Database socket</label><br />
               <input id="db-socket" class="input" type="text" name="t3_db_socket" value=""><br />
             </li>
             <li class="form-install-tool">
-              <label>Install Tool Password wird in 'typo3_config/typo3_db.php' gespeichert.</label><br /><br />
-              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool Password (character '&' not allowed)</label><br />
+              <label>Install Tool password is stored in 'typo3_config/typo3_db.php'.</label><br /><br />
+              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool password (character '&' not allowed)</label><br />
               <input type="password" class="input left form-control" id="install-tool-pw" name="t3_install_tool" value="" /> <br /><br />
               <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" >Generate a password</a>
               <div class="left" id="install-tool-pw-element"></div>
@@ -343,7 +335,7 @@ if(isset($_POST['sent'])) {
 ?>
   </main>
   <footer id="footer">
-
+    <p><a href="http://groundstack.de" title="Created by">groundstack.de</a></p>
   </footer>
 </div>
 <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script>
