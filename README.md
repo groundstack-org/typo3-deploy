@@ -20,18 +20,18 @@ Your existing files won't be overwritten during the deployment process.<br />
 ![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
 
 #### Dirs befor installation e. g.
-/etc/
-/logs/
-/httpdocs/ (<- this is document root)
-/httpdocs/cgi-bin/
+/etc/<br />
+/logs/<br />
+/httpdocs/ (<- this is document root)<br />
+/httpdocs/cgi-bin/<br />
 
 #### Dirs after installation e. g.
-/etc/
-/logs/
-/httpdocs/
-/httpdocs/typo3conf/
-/typo3_config/
-/typo3_sources/
+/etc/<br />
+/logs/<br />
+/httpdocs/<br />
+/httpdocs/typo3conf/<br />
+/typo3_config/<br />
+/typo3_sources/<br />
 
 #### Folders are created outside the document root:
 If you don't like this, create a folder e. g. "typo3" in your /httpdocs/ (e. g. /httpdocs/typo3/) and link your document root to this folder ("typo3"). Then put the deploy.php in this folder ("typo3").
