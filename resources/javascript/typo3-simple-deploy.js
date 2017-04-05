@@ -13,9 +13,11 @@
   $("#submit").on("click touchend", function() {
     $(".loading").fadeIn(500);
   });
-  setInterval(function() {
+  var inter = setInterval(function() {
     if($(".readyToTakeOff, .error, .warning").length > 0) {
       $(".loading").fadeOut(0);
+      $("body").animate({ scrollTop: $(document).height() }, 1000);
+      clearInterval(inter);
     }
   }, 200);
   $("#form-t3-install").attr("action", "deploy.php");
