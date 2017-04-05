@@ -1,6 +1,6 @@
 <?php
 if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
-    echo "File successfully deleted!";
+    echo "<span class='success'>File successfully deleted!</span>";
     unlink("deploy.php");
     exit();
 }
@@ -101,10 +101,11 @@ if(isset($_POST['sent'])) {
     $t3_install_tool = md5($t3_install_tool);
   }
 
-  $t3_src_dir_name = "typo3_sources";
+  $t3_src_dir_name = "../typo3_sources";
   $t3_version_dir = "typo3_src-{$t3_version}";
   $t3_zip_file = "{$t3_version_dir}.tar.gz";
   $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/{$t3_zip_file}";
+  $t3_config_date = date("Ymd_His");
 
   function downloadFile($url, $path) {
       $newfname = $path;
@@ -222,8 +223,12 @@ if(isset($_POST['sent'])) {
     }
   }
 
-  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
-    file_put_contents("typo3_config/typo3_db.php", "
+  function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $t3_config_date) {
+    $str = "../typo3_config/typo3_db_" . $t3_config_date . ".php";
+    if(file_exists($str)) {
+      echo "<span class='exists'>File: {$str} already exists.</span><br />";
+    } else {
+      file_put_contents((string)$str, "
 <?php
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
@@ -233,11 +238,17 @@ if(isset($_POST['sent'])) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
-    ");
+      ");
+      echo "<span class='success'>File {$str} is created.</span>";
+    }
   }
 
-  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool) {
-    file_put_contents("typo3_config/typo3_db.php", "
+  function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $t3_config_date) {
+    $str = "../typo3_config/typo3_db_" . $t3_config_date . ".php";
+    if(file_exists($str)) {
+      echo "<span class='exists'>File: {$str} already exists.</span><br />";
+    } else {
+      file_put_contents($str, "
 <?php
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['charset'] = 'utf8';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['driver'] = 'mysqli';
@@ -250,22 +261,23 @@ if(isset($_POST['sent'])) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
-    ");
+      ");
+      echo "<span clas='success'>File {$str} is created.</span><br />";
+    }
   }
 
-  check_file_dir("dir", "typo3_config");
-  check_file_dir("dir", "typo3");
-  check_file_dir("dir", "typo3conf", "typo3/");
+  check_file_dir("dir", "../typo3_config");
+  check_file_dir("dir", "typo3conf");
   check_file_dir("dir", $t3_src_dir_name);
 
-  check_file_dir("external_file", "typo3/humans.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt");
-  check_file_dir("external_file", "typo3/robots.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/robots.txt");
-  check_file_dir("external_file", "typo3/.htaccess", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/.htaccess");
+  check_file_dir("external_file", "humans.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/humans.txt");
+  check_file_dir("external_file", "robots.txt", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/robots.txt");
+  check_file_dir("external_file", ".htaccess", "https://raw.githubusercontent.com/Teisi/typo3-deploy/master/.htaccess");
 
   check_file_dir("external_file", $t3_zip_file, $typo3_source);
 
   if (file_exists($t3_zip_file)) {
-    echo "<span>File {$t3_zip_file} exists</span>";
+    echo "<span class='warning'>File {$t3_zip_file} exists</span>";
 
     if(!file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
       // unarchive from the tar
@@ -276,46 +288,46 @@ if(isset($_POST['sent'])) {
     }
 
     if (file_exists($t3_src_dir_name . "/" . $t3_version_dir . "/typo3")) {
-      echo "<span class='success'>Successfully extracted!</span>";
+      echo "<span class='success'>Successfully extracted!</span><br />";
       deleteFile("", $t3_zip_file);
 
-      if(!file_exists("typo3/typo3conf/AdditionalConfiguration.php")) {
-        file_put_contents("typo3/typo3conf/AdditionalConfiguration.php", "
+      if(!file_exists("typo3conf/AdditionalConfiguration.php")) {
+        file_put_contents("typo3conf/AdditionalConfiguration.php", "
   <?php
-  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db.php';
+  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db_{$t3_config_date}.php';
   if (file_exists(\$databaseCredentialsFile)) {
       require_once (\$databaseCredentialsFile);
   }
         ");
       }
 
-      if (!file_exists("typo3/FIRST_INSTALL")) {
-        file_put_contents("typo3/FIRST_INSTALL", "");
+      if (!file_exists("FIRST_INSTALL")) {
+        file_put_contents("FIRST_INSTALL", "");
       }
 
-      if (!file_exists("typo3_config/typo3_db.php")) {
+      if (!file_exists("../typo3_config/typo3_db_{$t3_config_date}.php")) {
         $v = explode(".",$t3_version);
         switch ($v[0]) {
           case 6:
-            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $t3_config_date);
             break;
           case 7:
-            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+            addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $t3_config_date);
             break;
           default:
-            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool);
+            addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $t3_config_date);
         }
       }
 
-      deleteFile("typo3/", "typo3_src");
-      deleteFile("typo3/", "typo3");
-      deleteFile("typo3/", "index.php");
+      deleteFile("", "typo3_src");
+      deleteFile("", "typo3");
+      deleteFile("", "index.php");
 
-      check_file_dir("symlink", "typo3/typo3_src", "../" . $t3_src_dir_name . "/" . $t3_version_dir . "/");
-      check_file_dir("symlink", "typo3/typo3", "typo3_src/typo3/");
-      check_file_dir("symlink", "typo3/index.php", "typo3_src/index.php");
+      check_file_dir("symlink", "typo3_src", $t3_src_dir_name . "/" . $t3_version_dir . "/");
+      check_file_dir("symlink", "typo3", "typo3_src/typo3/");
+      check_file_dir("symlink", "index.php", "typo3_src/index.php");
 
-      if(file_exists("typo3/index.php")) {
+      if(file_exists("index.php")) {
         echo "<div class='readyToTakeOff'><span class=''>Have fun :)</span></div>";
       }
 

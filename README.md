@@ -14,12 +14,27 @@ Your existing files won't be overwritten during the deployment process.<br />
 1. Download the [**deploy.php**](https://raw.githubusercontent.com/Teisi/typo3-deploy/master/deploy.php) and upload it to your document root (e.g. httpdocs).<br />
 2. Start the deployment in your browser www.example.com/deploy.php.<br />
 3. **Delete** the deploy.php from your server after successful Installation.<br />
-4. To start the installation of Typo3 change your domain documentroot (e.g. to "httpdocs/typo3/").<br />
-5. Open your domain in your browser and install Typo3.<br />
-6. Have fun.<br />
+4. Open your domain in your browser and install Typo3.<br />
+5. Have fun.<br />
 
 ![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
 
+#### Dirs befor installation e. g.
+/etc/
+/logs/
+/httpdocs/ (<- this is document root)
+/httpdocs/cgi-bin/
+
+#### Dirs after installation e. g.
+/etc/
+/logs/
+/httpdocs/
+/httpdocs/typo3conf/
+/typo3_config/
+/typo3_sources/
+
+#### Folders are created outside the document root:
+If you don't like this, create a folder e. g. "typo3" in your /httpdocs/ (e. g. /httpdocs/typo3/) and link your document root to this folder ("typo3"). Then put the deploy.php in this folder ("typo3").
 
 ## Issues
 - Language english switch
