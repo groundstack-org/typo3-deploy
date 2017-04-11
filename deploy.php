@@ -12,7 +12,134 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
 
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
-  <link rel="stylesheet" href="https://rawgit.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css">
+  <!-- <link rel="stylesheet" href="https://rawgit.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css"> -->
+  <style>
+  *, *:before, *:after {padding:0;margin:0;-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent;position: relative;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;text-decoration:none;}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0;}hr{display:block;float:left;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;width:100%;}input,select{ vertical-align: middle; outline: 0; } input:focus {outline: 0 none;}html, body { font-size: 100.1%; min-height: 100%; min-width: 310px; position: relative; width: 100%; -webkit-overflow-scrolling: touch; }html {height: 100%;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}body {line-height:1;height: auto;-webkit-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; overflow-x:hidden; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; height: 100%; background-color: #FFF; }img { display: block; height: auto; max-width: 100%; }a { text-decoration: none; -webkit-transition: color 300ms; -moz-transition: color 300ms; -ms-transition: color 300ms; transition: color 300ms; }a img { border: none; }template, .template { display: none; opacity: 0; visibility: hidden; }.br-to-old { background: red; padding: 1%; position: relative; width: 100%; }.ie img[src*=".svg"] {width: 100%; }
+  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    img[src*=".svg"] {width: 100%; }
+  }
+  a { color: #96c123; transition: color 500ms; }
+  a:hover { color: #312e2b; }
+  body { font-family: sans-serif; }
+  span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
+  div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
+  #main-wrapper { padding: 15px 6%; }
+  #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
+  #main > span { padding: 0 6%; }
+  #main > div { margin: 10px 0; padding: 20px 2%; border: 1px solid; }
+  #form { padding-top: 15px; padding-bottom: 30px; }
+  #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
+  select { background-color: #96c123; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none; }
+  select.t3_version { background-image: linear-gradient(45deg, transparent 50%, blue 50%), linear-gradient(135deg, blue 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
+    background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), 100% 0;
+    background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; }
+  select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(135deg, transparent 50%, white 50%), linear-gradient(to right, #000, #000);
+    background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, 100% 0;
+    background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; border-color: grey; outline: 0; }
+  .form-btn { font-size: 100%; width: 200px; display: block; height: auto; padding: 6px; color: #fff; background: #312e2b; border: none; border-radius: 3px; outline: none;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
+  .form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
+  .form-btn:active { opacity: 0.9; }
+  .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
+  .input:focus { background-color: #96c123; }
+  .btn-delete {  }
+  #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
+  .hidden { display: none; }
+  .warning { background-color: orange; color: #fff; }
+  .error { background-color: darkred; color; #fff; }
+  .success { background-color: green; }
+  .exists { background-color: grey; }
+  .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
+
+  .dropdown { display: inline-block; position: relative; overflow: hidden; height: 28px; width: 200px; background: #f2f2f2; border: 1px solid; border-color: white #f7f7f7 whitesmoke; border-radius: 3px;
+    background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
+    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }
+  .dropdown:before, .dropdown:after { content: ''; position: absolute; z-index: 2; top: 9px; right: 10px; width: 0; height: 0; border: 4px dashed; border-color: #888888 transparent; pointer-events: none; }
+  .dropdown:before { border-bottom-style: solid; border-top: none; }
+  .dropdown:after { margin-top: 7px; border-top-style: solid; border-bottom: none; }
+  .dropdown-select { color: #62717a; position: relative; width: 130%; margin: 0; padding: 2px 6px 8px 10px; height: 30px; font-size: 100%; text-shadow: 0 1px white; background: #f2f2f2; /* Fallback for IE 8 */ background: rgba(0, 0, 0, 0) !important; /* "transparent" doesn't work with Opera */ border: 0; border-radius: 0; -webkit-appearance: none; }
+  .dropdown-select:focus { z-index: 3; width: 100%; color: #394349; outline: 2px solid #49aff2; outline: 2px solid -webkit-focus-ring-color; outline-offset: -2px; }
+  .dropdown-select > option { margin: 3px; padding: 6px 8px; text-shadow: none; background: #f2f2f2; border-radius: 3px; cursor: pointer; }
+  @-moz-document url-prefix() {
+    .dropdown-select { padding-left: 6px; }
+  }
+  .dropdown-dark { background: #444; border-color: #111111 #0a0a0a black;
+    background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+    background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+    background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
+    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); }
+  .dropdown-dark:before { border-bottom-color: #aaa; }
+  .dropdown-dark:after { border-top-color: #aaa; }
+  .dropdown-dark .dropdown-select { color: #fff; text-shadow: 0 1px black; background: #444; }
+  .dropdown-dark .dropdown-select:focus { color: #ccc; }
+  .dropdown-dark .dropdown-select > option { background: #444; text-shadow: 0 1px rgba(0, 0, 0, 0.4); }
+
+  /* START: Loading; */
+  @keyframes spin-a {
+    0%   { transform: rotate(90deg); }
+    0%  { transform: rotate(90deg); }
+    50%  { transform: rotate(180deg); }
+    75%  { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes spin-b {
+    0%   { transform: rotate(90deg); }
+    25%  { transform: rotate(90deg); }
+    25%  { transform: rotate(180deg); }
+    75%  { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes spin-c {
+    0%   { transform: rotate(90deg); }
+    25%  { transform: rotate(90deg); }
+    50%  { transform: rotate(180deg); }
+    50%  { transform: rotate(270deg); }
+    100% { transform: rotate(360deg); }
+  }
+  @keyframes spin-d {
+    0%   { transform: rotate(90deg); }
+    25%  { transform: rotate(90deg); }
+    50%  { transform: rotate(180deg); }
+    75%  { transform: rotate(270deg); }
+    75% { transform: rotate(360deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .loading { opacity: 0.9; position: relative; width: 100%; }
+  .loading > div { height: 60px; left: 50%; margin: 0 auto 0 -30px; position: absolute; top: 50%; width: 60px; }
+  .loading > div > div { background: #96c123; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
+    transform-origin: 20px 20px;
+    animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+  .loading > div > .c2 { top: 10px; left: auto; right: 10px;
+    transform-origin: -4px 20px;
+    animation: spin-b 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+  .loading > div > .c3 { top: auto; left: auto; right: 10px; bottom: 10px;
+    transform-origin: -4px -4px;
+    animation: spin-c 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+  .loading > div > .c4 { top: auto; bottom: 10px;
+    transform-origin: 20px -4px;
+    animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
+  .loading > span { color: #96c123; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
+    position: absolute; top: 50%; text-align: center; width: 100px; }
+  /* END: Loading; */
+  #main > .loading { border: none; }
+
+  </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 
@@ -338,7 +465,107 @@ if(isset($_POST['sent'])) {
     <p><a href="http://groundstack.de" title="Created by">groundstack.de</a></p>
   </footer>
 </div>
-<script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script>
-<script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script>
+<!-- <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script> -->
+<!-- <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script> -->
+<script>
+/*!
+ * pGenerator jQuery Plugin v1.0.5
+ * https://github.com/M1Sh0u/pGenerator
+ *
+ * Created by Mihai MATEI <mihai.matei@outlook.com>
+ * Released under the MIT License (Feel free to copy, modify or redistribute this plugin.)
+ */
+ (function($){var numbers_array=[],upper_letters_array=[],lower_letters_array=[],special_chars_array=[],$pGeneratorElement=null;var methods={init:function(options,callbacks)
+ {var settings=$.extend({'bind':'click','passwordElement':null,'displayElement':null,'passwordLength':16,'uppercase':!0,'lowercase':!0,'numbers':!0,'specialChars':!0,'additionalSpecialChars':[],'onPasswordGenerated':function(generatedPassword){}},options);for(var i=48;i<58;i++){numbers_array.push(i)}
+ for(i=65;i<91;i++){upper_letters_array.push(i)}
+ for(i=97;i<123;i++){lower_letters_array.push(i)}
+ special_chars_array=[33,35,36,42,123,125,47,63,58,59,95].concat(settings.additionalSpecialChars);return this.each(function(){$pGeneratorElement=$(this);$pGeneratorElement.bind(settings.bind,function(e){e.preventDefault();methods.generatePassword(settings)})})},generatePassword:function(settings)
+ {var password=new Array(),selOptions=settings.uppercase+settings.lowercase+settings.numbers+settings.specialChars,selected=0,no_lower_letters=new Array();var optionLength=Math.floor(settings.passwordLength/selOptions);if(settings.uppercase){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(upper_letters_array[randomFromInterval(0,upper_letters_array.length-1)]))}
+ no_lower_letters=no_lower_letters.concat(upper_letters_array);selected++}
+ if(settings.numbers){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(numbers_array[randomFromInterval(0,numbers_array.length-1)]))}
+ no_lower_letters=no_lower_letters.concat(numbers_array);selected++}
+ if(settings.specialChars){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(special_chars_array[randomFromInterval(0,special_chars_array.length-1)]))}
+ no_lower_letters=no_lower_letters.concat(special_chars_array);selected++}
+ var remained=settings.passwordLength-(selected*optionLength);if(settings.lowercase){for(var i=0;i<remained;i++){password.push(String.fromCharCode(lower_letters_array[randomFromInterval(0,lower_letters_array.length-1)]))}}else{for(var i=0;i<remained;i++){password.push(String.fromCharCode(no_lower_letters[randomFromInterval(0,no_lower_letters.length-1)]))}}
+ password=shuffle(password).join('');if(settings.passwordElement!==null){$(settings.passwordElement).val(password)}
+ if(settings.displayElement!==null){if($(settings.displayElement).is("input")){$(settings.displayElement).val(password)}else{$(settings.displayElement).text(password)}}
+ settings.onPasswordGenerated(password)}};function shuffle(o)
+ {for(var j,x,i=o.length;i;j=parseInt(Math.random()*i),x=o[--i],o[i]=o[j],o[j]=x);return o}
+ function randomFromInterval(from,to)
+ {return Math.floor(Math.random()*(to-from+1)+from)}
+ $.fn.pGenerator=function(method)
+ {if(methods[method]){return methods[method].apply(this,Array.prototype.slice.call(arguments,1))}
+ else if(typeof method==='object'||!method){return methods.init.apply(this,arguments)}
+ else{$.error('Method '+method+' does not exist on jQuery.pGenerator')}}})(jQuery);
+
+
+ (function($) {
+   var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
+   $.fn.reverse = [].reverse;
+   function validate(s) {
+     var rgx = /^[0-9]*\.?[0-9]*\.?[0-9]*$/;
+     if(s.match(rgx)) {
+       return true;
+     } else {
+       return false;
+     }
+   }
+   $(".loading").fadeOut(0);
+   $("#submit").on("click touchend", function() {
+     $(".loading").fadeIn(500);
+   });
+   var inter = setInterval(function() {
+     if($(".readyToTakeOff, .error, .warning").length > 0) {
+       $(".loading").fadeOut(0);
+       $("body").animate({ scrollTop: $(document).height() }, 1000);
+       clearInterval(inter);
+     }
+   }, 200);
+   $("#form-t3-install").attr("action", "deploy.php");
+   label_info_version.text("Please wait");
+   $.getJSON("https://get.typo3.org/json", function(data) {
+     var items = [];
+     $.each(data, function(key, val) {
+       i++;
+       $.each(val.releases, function(k, v) {
+         var s = v.version.toString();
+         if(validate(s)) {
+           items.push(v.version);
+         }
+       });
+       if(i > 3) {
+         return false;
+       }
+     });
+     items.sort().reverse();
+     label_info_version.replaceWith("<div class='dropdown dropdown-dark'><select class='t3_version dropdown-select' name='t3_version' required></select></div>");
+     var selectT3Version = $("select.t3_version");
+     $.each(items, function(i, el) {
+       selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
+     });
+     selectT3Version.find("option:first-child").attr("selected='selected'");
+     $(".t3_version_label .info").fadeOut('fast');
+   }).fail(function() {
+     label_info_version.text(label_info_version_init_text);
+     console.log("getJSON failed!");
+   });
+ })(jQuery);
+  (function($) {
+   $('#generate-install-pw').pGenerator({
+       'bind': 'click',
+       'passwordElement': '#install-tool-pw',
+       'displayElement': '#install-tool-pw-element',
+       'passwordLength': 16,
+       'uppercase': true,
+       'lowercase': true,
+       'numbers':   true,
+       'specialChars': true,
+       'onPasswordGenerated': function(generatedPassword) {
+       alert('My new generated password is ' + generatedPassword);
+       }
+   });
+ })(jQuery);
+
+</script>
 </body>
 </html>
