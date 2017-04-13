@@ -349,6 +349,9 @@ if(isset($_POST['sent'])) {
     } else {
       file_put_contents((string)$str, "
 <?php
+if (!defined('TYPO3_MODE')) {
+	die('Access denied.');
+}
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['database'] = '{$t3_db_name}';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['host'] = '{$t3_db_host}';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['password'] = '{$t3_db_password}';
@@ -357,6 +360,7 @@ if(isset($_POST['sent'])) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
+\$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
       ");
       echo "<span class='success'>File {$str} is created.</span>";
     }
@@ -369,6 +373,9 @@ if(isset($_POST['sent'])) {
     } else {
       file_put_contents($str, "
 <?php
+if (!defined('TYPO3_MODE')) {
+	die('Access denied.');
+}
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['charset'] = 'utf8';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['driver'] = 'mysqli';
 \$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = '{$t3_db_name}';
@@ -380,6 +387,7 @@ if(isset($_POST['sent'])) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
+\$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = '';
       ");
       echo "<span clas='success'>File {$str} is created.</span><br />";
     }
@@ -413,6 +421,9 @@ if(isset($_POST['sent'])) {
       if(!file_exists("typo3conf/AdditionalConfiguration.php")) {
         file_put_contents("typo3conf/AdditionalConfiguration.php", "
   <?php
+  if (!defined('TYPO3_MODE')) {
+  	die('Access denied.');
+  }
   \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db_{$t3_config_date}.php';
   if (file_exists(\$databaseCredentialsFile)) {
       require_once (\$databaseCredentialsFile);
