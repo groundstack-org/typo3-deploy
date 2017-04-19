@@ -23,6 +23,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   body { font-family: sans-serif; }
   span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
   div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
+  input, label { clear: both; float: left; }
   #main-wrapper { padding: 15px 6%; }
   #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
   #main > span { padding: 0 6%; }
@@ -52,7 +53,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   .form-btn:active { opacity: 0.9; }
   .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
   .input:focus { background-color: #96c123; }
-  .btn-delete {  }
+  .btn-delete { float: left; clear: both; }
   #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
   .hidden { display: none; }
   .warning { background-color: orange; color: #fff; }
@@ -83,12 +84,14 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
     background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
     background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
     -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); }
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); float: left; clear: both; }
   .dropdown-dark:before { border-bottom-color: #aaa; }
   .dropdown-dark:after { border-top-color: #aaa; }
   .dropdown-dark .dropdown-select { color: #fff; text-shadow: 0 1px black; background: #444; }
   .dropdown-dark .dropdown-select:focus { color: #ccc; }
   .dropdown-dark .dropdown-select > option { background: #444; text-shadow: 0 1px rgba(0, 0, 0, 0.4); }
+
+  #lang { float: left; clear: both; margin-top: 15px; }
 
   /* START: Loading; */
   @keyframes spin-a {
@@ -147,41 +150,45 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   <div id="main-wrapper">
     <header id="header">
       <h1>Typo3 simple deployment</h1>
+      <select id="lang">
+          <option>English</option>
+          <option>German</option>
+      </select>
     </header>
     <main id="main">
       <div id="form">
         <p>
-    			<strong>After success:</strong><br />
-          Please delete this file (deploy.php)! Or click <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn">Delete me!</button></a><br />
+    			<strong data-translate="_aftersuccess">After success:</strong><br />
+          <span data-translate="_pleasedelete">Please delete this file (deploy.php)! Or click</span><br /> <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn" data-translate="_deleteme">Delete me!</button></a><br />
         </p>
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
   				<ul class="">
   					<li class="choose-version">
-  						<label class="t3_version_label" for="text_id">Enter your desired version:<br /><span class="info">(Please use this form: 6.2.12)</label>
+  						<label class="t3_version_label" for="text_id"><span data-translate="_yourversion">Enter your desired version:</span><br /><span class="info" data-translate="_pleaseuseform">(Please use this form: 6.2.12)</label><br />
   						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
   					</li>
             <li class="form-db-data">
-              <label>Database Access data are stored in 'typo3_config/typo3_db.php'.</label><br /><br />
-              <label class="label label-name" for="db-name">Database name</label><br />
+              <label><span data-translate="_databaseisstored">Database Access data are stored in 'typo3_config/typo3_db.php'.</span></label><br /><br />
+              <label class="label label-name" for="db-name" data-translate="_databasename">Database name</label><br />
               <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName"><br />
-              <label class="label label-name" for="db-name">Database username</label><br />
+              <label class="label label-name" for="db-name" data-translate="_databaseuser">Database username</label><br />
               <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser"><br />
-              <label class="label label-name" for="db-password">Database userpassword (character '&' not allowed)</label><br />
+              <label class="label label-name" for="db-password" data-translate="_databaseuserpassword">Database userpassword (character '&' not allowed)</label><br />
               <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort"><br />
-              <label class="label label-name" for="db-host">Database host</label><br />
+              <label class="label label-name" for="db-host"data-translate="_databasehost">Database host</label><br />
               <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost"><br />
-              <label class="label label-name" for="db-socket">Database socket</label><br />
+              <label class="label label-name" for="db-socket" data-translate="_databasesocket">Database socket</label><br />
               <input id="db-socket" class="input" type="text" name="t3_db_socket" value=""><br />
             </li>
             <li class="form-install-tool">
-              <label>Install Tool password is stored in 'typo3_config/typo3_db.php'.</label><br /><br />
-              <label class="label label-install-tool-pw" for="install-tool-pw">Install Tool password (character '&' not allowed)</label><br />
+              <label data-translate="_installtoolstoredin">Install Tool password is stored in 'typo3_config/typo3_db.php'.</label><br /><br />
+              <label class="label label-install-tool-pw" for="install-tool-pw" data-translate="_installpassword">Install Tool password (character '&' not allowed)</label><br />
               <input type="password" class="input left form-control" id="install-tool-pw" name="t3_install_tool" value="" /> <br /><br />
-              <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" >Generate a password</a>
+              <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" data-translate="_generatepassword">Generate a password</a>
               <div class="left" id="install-tool-pw-element"></div>
             </li>
   					<li class="from_submit">
-  						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden">Send</button>
+  						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
   					</li>
   				</ul>
   			</form>
@@ -576,7 +583,69 @@ if (!defined('TYPO3_MODE')) {
        }
    });
  })(jQuery);
+(function($) {
+  var dictionary, set_lang;
 
+  // Object literal behaving as multi-dictionary
+  dictionary = {
+    "english": {
+        "_aftersuccess": "After success:",
+        "_pleasedelete": "Please delete this file (deploy.php)! Or click",
+        "_deleteme": "delete me!",
+        "_yourversion": "Enter your desired version:",
+        "_pleaseuseform": "(Please use this form: 6.2.12)",
+        "_databaseisstored": "Database Access data are stored in 'typo3_config/typo3_db.php'.",
+        "_databasename": "Database name",
+        "_databaseuser": "Database username",
+        "_databaseuserpassword": "Database userpassword",
+        "_databasehost": "Database host",
+        "_databasesocket": "Database socket",
+        "_installtoolstoredin": "Install Tool password is stored in 'typo3_config/typo3_db.php'.",
+        "_installpassword": "Install Tool password",
+        "_generatepassword": "Generate a password",
+        "_send": "Send"
+
+    },
+    "german": {
+        "_aftersuccess": "Nach erfolgreicher Installation:",
+        "_pleasedelete": "Bitte lösche diese Datei (deploy.php)! Oder klicke hier",
+        "_deleteme": "lösche mich!",
+        "_yourversion": "Gib deine gewünschte Version ein:",
+        "_pleaseuseform": "(bitte in dieser Form: 6.2.12)",
+        "_databaseisstored": "Datenbank Zugangsdaten sind in 'typo3_config/typo3_db.php' gespeichert.",
+        "_databasename": "Datenbank Name",
+        "_databaseuser": "Datenbank Benutzer",
+        "_databaseuserpassword": "Datenbank Benutzerpasswort",
+        "_databasehost": "Datenbank Host",
+        "_databasesocket": "Datenbank Socket",
+        "_installtoolstoredin": "Install Tool Passwort ist gespeichert in 'typo3_config/typo3_db.php'.",
+        "_installpassword": "Install Tool Passwort",
+        "_generatepassword": "Generiere ein Passwort",
+        "_send": "Absenden"
+    }
+}
+
+    // Function for swapping dictionaries
+    set_lang = function (dictionary) {
+        $("[data-translate]").text(function () {
+            var key = $(this).data("translate");
+            if (dictionary.hasOwnProperty(key)) {
+                return dictionary[key];
+            }
+        });
+    };
+
+    // Swap languages when menu changes
+    $("#lang").on("change", function () {
+        var language = $(this).val().toLowerCase();
+        if (dictionary.hasOwnProperty(language)) {
+            set_lang(dictionary[language]);
+        }
+    });
+
+    // Set initial language to English
+    set_lang(dictionary.english);
+})(jQuery);
 </script>
 </body>
 </html>
