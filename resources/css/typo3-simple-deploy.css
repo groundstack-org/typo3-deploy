@@ -6,13 +6,17 @@ a { color: #96c123; transition: color 500ms; }
 a:hover { color: #312e2b; }
 body { font-family: sans-serif; }
 span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
-div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
+div, p, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
+input, label, select { clear: both; float: left; }
 #main-wrapper { padding: 15px 6%; }
 #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
+#btn-refresh { bottom: 8px; position: absolute; right: 0; }
 #main > span { padding: 0 6%; }
 #main > div { margin: 10px 0; padding: 20px 2%; border: 1px solid; }
-#form { padding-top: 15px; padding-bottom: 30px; }
+#form { min-width: 500px; padding-top: 15px; padding-bottom: 30px; width: 49%; }
+#form_2 { float: right; min-width: 500px; width: 49%; }
 #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
+button.submit { border-bottom: 5px solid #96c123; }
 select { background-color: #96c123; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -32,19 +36,22 @@ select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, tr
   box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
   -moz-box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
   -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
-.form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
+.form-btn:hover { background: #96c123; cursor: pointer; color: white; }
 .form-btn:active { opacity: 0.9; }
 .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
 .input:focus { background-color: #96c123; }
-.btn-delete {  }
+.btn-delete { border-bottom: 5px solid red; float: left; clear: both; }
 #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
+#form-t3-delete { padding: 15px 0; }
+#form-t3-delete ul li { clear: both; float: left; list-style: none; padding: 10px 0; }
+.list-versions { float: left; padding: 10px 20px; }
 .hidden { display: none; }
 .warning { background-color: orange; color: #fff; }
 .error { background-color: darkred; color; #fff; }
 .success { background-color: green; }
 .exists { background-color: grey; }
 .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
-
+#footer p { font-size: 85%; }
 .dropdown { display: inline-block; position: relative; overflow: hidden; height: 28px; width: 200px; background: #f2f2f2; border: 1px solid; border-color: white #f7f7f7 whitesmoke; border-radius: 3px;
   background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
   background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
@@ -67,12 +74,14 @@ select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, tr
   background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
   background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
   -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); }
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); float: left; clear: both; }
 .dropdown-dark:before { border-bottom-color: #aaa; }
 .dropdown-dark:after { border-top-color: #aaa; }
 .dropdown-dark .dropdown-select { color: #fff; text-shadow: 0 1px black; background: #444; }
 .dropdown-dark .dropdown-select:focus { color: #ccc; }
 .dropdown-dark .dropdown-select > option { background: #444; text-shadow: 0 1px rgba(0, 0, 0, 0.4); }
+
+#lang { float: left; clear: both; margin-top: 15px; }
 
 /* START: Loading; */
 @keyframes spin-a {

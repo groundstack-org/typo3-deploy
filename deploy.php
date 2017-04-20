@@ -1,9 +1,5 @@
-<?php
-if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
-    echo "<span class='success'>File successfully deleted!</span>";
-    unlink("deploy.php");
-    exit();
-}
+<?php require_once("/resources/lib/Deployer.php");
+  $deployer = new Deployer($_POST);
 ?>
 <!doctype html>
 <html>
@@ -12,143 +8,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
 
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
-  <!-- <link rel="stylesheet" href="https://rawgit.com/Teisi/typo3-deploy/dev/resources/css/typo3-simple-deploy.css"> -->
-  <style>
-  *, *:before, *:after {padding:0;margin:0;-webkit-box-sizing:inherit;-moz-box-sizing:inherit;box-sizing:inherit;}html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main,summary,time,mark,audio,video{margin:0;padding:0;border:0;outline:0;vertical-align:baseline;background:transparent;position: relative;}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section,main{display:block}nav ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:none}a{margin:0;padding:0;font-size:100%;vertical-align:baseline;background:transparent;text-decoration:none;}ins{background-color:#ff9;color:#000;text-decoration:none}mark{background-color:#ff9;color:#000;font-style:italic;font-weight:bold}del{text-decoration:line-through}abbr[title],dfn[title]{border-bottom:1px dotted;cursor:help}table{border-collapse:collapse;border-spacing:0;}hr{display:block;float:left;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0;width:100%;}input,select{ vertical-align: middle; outline: 0; } input:focus {outline: 0 none;}html, body { font-size: 100.1%; min-height: 100%; min-width: 310px; position: relative; width: 100%; -webkit-overflow-scrolling: touch; }html {height: 100%;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;}body {line-height:1;height: auto;-webkit-text-size-adjust: none; -ms-text-size-adjust: none; text-size-adjust: none; overflow-x:hidden; -webkit-backface-visibility: hidden; -moz-backface-visibility: hidden; -ms-backface-visibility: hidden; -o-backface-visibility: hidden; backface-visibility: hidden; height: 100%; background-color: #FFF; }img { display: block; height: auto; max-width: 100%; }a { text-decoration: none; -webkit-transition: color 300ms; -moz-transition: color 300ms; -ms-transition: color 300ms; transition: color 300ms; }a img { border: none; }template, .template { display: none; opacity: 0; visibility: hidden; }.br-to-old { background: red; padding: 1%; position: relative; width: 100%; }.ie img[src*=".svg"] {width: 100%; }
-  @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
-    img[src*=".svg"] {width: 100%; }
-  }
-  a { color: #96c123; transition: color 500ms; }
-  a:hover { color: #312e2b; }
-  body { font-family: sans-serif; }
-  span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
-  div, p, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
-  input, label, select { clear: both; float: left; }
-  #main-wrapper { padding: 15px 6%; }
-  #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
-  #btn-refresh { bottom: 8px; position: absolute; right: 0; }
-  #main > span { padding: 0 6%; }
-  #main > div { margin: 10px 0; padding: 20px 2%; border: 1px solid; }
-  #form { min-width: 500px; padding-top: 15px; padding-bottom: 30px; width: 49%; }
-  #form_2 { float: right; min-width: 500px; width: 49%; }
-  #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
-  button.submit { border-bottom: 5px solid #96c123; }
-  select { background-color: #96c123; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    -moz-appearance: none; }
-  select.t3_version { background-image: linear-gradient(45deg, transparent 50%, blue 50%), linear-gradient(135deg, blue 50%, transparent 50%), linear-gradient(to right, #fff, #fff);
-    background-position: calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px), 100% 0;
-    background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; }
-  select.t3_version:focus { background-image: linear-gradient(45deg, white 50%, transparent 50%), linear-gradient(135deg, transparent 50%, white 50%), linear-gradient(to right, #000, #000);
-    background-position: calc(100% - 15px) 1em, calc(100% - 20px) 1em, 100% 0;
-    background-size: 5px 5px, 5px 5px, 2.5em 2.5em; background-repeat: no-repeat; border-color: grey; outline: 0; }
-  .form-btn { font-size: 100%; width: 200px; display: block; height: auto; padding: 6px; color: #fff; background: #312e2b; border: none; border-radius: 3px; outline: none;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    transition: all 0.3s;
-    box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
-    -moz-box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
-    -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
-  .form-btn:hover { background: #96c123; cursor: pointer; color: white; }
-  .form-btn:active { opacity: 0.9; }
-  .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
-  .input:focus { background-color: #96c123; }
-  .btn-delete { border-bottom: 5px solid red; float: left; clear: both; }
-  #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
-  #form-t3-delete { padding: 15px 0; }
-  #form-t3-delete ul li { clear: both; float: left; list-style: none; padding: 10px 0; }
-  .list-versions { float: left; padding: 10px 20px; }
-  .hidden { display: none; }
-  .warning { background-color: orange; color: #fff; }
-  .error { background-color: darkred; color; #fff; }
-  .success { background-color: green; }
-  .exists { background-color: grey; }
-  .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
-  #footer p { font-size: 85%; }
-  .dropdown { display: inline-block; position: relative; overflow: hidden; height: 28px; width: 200px; background: #f2f2f2; border: 1px solid; border-color: white #f7f7f7 whitesmoke; border-radius: 3px;
-    background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-    background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-    background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
-    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.06));
-    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08);
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.08); }
-  .dropdown:before, .dropdown:after { content: ''; position: absolute; z-index: 2; top: 9px; right: 10px; width: 0; height: 0; border: 4px dashed; border-color: #888888 transparent; pointer-events: none; }
-  .dropdown:before { border-bottom-style: solid; border-top: none; }
-  .dropdown:after { margin-top: 7px; border-top-style: solid; border-bottom: none; }
-  .dropdown-select { color: #62717a; position: relative; width: 130%; margin: 0; padding: 2px 6px 8px 10px; height: 30px; font-size: 100%; text-shadow: 0 1px white; background: #f2f2f2; /* Fallback for IE 8 */ background: rgba(0, 0, 0, 0) !important; /* "transparent" doesn't work with Opera */ border: 0; border-radius: 0; -webkit-appearance: none; }
-  .dropdown-select:focus { z-index: 3; width: 100%; color: #394349; outline: 2px solid #49aff2; outline: 2px solid -webkit-focus-ring-color; outline-offset: -2px; }
-  .dropdown-select > option { margin: 3px; padding: 6px 8px; text-shadow: none; background: #f2f2f2; border-radius: 3px; cursor: pointer; }
-  @-moz-document url-prefix() {
-    .dropdown-select { padding-left: 6px; }
-  }
-  .dropdown-dark { background: #444; border-color: #111111 #0a0a0a black;
-    background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-    background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-    background-image: -o-linear-gradient(top, transparent, rgba(0, 0, 0, 0.4));
-    background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.4));
-    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px 1px rgba(0, 0, 0, 0.2); float: left; clear: both; }
-  .dropdown-dark:before { border-bottom-color: #aaa; }
-  .dropdown-dark:after { border-top-color: #aaa; }
-  .dropdown-dark .dropdown-select { color: #fff; text-shadow: 0 1px black; background: #444; }
-  .dropdown-dark .dropdown-select:focus { color: #ccc; }
-  .dropdown-dark .dropdown-select > option { background: #444; text-shadow: 0 1px rgba(0, 0, 0, 0.4); }
-
-  #lang { float: left; clear: both; margin-top: 15px; }
-
-  /* START: Loading; */
-  @keyframes spin-a {
-    0%   { transform: rotate(90deg); }
-    0%  { transform: rotate(90deg); }
-    50%  { transform: rotate(180deg); }
-    75%  { transform: rotate(270deg); }
-    100% { transform: rotate(360deg); }
-  }
-  @keyframes spin-b {
-    0%   { transform: rotate(90deg); }
-    25%  { transform: rotate(90deg); }
-    25%  { transform: rotate(180deg); }
-    75%  { transform: rotate(270deg); }
-    100% { transform: rotate(360deg); }
-  }
-  @keyframes spin-c {
-    0%   { transform: rotate(90deg); }
-    25%  { transform: rotate(90deg); }
-    50%  { transform: rotate(180deg); }
-    50%  { transform: rotate(270deg); }
-    100% { transform: rotate(360deg); }
-  }
-  @keyframes spin-d {
-    0%   { transform: rotate(90deg); }
-    25%  { transform: rotate(90deg); }
-    50%  { transform: rotate(180deg); }
-    75%  { transform: rotate(270deg); }
-    75% { transform: rotate(360deg); }
-    100% { transform: rotate(360deg); }
-  }
-  .loading { opacity: 0.9; position: relative; width: 100%; }
-  .loading > div { height: 60px; left: 50%; margin: 0 auto 0 -30px; position: absolute; top: 50%; width: 60px; }
-  .loading > div > div { background: #96c123; border-radius: 8px; content: ''; height: 16px; left: 10px; position: absolute; top: 10px; width: 16px;
-    transform-origin: 20px 20px;
-    animation: spin-a 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
-  .loading > div > .c2 { top: 10px; left: auto; right: 10px;
-    transform-origin: -4px 20px;
-    animation: spin-b 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
-  .loading > div > .c3 { top: auto; left: auto; right: 10px; bottom: 10px;
-    transform-origin: -4px -4px;
-    animation: spin-c 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
-  .loading > div > .c4 { top: auto; bottom: 10px;
-    transform-origin: 20px -4px;
-    animation: spin-d 2s infinite cubic-bezier(0.5, 0, 0.5, 1); }
-  .loading > span { color: #96c123; font-size: 12px; height: 30px; margin-left: -50px; margin-top: 56px; min-width: 0; left: 50%;
-    position: absolute; top: 50%; text-align: center; width: 100px; }
-  /* END: Loading; */
-  #main > .loading { border: none; }
-
-  </style>
+  <link rel="stylesheet" href="/resources/css/typo3-simple-deploy.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 
@@ -163,12 +23,16 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
       <button id="btn-refresh" class="form-btn" type="button">Refresh this page!</button>
     </header>
     <main id="main">
+      <div id="delete-deployment" class="">
+        <strong data-translate="_aftersuccess">After success:</strong>
+        <form id="form-delete-deployment" class="" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+          <input type="hidden" name="formtype" value="deletedeployment" />
+          <button id="submit-delete-deployment" class="form-btn submit" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
+        </form>
+      </div>
       <div id="form">
-        <p>
-    			<strong data-translate="_aftersuccess">After success:</strong><br />
-          <span data-translate="_pleasedelete">Please delete this file (deploy.php)! Or click</span><br /> <a href="deploy.php?php_var=delete" title="delete script"><button class="btn-delete form-btn" data-translate="_deleteme">Delete me!</button></a><br />
-        </p>
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+          <input type="hidden" name="formtype" value="t3install" />
   				<ul class="">
   					<li class="choose-version">
   						<label class="t3_version_label" for="text_id"><span data-translate="_yourversion">Enter your desired version:</span><br /><span class="info" data-translate="_pleaseuseform">(Please use this form: 6.2.12)</label><br />
@@ -178,7 +42,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   						<label class="t3_function_label" for="text_function_id"><span data-translate="_t3function">Please choose:</span></label>
               <div class="dropdown dropdown-dark">
                 <select class="t3_function dropdown-select" name="t3_function" id="text_function_id" required>
-                  <option value="firstinstall" selected>First Install</option>
+                  <option value="completeinstall" selected>First Install</option>
                   <option value="onlysymlink">Only change symlink</option>
                   <option value="downloadextract">Only download and extract</option>
                   <option value="downloadextractlink">Download, extract and change symlink</option>
@@ -206,7 +70,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
               <div class="left" id="install-tool-pw-element"></div>
             </li>
   					<li class="from_submit">
-  						<button id="submit" class="form-btn submit" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
+  						<button id="submit" class="form-btn submit" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
   					</li>
   				</ul>
   			</form>
@@ -231,6 +95,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
           ?>
         </ul>
         <form id="form-t3-delete" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+          <input type="hidden" name="formtype" value="t3sourcedelete" />
   				<ul class="">
             <li class="choose-function_delete">
   						<label class="t3_function_delete_label" for="text_function_delete_id"><span data-translate="_t3functiondelete">Here you can specify and delete the Typo3 version you no longer need:</span></label>
@@ -252,7 +117,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
               </div>
   					</li>
             <li class="from_submit">
-              <button id="submitdelete" class="form-btn submit" type="submit" name="senddelete" value="Senden" data-translate="_senddelete">Delete</button>
+              <button id="submitdelete" class="form-btn submit" type="submit" name="sendt3versiondelete" value="Senden" data-translate="_senddelete">Delete</button>
             </li>
           </ul>
         </form>
