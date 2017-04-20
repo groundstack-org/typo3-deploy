@@ -22,14 +22,17 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   a:hover { color: #312e2b; }
   body { font-family: sans-serif; }
   span { clear: both; float: left; min-width: 300px; padding: 10px 0; }
-  div, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
+  div, p, #header, #main, #footer, #main-wrapper, form { float: left; width: 100%; }
   input, label, select { clear: both; float: left; }
   #main-wrapper { padding: 15px 6%; }
   #header { border-bottom: 2px solid; margin-bottom: 10px; margin-top: 20px; padding-bottom: 8px; }
+  #btn-refresh { bottom: 8px; position: absolute; right: 0; }
   #main > span { padding: 0 6%; }
   #main > div { margin: 10px 0; padding: 20px 2%; border: 1px solid; }
-  #form { padding-top: 15px; padding-bottom: 30px; }
+  #form { min-width: 500px; padding-top: 15px; padding-bottom: 30px; width: 49%; }
+  #form_2 { float: right; min-width: 500px; width: 49%; }
   #form ul li { float: left; list-style: none; padding: 10px 0; width: 100%; }
+  button.submit { border-bottom: 5px solid #96c123; }
   select { background-color: #96c123; border: thin solid #000; border-radius: 4px; display: inline-block; padding-left: 4px; padding-top: 4px; padding-right: 45px; padding-bottom: 4px; margin: 0;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -49,23 +52,22 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
     box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
     -moz-box-shadow: 0 1px 4px rgba(0,0,0, 0.10);
     -webkit-box-shadow: 0 1px 4px rgba(0,0,0, 0.10); }
-  .form-btn:hover { background: #111; cursor: pointer; color: white; border: none;}
+  .form-btn:hover { background: #96c123; cursor: pointer; color: white; }
   .form-btn:active { opacity: 0.9; }
   .input { background-color: rgba(150, 193, 35, 0.7); margin-bottom: 10px; padding: 5px 10px; transition: all 400ms; min-width: 200px; }
   .input:focus { background-color: #96c123; }
-  .btn-delete { float: left; clear: both; }
+  .btn-delete { border-bottom: 5px solid red; float: left; clear: both; }
   #generate-install-pw { width: 100%; max-width: 200px; text-align: center; margin-bottom: 8px; }
+  #form-t3-delete { padding: 15px 0; }
+  #form-t3-delete ul li { clear: both; float: left; list-style: none; padding: 10px 0; }
+  .list-versions { float: left; padding: 10px 20px; }
   .hidden { display: none; }
   .warning { background-color: orange; color: #fff; }
   .error { background-color: darkred; color; #fff; }
   .success { background-color: green; }
   .exists { background-color: grey; }
   .readyToTakeOff { border-top: 2px solid; margin-top: 10px; text-align: center; }
-
-  .choose-function {  }
-  .t3_function_label {  }
-  .t3_function {  }
-
+  #footer p { font-size: 85%; }
   .dropdown { display: inline-block; position: relative; overflow: hidden; height: 28px; width: 200px; background: #f2f2f2; border: 1px solid; border-color: white #f7f7f7 whitesmoke; border-radius: 3px;
     background-image: -webkit-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
     background-image: -moz-linear-gradient(top, transparent, rgba(0, 0, 0, 0.06));
@@ -158,6 +160,7 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
           <option>English</option>
           <option>German</option>
       </select>
+      <button id="btn-refresh" class="form-btn" type="button">Refresh this page!</button>
     </header>
     <main id="main">
       <div id="form">
@@ -173,12 +176,14 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
   					</li>
             <li class="choose-function">
   						<label class="t3_function_label" for="text_function_id"><span data-translate="_t3function">Please choose:</span></label>
-              <select class="t3_function" name="t3_function" id="text_function_id" required>
-                <option value="firstinstall" selected>First Install</option>
-                <option value="onlysymlink">Only change symlink</option>
-                <option value="downloadextract">Only download and extract</option>
-                <option value="downloadextractlink">Download, extract and change symlink</option>
-              </select>
+              <div class="dropdown dropdown-dark">
+                <select class="t3_function dropdown-select" name="t3_function" id="text_function_id" required>
+                  <option value="firstinstall" selected>First Install</option>
+                  <option value="onlysymlink">Only change symlink</option>
+                  <option value="downloadextract">Only download and extract</option>
+                  <option value="downloadextractlink">Download, extract and change symlink</option>
+                </select>
+              </div>
   					</li>
             <li class="form-db-data">
               <label><span data-translate="_databaseisstored">Database Access data are stored in 'typo3_config/typo3_db.php'.</span></label><br /><br />
@@ -201,10 +206,56 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
               <div class="left" id="install-tool-pw-element"></div>
             </li>
   					<li class="from_submit">
-  						<button id="submit" class="form-btn" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
+  						<button id="submit" class="form-btn submit" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
   					</li>
   				</ul>
   			</form>
+      </div>
+      <div id="form_2">
+        <?php
+          $t3_sources_dir = '../typo3_sources/';
+        ?>
+        <p><span data-translate="_t3functiondelete_existsversions">Typo3 versions which exists in "../typo3_sources/":</span></p>
+        <ul class="list-versions">
+          <?php
+            function listSources($t3_sources_dir) {
+              $listdir = dir($t3_sources_dir);
+              while(($fl = $listdir->read()) != false) {
+                  if($fl != "." && $fl != "..") {
+                     echo "<li>".$fl."</li>";
+                  }
+              }
+              $listdir->close();
+            }
+            listSources($t3_sources_dir);
+          ?>
+        </ul>
+        <form id="form-t3-delete" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+  				<ul class="">
+            <li class="choose-function_delete">
+  						<label class="t3_function_delete_label" for="text_function_delete_id"><span data-translate="_t3functiondelete">Here you can specify and delete the Typo3 version you no longer need:</span></label>
+              <div class="dropdown dropdown-dark">
+                <select class="t3_function_delete dropdown-select" name="t3_function_delete" id="text_function_delete_id" required>
+                  <?php
+                    function listOptionSources($t3_sources_dir) {
+                      $optiondir = dir($t3_sources_dir);
+                      while(($f = $optiondir->read()) != false) {
+                          if($f != "." && $f != "..") {
+                             echo "<option value='".$f."'>".$f."</option>";
+                          }
+                      }
+                      $optiondir->close();
+                    }
+                    listOptionSources($t3_sources_dir);
+                  ?>
+                </select>
+              </div>
+  					</li>
+            <li class="from_submit">
+              <button id="submitdelete" class="form-btn submit" type="submit" name="senddelete" value="Senden" data-translate="_senddelete">Delete</button>
+            </li>
+          </ul>
+        </form>
       </div>
       <div class="loading">
         <div>
@@ -217,6 +268,60 @@ if (isset($_GET['php_var']) && $_GET['php_var'] === "delete") {
       </div>
 <?php
 $t3_version = "empty";
+
+if(isset($_POST['senddelete'])) {
+  $t3_version_delete = "";
+
+  function escape_input($data) {
+    $tmp_str_replace_orig = array('"', "'", "<", ">", " ");
+    $tmp_str_replace_target = array('', "", "", "", "");
+    return str_replace($tmp_str_replace_orig, $tmp_str_replace_target, htmlspecialchars(stripslashes(trim($data))));
+  }
+
+  if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $t3_version_delete = escape_input($_POST['t3_function_delete']);
+  }
+
+  function rrmdir($src) {
+    $dir = opendir($src);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            $full = $src . '/' . $file;
+            if ( is_dir($full) ) {
+                rrmdir($full);
+            }
+            else {
+                unlink($full);
+            }
+        }
+    }
+    closedir($dir);
+    rmdir($src);
+  }
+
+  function deleteDir($path, $filename) {
+    $filepath = $path.$filename;
+    echo "<div class='delete-file-dir'>";
+    echo "<span class=''>Try to delete: '$filepath'...</span>";
+    rrmdir($filepath);
+
+    if(!file_exists($filepath)) {
+      echo "<span class='success'>Successfully deleted: '$filepath' or dosen't exists.</span>";
+    } else {
+      echo "<span class='warning'>Can't delete: '$filepath'!</span>";
+    }
+
+    echo "</div>";
+  }
+
+  deleteDir($t3_sources_dir, $t3_version_delete);
+}
+
+
+
+
+
+
 
 if(isset($_POST['sent'])) {
   $t3_version = $t3_db_user = $t3_db_name = $t3_db_user = $t3_db_host = $t3_db_socket = $t3_install_tool = $t3_function = "";
@@ -553,7 +658,7 @@ if (!defined('TYPO3_MODE')) {
 ?>
   </main>
   <footer id="footer">
-    <p><a href="http://groundstack.de" title="Created by">groundstack.de</a></p>
+    <p>Developed by <a href="https://www.facebook.com/profile.php?id=100007889897625" title="developed by">Christian Hackl</a> from <a href="http://groundstack.de" title="Created by">groundstack.de</a></p>
   </footer>
 </div>
 <!-- <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script> -->
@@ -591,6 +696,11 @@ if (!defined('TYPO3_MODE')) {
 
 
  (function($) {
+   $("#form-t3-install, #form-t3-delete").attr("action", "deploy.php");
+   $("#btn-refresh").on("click touchend", function() {
+     window.location.href = window.location.href;
+   });
+
    var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
    $.fn.reverse = [].reverse;
    function validate(s) {
@@ -602,17 +712,16 @@ if (!defined('TYPO3_MODE')) {
      }
    }
    $(".loading").fadeOut(0);
-   $("#submit").on("click touchend", function() {
+   $(".submit").on("click touchend", function() {
      $(".loading").fadeIn(500);
    });
    var inter = setInterval(function() {
-     if($(".readyToTakeOff, .error, .warning").length > 0) {
+     if($(".readyToTakeOff, .error, .warning, .success").length > 0) {
        $(".loading").fadeOut(0);
        $("body").animate({ scrollTop: $(document).height() }, 1000);
        clearInterval(inter);
      }
    }, 200);
-   $("#form-t3-install").attr("action", "deploy.php");
    label_info_version.text("Please wait");
    $.getJSON("https://get.typo3.org/json", function(data) {
      var items = [];
@@ -694,7 +803,10 @@ if (!defined('TYPO3_MODE')) {
         "_installtoolstoredin": "Install Tool password is stored in 'typo3_config/typo3_db.php'.",
         "_installpassword": "Install Tool password",
         "_generatepassword": "Generate a password",
-        "_send": "Send"
+        "_send": "Send",
+        "_t3functiondelete": "Here you can specify and delete the Typo3 version you no longer need:",
+        "_t3functiondelete_existsversions": "Typo3 versions which exists in '../typo3_sources/':",
+        "_senddelete": "Delete Typo3 source"
 
     },
     "german": {
@@ -713,7 +825,10 @@ if (!defined('TYPO3_MODE')) {
         "_installtoolstoredin": "Install Tool Passwort ist gespeichert in 'typo3_config/typo3_db.php'.",
         "_installpassword": "Install Tool Passwort",
         "_generatepassword": "Generiere ein Passwort",
-        "_send": "Absenden"
+        "_send": "Absenden",
+        "_t3functiondelete": "Hier kannst du die Typo3 Version(en) löschen die du nicht mehr benötigst:",
+        "_t3functiondelete_existsversions": "Typo3 Versionen die in '../typo3_sources/' liegen:",
+        "_senddelete": "Lösche diesen Typo3 Source"
     }
 }
 
