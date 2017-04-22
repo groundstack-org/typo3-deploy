@@ -1,4 +1,5 @@
-<?php require_once("/resources/lib/Deployer.php");
+<?php
+  require_once("/resources/lib/Deployer.php");
   $deployer = new Deployer($_POST);
 ?>
 <!doctype html>
@@ -23,6 +24,8 @@
       <button id="btn-refresh" class="form-btn" type="button">Refresh this page!</button>
     </header>
     <main id="main">
+
+      /* form to delete deployment script */
       <div id="delete-deployment" class="">
         <strong data-translate="_aftersuccess">After success:</strong>
         <form id="form-delete-deployment" class="" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
@@ -30,52 +33,61 @@
           <button id="submit-delete-deployment" class="form-btn submit" type="submit" name="sent" value="Senden" data-translate="_send">Send</button>
         </form>
       </div>
+
+      /* form to install or change Typo3 installation */
       <div id="form">
         <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
           <input type="hidden" name="formtype" value="t3install" />
-  				<ul class="">
-  					<li class="choose-version">
-  						<label class="t3_version_label" for="text_id"><span data-translate="_yourversion">Enter your desired version:</span><br /><span class="info" data-translate="_pleaseuseform">(Please use this form: 6.2.12)</label><br />
-  						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
-  					</li>
-            <li class="choose-function">
-  						<label class="t3_function_label" for="text_function_id"><span data-translate="_t3function">Please choose:</span></label>
-              <div class="dropdown dropdown-dark">
-                <select class="t3_function dropdown-select" name="t3_function" id="text_function_id" required>
-                  <option value="completeinstall" selected>First Install</option>
-                  <option value="onlysymlink">Only change symlink</option>
-                  <option value="downloadextract">Only download and extract</option>
-                  <option value="downloadextractlink">Download, extract and change symlink</option>
-                </select>
-              </div>
-  					</li>
-            <li class="form-db-data">
-              <label><span data-translate="_databaseisstored">Database Access data are stored in 'typo3_config/typo3_db.php'.</span></label><br /><br />
-              <label class="label label-name" for="db-name" data-translate="_databasename">Database name</label><br />
-              <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName"><br />
-              <label class="label label-name" for="db-name" data-translate="_databaseuser">Database username</label><br />
-              <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser"><br />
-              <label class="label label-name" for="db-password" data-translate="_databaseuserpassword">Database userpassword (character '&' not allowed)</label><br />
-              <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort"><br />
-              <label class="label label-name" for="db-host"data-translate="_databasehost">Database host</label><br />
-              <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost"><br />
-              <label class="label label-name" for="db-socket" data-translate="_databasesocket">Database socket</label><br />
-              <input id="db-socket" class="input" type="text" name="t3_db_socket" value=""><br />
-            </li>
-            <li class="form-install-tool">
-              <label data-translate="_installtoolstoredin">Install Tool password is stored in 'typo3_config/typo3_db.php'.</label><br /><br />
-              <label class="label label-install-tool-pw" for="install-tool-pw" data-translate="_installpassword">Install Tool password (character '&' not allowed)</label><br />
-              <input type="password" class="input left form-control" id="install-tool-pw" name="t3_install_tool" value="" /> <br /><br />
-              <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" data-translate="_generatepassword">Generate a password</a>
-              <div class="left" id="install-tool-pw-element"></div>
-            </li>
-  					<li class="from_submit">
-  						<button id="submit" class="form-btn submit" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
-  					</li>
-  				</ul>
+					<div class="choose-version">
+						<label class="t3_version_label" for="text_id">
+              <span data-translate="_yourversion">Enter your desired version:</span><br />
+              <span class="info" data-translate="_pleaseuseform">(Please use this form: 6.2.12)</span>
+            </label>
+						<input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
+					</div>
+          <div class="choose-function">
+						<label class="t3_function_label" for="text_function_id">
+              <span data-translate="_t3function">Please choose:</span>
+            </label>
+            <div class="dropdown dropdown-dark">
+              <select class="t3_function dropdown-select" name="t3_function" id="text_function_id" required>
+                <option value="completeinstall" selected>First Install</option>
+                <option value="onlysymlink">Only change symlink</option>
+                <option value="downloadextract">Only download and extract</option>
+                <option value="downloadextractlink">Download, extract and change symlink</option>
+              </select>
+            </div>
+					</div>
+          <div class="form-db-data">
+            <label>
+              <span data-translate="_databaseisstored">Database Access data are stored in 'typo3_config/typo3_db.php'.</span>
+            </label>
+            <label class="label label-name" for="db-name" data-translate="_databasename">Database name</label>
+            <input id="db-name" class="input" type="text" name="t3_db_name" value="databaseName">
+            <label class="label label-name" for="db-name" data-translate="_databaseuser">Database username</label>
+            <input id="db-user" class="input" type="text" name="t3_db_user" value="databaseUser">
+            <label class="label label-name" for="db-password" data-translate="_databaseuserpassword">Database userpassword</label>
+            <input id="db-password" class="input" type="password" name="t3_db_password" value="databasePasswort">
+            <label class="label label-name" for="db-host"data-translate="_databasehost">Database host</label>
+            <input id="db-host" class="input" type="text" name="t3_db_host" value="localhost">
+            <label class="label label-name" for="db-socket" data-translate="_databasesocket">Database socket</label>
+            <input id="db-socket" class="input" type="text" name="t3_db_socket" value="">
+          </div>
+          <div class="form-install-tool">
+            <label data-translate="_installtoolstoredin">Install Tool password is stored in 'typo3_config/typo3_db.php'.</label>
+            <label class="label label-install-tool-pw" for="install-tool-pw" data-translate="_installpassword">Install Tool password</label>
+            <input type="password" class="input left form-control" id="install-tool-pw" name="t3_install_tool" value="" />
+            <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" data-translate="_generatepassword">Generate a password</a>
+            <div class="left" id="install-tool-pw-element"></div>
+          </div>
+					<div class="from_submit">
+						<button id="submit" class="form-btn submit" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
+					</div>
   			</form>
       </div>
-      <div id="form_2">
+
+      /* lists all existing Typo3 sources in folder typo3_sources */
+      <div class="list-typo3-sources">
         <?php
           $t3_sources_dir = '../typo3_sources/';
         ?>
@@ -94,6 +106,10 @@
             listSources($t3_sources_dir);
           ?>
         </ul>
+      </div>
+
+      /* form to delete existing Typo3 sources */
+      <div id="form_2">
         <form id="form-t3-delete" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
           <input type="hidden" name="formtype" value="t3sourcedelete" />
   				<ul class="">
@@ -122,6 +138,7 @@
           </ul>
         </form>
       </div>
+
       <div class="loading">
         <div>
           <div class="c1"></div>
@@ -131,60 +148,16 @@
         </div>
         <span>...loading...</span>
       </div>
+
+      <?=
+        $deployer->t3install_onlysymlink();
+      ?>
+
+
 <?php
+$deployer->t3install_completeinstall();
+
 $t3_version = "empty";
-
-if(isset($_POST['senddelete'])) {
-  $t3_version_delete = "";
-
-  function escape_input($data) {
-    $tmp_str_replace_orig = array('"', "'", "<", ">", " ");
-    $tmp_str_replace_target = array('', "", "", "", "");
-    return str_replace($tmp_str_replace_orig, $tmp_str_replace_target, htmlspecialchars(stripslashes(trim($data))));
-  }
-
-  if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $t3_version_delete = escape_input($_POST['t3_function_delete']);
-  }
-
-  function rrmdir($src) {
-    $dir = opendir($src);
-    while(false !== ( $file = readdir($dir)) ) {
-        if (( $file != '.' ) && ( $file != '..' )) {
-            $full = $src . '/' . $file;
-            if ( is_dir($full) ) {
-                rrmdir($full);
-            }
-            else {
-                unlink($full);
-            }
-        }
-    }
-    closedir($dir);
-    rmdir($src);
-  }
-
-  function deleteDir($path, $filename) {
-    $filepath = $path.$filename;
-    echo "<div class='delete-file-dir'>";
-    echo "<span class=''>Try to delete: '$filepath'...</span>";
-    rrmdir($filepath);
-
-    if(!file_exists($filepath)) {
-      echo "<span class='success'>Successfully deleted: '$filepath' or dosen't exists.</span>";
-    } else {
-      echo "<span class='warning'>Can't delete: '$filepath'!</span>";
-    }
-
-    echo "</div>";
-  }
-
-  deleteDir($t3_sources_dir, $t3_version_delete);
-}
-
-
-
-
 
 
 
@@ -214,7 +187,7 @@ if(isset($_POST['sent'])) {
   $t3_src_dir_name = "../typo3_sources";
   $t3_version_dir = "typo3_src-{$t3_version}";
   $t3_zip_file = "{$t3_version_dir}.tar.gz";
-  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$t3_version}/{$t3_zip_file}";
+  $typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$this->t3_version}/";
   $t3_config_date = date("Ymd_His");
 
   function downloadFile($url, $path) {
