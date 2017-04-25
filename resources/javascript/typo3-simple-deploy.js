@@ -83,6 +83,26 @@
 })(jQuery);
 
 (function($) {
+  $.fn.autosubmit = function() {
+    this.submit(function(event) {
+      event.preventDefault();
+      var form = $(this);
+      $.ajax({
+        type: form.attr('method'),
+        url: 'resources/api',
+        data: form.serialize()
+      }).done(function(data) {
+        alert(data);
+      }).fail(function(data) {
+        alert("fail");
+      });
+    });
+    return this;
+  }
+
+  $('#ajax_form_test').autosubmit();
+})(jQuery);
+(function($) {
   var dictionary, set_lang;
 
   // Object literal behaving as multi-dictionary

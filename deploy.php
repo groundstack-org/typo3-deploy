@@ -1,5 +1,7 @@
 <?php
+  require_once("/resources/lib/Helper.php");
   require_once("/resources/lib/Deployer.php");
+
   $deployer = new Deployer($_POST);
 ?>
 <!doctype html>
@@ -9,7 +11,7 @@
 
   <title>Typo3 deploy script</title>
   <meta name="description" content="The Typo3 simple deploy script.">
-  <link rel="stylesheet" href="/resources/css/typo3-simple-deploy.css">
+  <link rel="stylesheet" href="resources/css/typo3-simple-deploy.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 </head>
 
@@ -35,8 +37,14 @@
       </div>
 
       /* form to install or change Typo3 installation */
+      <form id="ajax_form_test" method="post" action="resources/api">
+        <input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
+        <button id="submit" class="form-btn submit" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
+
+      </form>
+
       <div id="form">
-        <form id="form-t3-install" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+        <form id="form-t3-install" class="ajax_form" method="post">
           <input type="hidden" name="formtype" value="t3install" />
 					<div class="choose-version">
 						<label class="t3_version_label" for="text_id">
@@ -94,16 +102,16 @@
         <p><span data-translate="_t3functiondelete_existsversions">Typo3 versions which exists in "../typo3_sources/":</span></p>
         <ul class="list-versions">
           <?php
-            function listSources($t3_sources_dir) {
-              $listdir = dir($t3_sources_dir);
-              while(($fl = $listdir->read()) != false) {
-                  if($fl != "." && $fl != "..") {
-                     echo "<li>".$fl."</li>";
-                  }
-              }
-              $listdir->close();
-            }
-            listSources($t3_sources_dir);
+            // function listSources($t3_sources_dir) {
+            //   $listdir = dir($t3_sources_dir);
+            //   while(($fl = $listdir->read()) != false) {
+            //       if($fl != "." && $fl != "..") {
+            //          echo "<li>".$fl."</li>";
+            //       }
+            //   }
+            //   $listdir->close();
+            // }
+            // listSources($t3_sources_dir);
           ?>
         </ul>
       </div>
@@ -118,16 +126,16 @@
               <div class="dropdown dropdown-dark">
                 <select class="t3_function_delete dropdown-select" name="t3_function_delete" id="text_function_delete_id" required>
                   <?php
-                    function listOptionSources($t3_sources_dir) {
-                      $optiondir = dir($t3_sources_dir);
-                      while(($f = $optiondir->read()) != false) {
-                          if($f != "." && $f != "..") {
-                             echo "<option value='".$f."'>".$f."</option>";
-                          }
-                      }
-                      $optiondir->close();
-                    }
-                    listOptionSources($t3_sources_dir);
+                    // function listOptionSources($t3_sources_dir) {
+                    //   $optiondir = dir($t3_sources_dir);
+                    //   while(($f = $optiondir->read()) != false) {
+                    //       if($f != "." && $f != "..") {
+                    //          echo "<option value='".$f."'>".$f."</option>";
+                    //       }
+                    //   }
+                    //   $optiondir->close();
+                    // }
+                    // listOptionSources($t3_sources_dir);
                   ?>
                 </select>
               </div>
@@ -149,13 +157,13 @@
         <span>...loading...</span>
       </div>
 
-      <?=
-        $deployer->t3install_onlysymlink();
+      <?php
+        // $deployer->t3install_onlysymlink();
       ?>
 
 
 <?php
-$deployer->t3install_completeinstall();
+// $deployer->t3install_completeinstall();
 
 $t3_version = "empty";
 
@@ -499,40 +507,9 @@ if (!defined('TYPO3_MODE')) {
     <p>Developed by <a href="https://www.facebook.com/profile.php?id=100007889897625" title="developed by">Christian Hackl</a> from <a href="http://groundstack.de" title="Created by">groundstack.de</a></p>
   </footer>
 </div>
-<!-- <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/pGenerator.min.js"></script> -->
-<!-- <script src="https://rawgit.com/Teisi/typo3-deploy/dev/resources/javascript/typo3-simple-deploy.js"></script> -->
+<script src="resources/javascript/pGenerator.min.js"></script>
+<script src="resources/javascript/typo3-simple-deploy.js"></script>
 <script>
-/*!
- * pGenerator jQuery Plugin v1.0.5
- * https://github.com/M1Sh0u/pGenerator
- *
- * Created by Mihai MATEI <mihai.matei@outlook.com>
- * Released under the MIT License (Feel free to copy, modify or redistribute this plugin.)
- */
- (function($){var numbers_array=[],upper_letters_array=[],lower_letters_array=[],special_chars_array=[],$pGeneratorElement=null;var methods={init:function(options,callbacks)
- {var settings=$.extend({'bind':'click','passwordElement':null,'displayElement':null,'passwordLength':16,'uppercase':!0,'lowercase':!0,'numbers':!0,'specialChars':!0,'additionalSpecialChars':[],'onPasswordGenerated':function(generatedPassword){}},options);for(var i=48;i<58;i++){numbers_array.push(i)}
- for(i=65;i<91;i++){upper_letters_array.push(i)}
- for(i=97;i<123;i++){lower_letters_array.push(i)}
- special_chars_array=[33,35,36,42,123,125,47,63,58,59,95].concat(settings.additionalSpecialChars);return this.each(function(){$pGeneratorElement=$(this);$pGeneratorElement.bind(settings.bind,function(e){e.preventDefault();methods.generatePassword(settings)})})},generatePassword:function(settings)
- {var password=new Array(),selOptions=settings.uppercase+settings.lowercase+settings.numbers+settings.specialChars,selected=0,no_lower_letters=new Array();var optionLength=Math.floor(settings.passwordLength/selOptions);if(settings.uppercase){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(upper_letters_array[randomFromInterval(0,upper_letters_array.length-1)]))}
- no_lower_letters=no_lower_letters.concat(upper_letters_array);selected++}
- if(settings.numbers){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(numbers_array[randomFromInterval(0,numbers_array.length-1)]))}
- no_lower_letters=no_lower_letters.concat(numbers_array);selected++}
- if(settings.specialChars){for(var i=0;i<optionLength;i++){password.push(String.fromCharCode(special_chars_array[randomFromInterval(0,special_chars_array.length-1)]))}
- no_lower_letters=no_lower_letters.concat(special_chars_array);selected++}
- var remained=settings.passwordLength-(selected*optionLength);if(settings.lowercase){for(var i=0;i<remained;i++){password.push(String.fromCharCode(lower_letters_array[randomFromInterval(0,lower_letters_array.length-1)]))}}else{for(var i=0;i<remained;i++){password.push(String.fromCharCode(no_lower_letters[randomFromInterval(0,no_lower_letters.length-1)]))}}
- password=shuffle(password).join('');if(settings.passwordElement!==null){$(settings.passwordElement).val(password)}
- if(settings.displayElement!==null){if($(settings.displayElement).is("input")){$(settings.displayElement).val(password)}else{$(settings.displayElement).text(password)}}
- settings.onPasswordGenerated(password)}};function shuffle(o)
- {for(var j,x,i=o.length;i;j=parseInt(Math.random()*i),x=o[--i],o[i]=o[j],o[j]=x);return o}
- function randomFromInterval(from,to)
- {return Math.floor(Math.random()*(to-from+1)+from)}
- $.fn.pGenerator=function(method)
- {if(methods[method]){return methods[method].apply(this,Array.prototype.slice.call(arguments,1))}
- else if(typeof method==='object'||!method){return methods.init.apply(this,arguments)}
- else{$.error('Method '+method+' does not exist on jQuery.pGenerator')}}})(jQuery);
-
-
  (function($) {
    $("#form-t3-install, #form-t3-delete").attr("action", "deploy.php");
    $("#btn-refresh").on("click touchend", function() {
