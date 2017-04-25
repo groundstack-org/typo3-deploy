@@ -1,6 +1,6 @@
 <?php
-  require_once("/resources/lib/Helper.php");
-  require_once("/resources/lib/Deployer.php");
+  require_once("resources/lib/Helper.php");
+  require_once("resources/lib/Deployer.php");
 
   $deployer = new Deployer($_POST);
 ?>
@@ -37,10 +37,9 @@
       </div>
 
       /* form to install or change Typo3 installation */
-      <form id="ajax_form_test" method="post" action="resources/api">
+      <form id="ajax_form_test" method="post">
         <input type="text" class="t3_version" name="t3_version" id="text_id" value="7.6.16" autofocus min="5" maxlength="8" required />
         <button id="submit" class="form-btn submit" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
-
       </form>
 
       <div id="form">

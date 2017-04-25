@@ -49,7 +49,9 @@
     console.log("getJSON failed!");
   });
 })(jQuery);
- (function($) {
+
+
+(function($) {
   $('#generate-install-pw').pGenerator({
       'bind': 'click',
       'passwordElement': '#install-tool-pw',
@@ -64,6 +66,8 @@
       }
   });
 })(jQuery);
+
+
 (function($) {
   var formDbData = $(".form-db-data"),
       formInstallTool = $(".form-install-tool");
@@ -82,26 +86,19 @@
   });
 })(jQuery);
 
-(function($) {
-  $.fn.autosubmit = function() {
-    this.submit(function(event) {
-      event.preventDefault();
-      var form = $(this);
-      $.ajax({
-        type: form.attr('method'),
-        url: 'resources/api',
-        data: form.serialize()
-      }).done(function(data) {
-        alert(data);
-      }).fail(function(data) {
-        alert("fail");
-      });
-    });
-    return this;
-  }
 
-  $('#ajax_form_test').autosubmit();
+(function($) {
+  $("#form-t3-install, #ajax_form_test").on("submit", function(e) {
+    e.preventDefault();
+    var that = $(this), data = JSON.stringify(that.serializeArray());
+
+    $.post('api/index.php', data, function(returnedData) {
+      console.log(returnedData);
+    });
+  });
 })(jQuery);
+
+
 (function($) {
   var dictionary, set_lang;
 
