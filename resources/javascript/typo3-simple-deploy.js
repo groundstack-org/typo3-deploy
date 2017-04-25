@@ -88,13 +88,22 @@
 
 
 (function($) {
+  function assocJSON(formArray) {
+    var tmp = {};
+    $.each(formArray, function() {
+      tmp[this.name] = this.value;
+    });
+    return tmp;
+  }
+
   $("#form-t3-install, #ajax_form_test").on("submit", function(e) {
     e.preventDefault();
-    var that = $(this), data = JSON.stringify(that.serializeArray());
+    var $this = $(this), data = $this.serializeArray();
+    var tmpData = JSON.stringify(assocJSON(data));
 
-    console.log("data befor send:      " + data + "      ");
+  //  console.log(tmpData);
 
-    $.post('api/index.php', data, function(returnedData) {
+    $.post('api/index.php', tmpData, function(returnedData) {
       console.log("data returnedData:       " + returnedData + "      ");
     });
   });

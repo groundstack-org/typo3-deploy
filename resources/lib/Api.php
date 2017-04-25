@@ -9,10 +9,11 @@ class Api extends Deployer {
 
   function __construct($config=false) {
 
-    print_r($config);
+    // print_r($config);
 
     if($config && is_array($config)){
       $this->deployer = new Deployer($config);
+      $this->config = $this->deployer->getConfig();
       $this->api($config['formtype']);
     } else {
       echo "Please specify your API Data..";

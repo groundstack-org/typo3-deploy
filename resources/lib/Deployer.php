@@ -27,11 +27,15 @@ class Deployer extends Helper {
     }
   }
 
+  public function getConfig() {
+    return $this->config;
+  }
+
   public function initConfig($config) {
     $this->t3_version = $config['t3_version'];
     $this->t3_version_dir = "typo3_src-{$this->t3_version}";
 
-    switch ($this->config['formtype']) {
+    switch ($config['formtype']) {
       case 't3install':
         $this->t3_zip_file = "{$this->t3_version_dir}.tar.gz";
         $this->typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$this->t3_version}/{$this->t3_zip_file}";
@@ -66,13 +70,13 @@ class Deployer extends Helper {
   }
 
   public function t3install_completeinstall() {
-    if($config['t3_function'] == 'completeinstall') {
+    if($this->config['t3_function'] == 'completeinstall') {
       echo "bla";
     }
   }
 
   public function t3install_onlysymlink() {
-    if($config['t3_function'] == 'onlysymlink') {
+    if($this->config['t3_function'] == 'onlysymlink') {
       echo "<div id='onlysymlink' class='result'>";
       $this->helper->createSymlink("typo3_src", "{$this->t3_src_dir_name}/{$this->t3_version_dir}");
       $this->helper->createSymlink("typo3", "typo3_src/typo3");
@@ -82,7 +86,7 @@ class Deployer extends Helper {
   }
 
   public function t3install_downloadextract() {
-    if($config['t3_function'] == 'downloadextract') {
+    if($this->config['t3_function'] == 'downloadextract') {
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
           $this->helper->extractZipFile($this->t3_zip_file);
           return true;
@@ -91,7 +95,7 @@ class Deployer extends Helper {
   }
 
   public function t3install_downloadextractlink() {
-    if($config['t3_function'] == 'downloadextractlink') {
+    if($this->config['t3_function'] == 'downloadextractlink') {
       if ($this->t3install_downloadextract()) {
         if ($this->t3install_onlysymlink()) {
 
