@@ -92,8 +92,10 @@
     e.preventDefault();
     var that = $(this), data = JSON.stringify(that.serializeArray());
 
+    console.log("data befor send:      " + data + "      ");
+
     $.post('api/index.php', data, function(returnedData) {
-      console.log(returnedData);
+      console.log("data returnedData:       " + returnedData + "      ");
     });
   });
 })(jQuery);
