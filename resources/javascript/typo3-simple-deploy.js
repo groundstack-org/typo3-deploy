@@ -49,7 +49,9 @@
     console.log("getJSON failed!");
   });
 })(jQuery);
- (function($) {
+
+
+(function($) {
   $('#generate-install-pw').pGenerator({
       'bind': 'click',
       'passwordElement': '#install-tool-pw',
@@ -63,4 +65,108 @@
       alert('My new generated password is ' + generatedPassword);
       }
   });
+})(jQuery);
+
+
+(function($) {
+  var formDbData = $(".form-db-data"),
+      formInstallTool = $(".form-install-tool");
+  $('.t3_function').on('change', function() {
+    var that = $(this), val = that.val();
+    if(val === "firstinstall") {
+      formDbData.fadeIn();
+      formInstallTool.fadeIn();
+    } else if(val === "downloadextract") {
+      formDbData.fadeOut();
+      formInstallTool.fadeOut();
+    } else if(val === "downloadextractlink") {
+      formDbData.fadeOut();
+      formInstallTool.fadeOut();
+    }
+  });
+})(jQuery);
+
+
+(function($) {
+  $("#form-t3-install, #ajax_form_test").on("submit", function(e) {
+    e.preventDefault();
+    var that = $(this), data = JSON.stringify(that.serializeArray());
+
+    $.post('api/index.php', data, function(returnedData) {
+      console.log(returnedData);
+    });
+  });
+})(jQuery);
+
+
+(function($) {
+  var dictionary, set_lang;
+
+  // Object literal behaving as multi-dictionary
+  dictionary = {
+    "english": {
+        "_aftersuccess": "After success:",
+        "_pleasedelete": "Please delete this file (deploy.php)! Or click",
+        "_deleteme": "delete me!",
+        "_yourversion": "Enter your desired version:",
+        "_t3function": "Please choose:",
+        "_pleaseuseform": "(Please use this form: 6.2.12)",
+        "_databaseisstored": "Database Access data are stored in 'typo3_config/typo3_db.php'.",
+        "_databasename": "Database name",
+        "_databaseuser": "Database username",
+        "_databaseuserpassword": "Database userpassword",
+        "_databasehost": "Database host",
+        "_databasesocket": "Database socket",
+        "_installtoolstoredin": "Install Tool password is stored in 'typo3_config/typo3_db.php'.",
+        "_installpassword": "Install Tool password",
+        "_generatepassword": "Generate a password",
+        "_send": "Send",
+        "_t3functiondelete": "Here you can specify and delete the Typo3 version you no longer need:",
+        "_t3functiondelete_existsversions": "Typo3 versions which exists in '../typo3_sources/':",
+        "_senddelete": "Delete Typo3 source"
+
+    },
+    "german": {
+        "_aftersuccess": "Nach erfolgreicher Installation:",
+        "_pleasedelete": "Bitte lösche diese Datei (deploy.php)! Oder klicke hier",
+        "_deleteme": "lösche mich!",
+        "_yourversion": "Gib deine gewünschte Version ein:",
+        "_t3function": "Bitte auswählen:",
+        "_pleaseuseform": "(bitte in dieser Form: 6.2.12)",
+        "_databaseisstored": "Datenbank Zugangsdaten sind in 'typo3_config/typo3_db.php' gespeichert.",
+        "_databasename": "Datenbank Name",
+        "_databaseuser": "Datenbank Benutzer",
+        "_databaseuserpassword": "Datenbank Benutzerpasswort",
+        "_databasehost": "Datenbank Host",
+        "_databasesocket": "Datenbank Socket",
+        "_installtoolstoredin": "Install Tool Passwort ist gespeichert in 'typo3_config/typo3_db.php'.",
+        "_installpassword": "Install Tool Passwort",
+        "_generatepassword": "Generiere ein Passwort",
+        "_send": "Absenden",
+        "_t3functiondelete": "Hier kannst du die Typo3 Version(en) löschen die du nicht mehr benötigst:",
+        "_t3functiondelete_existsversions": "Typo3 Versionen die in '../typo3_sources/' liegen:",
+        "_senddelete": "Lösche diesen Typo3 Source"
+    }
+}
+
+    // Function for swapping dictionaries
+    set_lang = function (dictionary) {
+        $("[data-translate]").text(function () {
+            var key = $(this).data("translate");
+            if (dictionary.hasOwnProperty(key)) {
+                return dictionary[key];
+            }
+        });
+    };
+
+    // Swap languages when menu changes
+    $("#lang").on("change", function () {
+        var language = $(this).val().toLowerCase();
+        if (dictionary.hasOwnProperty(language)) {
+            set_lang(dictionary[language]);
+        }
+    });
+
+    // Set initial language to English
+    set_lang(dictionary.english);
 })(jQuery);
