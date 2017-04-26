@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * [__construct description]
  */
 class Helper {
 
@@ -8,6 +8,27 @@ class Helper {
 
   }
 
+  /**
+   * return the path to this class (helper.php) file
+   * @return (string)
+   */
+  public function getClassPath() {
+    return dirname((new ReflectionClass(static::class))->getFileName());
+  }
+
+  /**
+   * return the path to the parent class file
+   * @return (string)
+   */
+  public function getParentClassPath() {
+    return dirname((new ReflectionClass(static::class))->getFileName()) . "../";
+  }
+
+  /**
+   * deletes a file
+   * @param (string) $filename - path to file incl. filename
+   * @return (bool)
+   */
   public function deleteFile($filename) {
     $fileType = filetype($filename);
 
@@ -26,6 +47,11 @@ class Helper {
     }
   }
 
+  /**
+   * deletes a folder recursive
+   * @param (string) $src - path to dir incl. dirname
+   * @return (bool)
+   */
   public function deleteDir($src) {
     $fileType = filetype($filename);
 
@@ -57,9 +83,13 @@ class Helper {
         return false;
         break;
     }
-
   }
 
+  /**
+   * deletes a symlink file
+   * @param (string) $filename - path to symlink incl. symlinkname
+   * @return (bool)
+   */
   public function deleteLink($filename) {
     $fileType = filetype($filename);
 
@@ -78,49 +108,83 @@ class Helper {
     }
   }
 
+  /**
+   * creates a symlink
+   * @param (string) $filename - name of the symlink
+   * @param (string) $target - path to the file where the symlink links to
+   * @return (bool)
+   */
   public function createSymlink($filename, $target) {
     $tmpFilename = escape_input($filename);
     $tmpTarget = escape_input($target);
 
     if(deleteLink($tmpFilename) && symlink($tmpTarget, $tmpFilename)) {
       echo "<span class='successful'>Link: {$tmpFilename} successfully created.</span>";
-    } else {
-      echo "<span class='error'>Link: {$tmpFilename} not created!</span>";
-    }
-  }
-
-  public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = "/") {
-    $newfname = $pathToSafeFile;
-    $url = $pathToExternalFile.$filename;
-    $file = fopen($url, 'rb');
-    if($file) {
-        $newf = fopen($newfname, 'wb');
-        if($newf) {
-            while(!feof($file)) {
-                fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
-            }
-        }
-    }
-    if ($file) {
-        fclose($file);
-    }
-    if ($newf) {
-        fclose($newf);
-    }
-    if(file_exists($pathToSafeFile.$filename)) {
-      echo "<span class='successful'>File: {$filename} successfully downloaded to {$pathToSafeFile}.</span>";
       return true;
     } else {
-      echo "<span class='error'>File: {$url} not downloaded!</span>";
+      echo "<span class='error'>Link: {$tmpFilename} not created!</span>";
       return false;
     }
   }
 
-  public function extractZipFile($pathToZipFile, $pathToExtract = "") {
+  /**
+   * downloadExternalFile() - downloads a file from an external source
+   * @param (string) $pathToExternalFile - path to external file (url) without filename
+   * @param (string) $filename - name of the external file
+   * @param (string) $pathToSafeFile - optional - path where to safe the file
+   * @return (bool)
+   */
+  public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
+    $pathToSafeFile = $pathToSafeFile ? $pathToSafeFile : $this->getParentClassPath();
+    echo "          classPath: " . $this->classPath;
+    echo "       path to safe:  " . $pathToSafeFile;
+    if (file_exists($pathToSafeFile.$filename)) {
+      echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
+      return false;
+    } else {
+      $newfname = $pathToSafeFile;
+      $file = fopen($pathToExternalFile, 'rb');
+      if($file) {
+          $newf = fopen($filename, 'wb');
+          if($newf) {
+              while(!feof($file)) {
+                  fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
+              }
+          }
+      }
+      if ($file) {
+          fclose($file);
+      }
+      if ($newf) {
+          fclose($newf);
+      }
+      echo "  nachDownload";
+      if(file_exists($pathToSafeFile.$filename)) {
+        echo "<span class='successful'>File: {$filename} successfully downloaded to {$pathToSafeFile}.</span>";
+        return true;
+      } else {
+        echo "<span class='error'>File: {$pathToSafeFile}{$filename} not downloaded!</span>";
+        return false;
+      }
+    }
+  }
+
+  /**
+   * extracts a zip file
+   * @param  [string] $pathToZipFile - path to zip file incl. zip file name
+   * @param  [string] $pathToExtract - path where to extract the zip file
+   * @return [bool]
+   */
+  public function extractZipFile($pathToZipFile, $pathToExtract = ".") {
     $phar = new PharData($pathToZipFile);
     $phar->extractTo($pathToExtract);
   }
 
+  /**
+   * escape's a given string or array
+   * @param  [string or array] $data - array to escape
+   * @return [array] - returns the escaped array
+   */
   public function escape_input($data) {
     $tmpArray = is_array($data) ? $data : array($data);
     foreach ($tmpArray as &$arr) {
