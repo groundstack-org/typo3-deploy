@@ -9,18 +9,7 @@
       return false;
     }
   }
-  $(".loading").fadeOut(0);
-  $("#submit").on("click touchend", function() {
-    $(".loading").fadeIn(500);
-  });
-  var inter = setInterval(function() {
-    if($(".readyToTakeOff, .error, .warning").length > 0) {
-      $(".loading").fadeOut(0);
-      $("body").animate({ scrollTop: $(document).height() }, 1000);
-      clearInterval(inter);
-    }
-  }, 200);
-  $("#form-t3-install").attr("action", "deploy.php");
+
   label_info_version.text("Please wait");
   $.getJSON("https://get.typo3.org/json", function(data) {
     var items = [];
@@ -37,16 +26,16 @@
       }
     });
     items.sort().reverse();
-    label_info_version.replaceWith("<div class='dropdown dropdown-dark'><select class='t3_version dropdown-select' name='t3_version' required></select></div>");
-    var selectT3Version = $("select.t3_version");
+
+    var selectT3Version = $("#t3_version");
+    selectT3Version.html("");
     $.each(items, function(i, el) {
       selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
     });
     selectT3Version.find("option:first-child").attr("selected='selected'");
-    $(".t3_version_label .info").fadeOut('fast');
   }).fail(function() {
     label_info_version.text(label_info_version_init_text);
-    console.log("getJSON failed!");
+    console.log("getJSON for all available Typo3 versions failed!");
   });
 })(jQuery);
 
@@ -69,21 +58,38 @@
 
 
 (function($) {
-  var formDbData = $(".form-db-data"),
-      formInstallTool = $(".form-install-tool");
-  $('.t3_function').on('change', function() {
-    var that = $(this), val = that.val();
-    if(val === "firstinstall") {
-      formDbData.fadeIn();
-      formInstallTool.fadeIn();
-    } else if(val === "downloadextract") {
-      formDbData.fadeOut();
-      formInstallTool.fadeOut();
-    } else if(val === "downloadextractlink") {
-      formDbData.fadeOut();
-      formInstallTool.fadeOut();
+  var t3_function = $("#t3function"), display = t3_function.parent().find(".display");
+
+  function switchInAll(element) {
+    element.each(function(i, el) {
+      $(el).fadeIn(400);
+    });
+  }
+  function switchOutAll(element) {
+    element.each(function(i, el) {
+      $(el).fadeOut(400);
+    });
+  }
+
+  function t3_function_hide() {
+    t3_function.find(".select2-container").find("span").on("DOMSubtreeModified", function() {
+      var val = $(this).text();
+      switch (val) {
+        case "Full Install":
+          switchInAll(display);
+          break;
+        default:
+          switchOutAll(display);
+      }
+    });
+  }
+
+  var refreshIntervalId = setInterval(function() {
+    if(t3_function.find(".select2-container").find("span").length > 0) {
+      t3_function_hide();
+      clearInterval(refreshIntervalId);
     }
-  });
+  }, 200);
 })(jQuery);
 
 
@@ -180,4 +186,30 @@
 
     // Set initial language to English
     set_lang(dictionary.english);
+})(jQuery);
+
+// Page change
+(function($) {
+  var sidebar = $("#sidebar");
+  var typo3 = $(".deploy-typo3"), theme = $(".deploy-theme"), readme = $(".deploy-readme");
+  theme.fadeOut(10);
+  readme.fadeOut(10);
+  $("a").on("click touchend", function() {
+    if($(this).hasClass("typo3")) {
+      theme.fadeOut(400, function() { typo3.fadeIn(400); });
+      readme.fadeOut(400, function() { typo3.fadeIn(400); });
+      sidebar.find(".active").removeClass("active");
+      sidebar.find(".typo3").parent("li").addClass("active");
+    } else if($(this).hasClass("theme")) {
+      typo3.fadeOut(400, function() { theme.fadeIn(400); });
+      readme.fadeOut(400, function() { theme.fadeIn(400); });
+      sidebar.find(".active").removeClass("active");
+      sidebar.find(".theme").parent("li").addClass("active");
+    } else if($(this).hasClass("readme")) {
+      typo3.fadeOut(400, function() { readme.fadeIn(400); });
+      theme.fadeOut(400, function() { readme.fadeIn(400); });
+      sidebar.find(".active").removeClass("active");
+      sidebar.find(".readme").parent("li").addClass("active");
+    }
+  });
 })(jQuery);

@@ -202,7 +202,7 @@ class Helper {
    */
   public function getDirList($t3_sources_dir = false) {
     $listdir = $t3_sources_dir ? dir($t3_sources_dir) : dir(dirname(__FILE__) . DIRECTORY_SEPARATOR ."..".DIRECTORY_SEPARATOR ."..".DIRECTORY_SEPARATOR ."typo3_sources".DIRECTORY_SEPARATOR);
-    echo $listdir;
+    echo "listdir: ".$listdir;
     echo "<br />".dirname(__FILE__);
     echo "<ul class='dirlist'>";
     while(($fl = $listdir->read()) != false) {

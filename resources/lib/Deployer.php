@@ -28,8 +28,8 @@ class Deployer extends Helper {
   function __construct($config=false) {
     $this->helper = new Helper();
     $this->classPath = $this->helper->getClassPath();
-    echo "string";
-    print_r($this->classPath);
+    // echo "string";
+    // print_r($this->classPath);
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
