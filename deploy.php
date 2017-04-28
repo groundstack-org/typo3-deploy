@@ -101,16 +101,7 @@
         <p><span data-translate="_t3functiondelete_existsversions">Typo3 versions which exists in "../typo3_sources/":</span></p>
         <ul class="list-versions">
           <?php
-            // function listSources($t3_sources_dir) {
-            //   $listdir = dir($t3_sources_dir);
-            //   while(($fl = $listdir->read()) != false) {
-            //       if($fl != "." && $fl != "..") {
-            //          echo "<li>".$fl."</li>";
-            //       }
-            //   }
-            //   $listdir->close();
-            // }
-            // listSources($t3_sources_dir);
+            $deployer->helper->getDirList();
           ?>
         </ul>
       </div>

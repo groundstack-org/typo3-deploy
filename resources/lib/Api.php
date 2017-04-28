@@ -1,6 +1,7 @@
 <?php
 /**
- *
+ * [__construct description]
+ * @param boolean $config [description]
  */
 class Api extends Deployer {
 
@@ -20,6 +21,11 @@ class Api extends Deployer {
     }
   }
 
+  /**
+   * [api description]
+   * @param  [type] $callMethod [description]
+   * @return [type]             [description]
+   */
   private function api($callMethod) {
     switch ($callMethod) {
       case 't3install':
