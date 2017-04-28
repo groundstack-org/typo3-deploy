@@ -89,7 +89,7 @@
             <h5>Typo3 Install or change</h5>
           </div>
           <div class="widget-content nopadding">
-            <form action="#" method="post" class="form-horizontal ajax_form">
+            <form id="form-install-typo3" action="#" method="post" class="form-horizontal ajax_form">
               <input type="hidden" name="formtype" value="t3install" />
 
               <div id="t3version" class="control-group">
@@ -109,7 +109,7 @@
                   <span data-translate="_t3function">Please choose:</span>
                 </label>
                 <div class="controls">
-                  <select id="text_function_id">
+                  <select id="text_function_id" name="t3_install_function">
                     <option value="completeinstall" selected>Full Install</option>
                     <option value="onlysymlink">Only change symlink</option>
                     <option value="downloadextract">Only download and extract</option>
@@ -189,7 +189,7 @@
             <h5>Delete unused Typo3 source</h5>
           </div>
           <div class="widget-content nopadding">
-            <form class="form-horizontal" method="post" action="#">
+            <form id="form-delete-typo3source" class="form-horizontal" method="post" action="#">
               <input type="hidden" name="formtype" value="t3sourcedelete" />
               <div class="control-group">
                 <label for="normal" class="control-label">Typo3 source</label>

@@ -29,7 +29,7 @@ class Api extends Deployer {
   private function api($callMethod) {
     switch ($callMethod) {
       case 't3install':
-        switch ($this->config['t3_function']) {
+        switch ($this->config['t3_install_function']) {
           case 'completeinstall':
             $this->deployer->t3install_completeinstall();
             break;

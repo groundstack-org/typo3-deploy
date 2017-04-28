@@ -100,7 +100,7 @@ class Helper {
         return true;
         break;
       default:
-        echo "<span class='error'>File: {$filename} is filetype {$filetype}</span>";
+        echo "<span class='error'>Link: {$filename} is filetype {$filetype}!</span>";
         if(file_exists($filename)) {
           return false;
         }
@@ -115,14 +115,14 @@ class Helper {
    * @return (bool)
    */
   public function createSymlink($filename, $target) {
-    $tmpFilename = escape_input($filename);
-    $tmpTarget = escape_input($target);
+    $tmpFilename = $this->escape_input($filename);
+    $tmpTarget = $this->escape_input($target);
 
-    if(deleteLink($tmpFilename) && symlink($tmpTarget, $tmpFilename)) {
-      echo "<span class='successful'>Link: {$tmpFilename} successfully created.</span>";
+    if($this->deleteLink($tmpFilename[0]) && symlink($tmpTarget[0], $tmpFilename[0])) {
+      echo "<span class='successful'>Link: {$tmpFilename[0]} successfully created.</span>";
       return true;
     } else {
-      echo "<span class='error'>Link: {$tmpFilename} not created!</span>";
+      echo "<span class='error'>Link: {$tmpFilename[0]} not created!</span>";
       return false;
     }
   }
@@ -192,6 +192,7 @@ class Helper {
       $tmp_str_replace_target = array('', "", "", "", "");
       $arr = str_replace($tmp_str_replace_orig, $tmp_str_replace_target, htmlspecialchars(stripslashes(trim($arr))));
     }
+
     return $tmpArray;
   }
 

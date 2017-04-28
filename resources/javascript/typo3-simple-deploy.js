@@ -102,7 +102,7 @@
     return tmp;
   }
 
-  $("#form-t3-install, #ajax_form_test").on("submit", function(e) {
+  $("#form-delete-deployment, #form-install-typo3, #form-delete-typo3source").on("submit", function(e) {
     e.preventDefault();
     var $this = $(this), data = $this.serializeArray();
     var tmpData = JSON.stringify(assocJSON(data));
