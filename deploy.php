@@ -97,7 +97,7 @@
                   <span data-translate="_yourversion">Enter your desired version:</span>
                 </label>
                 <div class="controls">
-                  <select id="t3_version">
+                  <select id="t3_version" name="t3_version">
                     <option value="7.6.16">7.6.16</option>
                     <option value="8.7.1">8.7.1</option>
                   </select>

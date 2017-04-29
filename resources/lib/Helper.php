@@ -21,7 +21,7 @@ class Helper {
    * @return (string)
    */
   public function getParentClassPath() {
-    return dirname((new ReflectionClass(static::class))->getFileName()) . "../";
+    return dirname((new ReflectionClass(static::class))->getFileName()).DIRECTORY_SEPARATOR;
   }
 
   /**
@@ -100,11 +100,13 @@ class Helper {
         return true;
         break;
       default:
-        echo "<span class='error'>Link: {$filename} is filetype {$filetype}!</span>";
         if(file_exists($filename)) {
+          echo "<span class='error'>Link: {$filename} is filetype {$filetype}! File is not deleted!</span>";
           return false;
+        } else {
+          echo "<span class='success'>Link: {$filename} doesn't exists!</span>";
+          return true;
         }
-        return true;
     }
   }
 
@@ -131,21 +133,20 @@ class Helper {
    * downloadExternalFile() - downloads a file from an external source
    * @param (string) $pathToExternalFile - path to external file (url) without filename
    * @param (string) $filename - name of the external file
-   * @param (string) $pathToSafeFile - optional - path where to safe the file
+   * @param (string) $pathToSafeFile - optional - path where to safe the file, with ending slash
    * @return (bool)
    */
   public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
-    $pathToSafeFile = $pathToSafeFile ? $pathToSafeFile : $this->getParentClassPath();
-    echo "          classPath: " . $this->classPath;
-    echo "       path to safe:  " . $pathToSafeFile;
+    $pathToSafeFile = $pathToSafeFile ? $pathToSafeFile : "../../typo3_sources/";
+
     if (file_exists($pathToSafeFile.$filename)) {
       echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
       return false;
     } else {
-      $newfname = $pathToSafeFile;
+      $newfname = $pathToSafeFile.$filename;
       $file = fopen($pathToExternalFile, 'rb');
       if($file) {
-          $newf = fopen($filename, 'wb');
+          $newf = fopen($newfname, 'wb');
           if($newf) {
               while(!feof($file)) {
                   fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
@@ -153,14 +154,13 @@ class Helper {
           }
       }
       if ($file) {
-          fclose($file);
+        fclose($file);
       }
       if ($newf) {
-          fclose($newf);
+        fclose($newf);
       }
-      echo "  nachDownload";
       if(file_exists($pathToSafeFile.$filename)) {
-        echo "<span class='successful'>File: {$filename} successfully downloaded to {$pathToSafeFile}.</span>";
+        echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
         return true;
       } else {
         echo "<span class='error'>File: {$pathToSafeFile}{$filename} not downloaded!</span>";
@@ -175,7 +175,7 @@ class Helper {
    * @param  [string] $pathToExtract - path where to extract the zip file
    * @return [bool]
    */
-  public function extractZipFile($pathToZipFile, $pathToExtract = ".") {
+  public function extractZipFile($pathToZipFile, $pathToExtract = "./..") {
     $phar = new PharData($pathToZipFile);
     $phar->extractTo($pathToExtract);
   }

@@ -140,8 +140,8 @@ class Deployer extends Helper {
     if($this->config['t3_install_function'] == 'downloadextract') {
       echo "<div id='downloadextract' class='result'>";
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
-        if($this->helper->extractZipFile($this->t3_zip_file)) {
-          if ($this->helper->deleteFile($this->t3_zip_file)) {
+        if($this->helper->extractZipFile("../../typo3_sources/".$this->t3_zip_file, "../../typo3_sources/")) {
+          if ($this->helper->deleteFile("../../typo3_sources/".$this->t3_zip_file)) {
             return true;
           } else {
             return false;
