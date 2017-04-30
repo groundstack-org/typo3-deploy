@@ -21,9 +21,9 @@
   <link rel="stylesheet" href="resources/css/matrix-style.css" />
   <link rel="stylesheet" href="resources/css/matrix-media.css" />
   <link rel="stylesheet" href="resources/css/bootstrap-wysihtml5.css" />
-  <link rel="stylesheet" href="resources/css/own.css" />
+  <link rel="stylesheet" href="resources/css/typo3-simple-deploy.css" />
   <link href="resources/css/font-awesome.css" rel="stylesheet" />
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'> -->
 </head>
 <body>
 
@@ -63,8 +63,33 @@
     <div id="breadcrumb"> <a href="deploy.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>  <a href="#" class="current typo3">Typo3 install & change</a> </div>
     <h1>Typo3 deployer</h1>
   </div>
-  <div class="container-fluid">
+  <div class="container-fluid">memory_limit
     <hr>
+    <div class="row-fluid">
+      <div class="span12">
+        <h4>PHP config:</h4>
+        <?php
+          $maxExecutionTime = ini_get('max_execution_time');
+          if ($maxExecutionTime < 240) {
+            echo "<p class='warning'>max_execution_time = {$maxExecutionTime} <span>(should be 240!)</span></p>";
+          } else {
+            echo "<p class='success'>max_execution_time = {$maxExecutionTime}</p>";
+          }
+          $memory_limit = ini_get('memory_limit');
+          if ($memory_limit < 128) {
+            echo "<p class='warning'>memory_limit = {$memory_limit} <span>(should be 128!)</span></p>";
+          } else {
+            echo "<p class='success'>memory_limit = {$memory_limit}</p>";
+          }
+          $max_input_vars = ini_get('max_input_vars');
+          if ($max_input_vars < 1500) {
+            echo "<p class='warning'>max_input_vars = {$max_input_vars} <span>(should be 1500!)</span></p>";
+          } else {
+            echo "<p class='success'>max_input_vars = {$max_input_vars}</p>";
+          }
+        ?>
+      </div>
+    </div>
     <div class="row-fluid">
       <div class="span6">
 

@@ -30,6 +30,9 @@ class Helper {
    * @return (bool)
    */
   public function deleteFile($filename) {
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+
     $fileType = filetype($filename);
 
     switch($fileType) {
@@ -53,6 +56,9 @@ class Helper {
    * @return (bool)
    */
   public function deleteDir($src) {
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+
     $fileType = filetype($filename);
 
     switch ($fileType) {
@@ -91,6 +97,9 @@ class Helper {
    * @return (bool)
    */
   public function deleteLink($filename) {
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+
     $fileType = filetype($filename);
 
     switch($fileType) {
@@ -117,15 +126,45 @@ class Helper {
    * @return (bool)
    */
   public function createSymlink($filename, $target) {
-    $tmpFilename = $this->escape_input($filename);
-    $tmpTarget = $this->escape_input($target);
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+    $target = $this->escape_input($target);
+    $target = $target[0];
 
-    if($this->deleteLink($tmpFilename[0]) && symlink($tmpTarget[0], $tmpFilename[0])) {
-      echo "<span class='successful'>Link: {$tmpFilename[0]} successfully created.</span>";
+    if($this->deleteLink($filename) && symlink($target, $filename)) {
+      echo "<span class='successful'>Link: {$filename} successfully created.</span>";
       return true;
     } else {
-      echo "<span class='error'>Link: {$tmpFilename[0]} not created!</span>";
+      echo "<span class='error'>Link: {$filename} not created!</span>";
       return false;
+    }
+  }
+
+  /**
+   * creates a folder(dir)
+   * @param (string) $dirName - name of the folder without slashes
+   * @param (string) $pathToDir - path where the folder creates with ending slash
+   * @return (bool)
+   */
+  public function createDir($dirName, $pathToDir = false) {
+    $pathToDir = $pathToDir ? $pathToDir : "./";
+
+    $pathToDir = $this->escape_input($pathToDir);
+    $pathToDir = $pathToDir[0];
+    $dirName = $this->escape_input($dirName);
+    $dirName = $dirName[0];
+
+    if(!dir($pathToDir.$dirName)){
+      if(mkdir($pathToDir.$dirName)) {
+        echo "<span class='successful'>Folder: {$dirName} successfully created.</span>";
+        return true;
+      } else {
+        echo "<span class='error'>Folder: {$dirName} can't created!</span>";
+        return false;
+      }
+    } else {
+      echo "<span class='warning'>Folder: {$dirName} in {$pathToDir} already exists!</span>";
+      return true;
     }
   }
 
@@ -137,11 +176,24 @@ class Helper {
    * @return (bool)
    */
   public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
-    $pathToSafeFile = $pathToSafeFile ? $pathToSafeFile : "../../typo3_sources/";
+    if(!$pathToSafeFile){
+      if($this->createDir("typo3_sources", "../../")) {
+        $pathToSafeFile = "../../typo3_sources/";
+      }
+    } else {
+      $pathToSafeFile = $pathToSafeFile;
+    }
+
+    $pathToExternalFile = $this->escape_input($pathToExternalFile);
+    $pathToExternalFile = $pathToExternalFile[0];
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+    $pathToSafeFile = $this->escape_input($pathToSafeFile);
+    $pathToSafeFile = $pathToSafeFile[0];
 
     if (file_exists($pathToSafeFile.$filename)) {
       echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
-      return false;
+      return true;
     } else {
       $newfname = $pathToSafeFile.$filename;
       $file = fopen($pathToExternalFile, 'rb');
@@ -163,7 +215,7 @@ class Helper {
         echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
         return true;
       } else {
-        echo "<span class='error'>File: {$pathToSafeFile}{$filename} not downloaded!</span>";
+        echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
         return false;
       }
     }
@@ -175,9 +227,27 @@ class Helper {
    * @param  [string] $pathToExtract - path where to extract the zip file
    * @return [bool]
    */
-  public function extractZipFile($pathToZipFile, $pathToExtract = "./..") {
-    $phar = new PharData($pathToZipFile);
-    $phar->extractTo($pathToExtract);
+  public function extractZipFile($pathToZipFile, $pathToExtract = false) {
+    $pathToZipFile = $this->escape_input($pathToZipFile);
+    $pathToZipFile = $pathToZipFile[0];
+    $pathToExtract = $this->escape_input($pathToExtract);
+    $pathToExtract = $pathToExtract[0];
+
+    $pathToExtract = $pathToExtract ? $pathToExtract : "../../typo3_sources/";
+
+    if (file_exists($pathToZipFile)) {
+      $phar = new PharData($pathToZipFile);
+      if($phar->extractTo($pathToExtract)) {
+        echo "<span class='successful'>ZipFile: {$pathToZipFile} successfully extracted!</span>";
+        return true;
+      } else {
+        echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! ZipFile corrupt?</span>";
+        return false;
+      }
+    } else {
+      echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! File dosen't exist</span>";
+      return false;
+    }
   }
 
   /**
