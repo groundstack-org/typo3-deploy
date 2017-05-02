@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 /**
  * [__construct description]
  */
@@ -184,17 +185,20 @@ class Helper {
       $pathToSafeFile = $pathToSafeFile;
     }
 
-    $pathToExternalFile = $this->escape_input($pathToExternalFile);
-    $pathToExternalFile = $pathToExternalFile[0];
-    $filename = $this->escape_input($filename);
-    $filename = $filename[0];
-    $pathToSafeFile = $this->escape_input($pathToSafeFile);
-    $pathToSafeFile = $pathToSafeFile[0];
+    //$pathToExternalFile = $this->escape_input($pathToExternalFile);
+    //$pathToExternalFile = $pathToExternalFile[0];
+    //$filename = $this->escape_input($filename);
+    //$filename = $filename[0];
+    //$pathToSafeFile = $this->escape_input($pathToSafeFile);
+    //$pathToSafeFile = $pathToSafeFile[0];
+
+    echo $pathToSafeFile.$filename;
 
     if (file_exists($pathToSafeFile.$filename)) {
       echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
       return true;
     } else {
+      echo "<span class=''>File: {$filename} try to download to {$pathToSafeFile}.</span>";
       $newfname = $pathToSafeFile.$filename;
       $file = fopen($pathToExternalFile, 'rb');
       if($file) {

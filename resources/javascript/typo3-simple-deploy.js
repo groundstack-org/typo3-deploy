@@ -110,7 +110,8 @@
   //  console.log(tmpData);
 
     $.post('api/index.php', tmpData, function(returnedData) {
-      console.log("data returnedData:       " + returnedData + "      ");
+      // console.log("data returnedData:       " + returnedData + "      ");
+      $("#deploy-output").html(returnedData);
     });
   });
 })(jQuery);

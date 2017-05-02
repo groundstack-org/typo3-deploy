@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 /**
  * [__construct description]
  * @param (array) $config [description]
@@ -141,11 +142,12 @@ class Deployer extends Helper {
       echo "<div id='downloadextract' class='result'>";
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
         if($this->helper->extractZipFile("../../typo3_sources/".$this->t3_zip_file, "../../typo3_sources/")) {
-          if ($this->helper->deleteFile("../../typo3_sources/".$this->t3_zip_file)) {
-            return true;
-          } else {
-            return false;
-          }
+          echo "../../typo3_sources/".$this->t3_zip_file;
+          // if ($this->helper->deleteFile("../../typo3_sources/".$this->t3_zip_file)) {
+          //   return true;
+          // } else {
+          //   return false;
+          // }
         } else {
           return false;
         }
