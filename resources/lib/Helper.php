@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL);
+define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
+
 /**
  * [__construct description]
  */
@@ -51,33 +52,37 @@ class Helper {
     }
   }
 
+  private function deleteDirs($src) {
+    $dir = opendir($src);
+        while(false !== ( $file = readdir($dir)) ) {
+            if(($file != '.' ) && ( $file != '..' )) {
+                $full = $src . '/' . $file;
+                if(is_dir($full)) {
+                  $this->deleteDirs($full);
+                }
+                else {
+                  unlink($full);
+                }
+            }
+        }
+        closedir($dir);
+        rmdir($src);
+  }
+
   /**
    * deletes a folder recursive
    * @param (string) $src - path to dir incl. dirname
    * @return (bool)
    */
   public function deleteDir($src) {
-    $filename = $this->escape_input($filename);
-    $filename = $filename[0];
+    $src = $this->escape_input($src);
+    $src = $src[0];
 
-    $fileType = filetype($filename);
-
+    $fileType = filetype($src);
     switch ($fileType) {
       case 'dir':
-        $dir = opendir($src);
-        while(false !== ( $file = readdir($dir)) ) {
-            if(($file != '.' ) && ( $file != '..' )) {
-                $full = $src . '/' . $file;
-                if(is_dir($full)) {
-                    $this->rrmdir($full);
-                }
-                else {
-                    unlink($full);
-                }
-            }
-        }
-        closedir($dir);
-        if(rmdir($src)) {
+        $this->deleteDirs($src);
+        if(!file_exists($src)) {
           echo "<span class='successful'>Dir {$src} successfully deleted.</span>";
           return true;
         } else {
@@ -86,7 +91,7 @@ class Helper {
         }
         break;
       default:
-        echo "<span class='error'>File: {$filename} is filetype {$filetype}</span>";
+        echo "<span class='error'>File: {$src} is filetype {$filetype}</span>";
         return false;
         break;
     }
@@ -164,7 +169,7 @@ class Helper {
         return false;
       }
     } else {
-      echo "<span class='warning'>Folder: {$dirName} in {$pathToDir} already exists!</span>";
+      echo "<span class='successful'>Folder: {$dirName} in {$pathToDir} already exists!</span>";
       return true;
     }
   }
@@ -177,52 +182,62 @@ class Helper {
    * @return (bool)
    */
   public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
-    if(!$pathToSafeFile){
-      if($this->createDir("typo3_sources", "../../")) {
-        $pathToSafeFile = "../../typo3_sources/";
+    try {
+      if(!$pathToSafeFile){
+        if($this->createDir("typo3_sources", LOCAL_PATH_ROOT."/../")) {
+          $pathToSafeFile = LOCAL_PATH_ROOT."/../typo3_sources/";
+        }
+      } else {
+        $pathToSafeFile = $pathToSafeFile;
       }
-    } else {
-      $pathToSafeFile = $pathToSafeFile;
+    } catch(Exception $e) {
+      echo '1. Exception abgefangen: ',  $e->getMessage(), "\n";
     }
-
-    //$pathToExternalFile = $this->escape_input($pathToExternalFile);
-    //$pathToExternalFile = $pathToExternalFile[0];
-    //$filename = $this->escape_input($filename);
-    //$filename = $filename[0];
-    //$pathToSafeFile = $this->escape_input($pathToSafeFile);
-    //$pathToSafeFile = $pathToSafeFile[0];
-
-    echo $pathToSafeFile.$filename;
-
-    if (file_exists($pathToSafeFile.$filename)) {
-      echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
-      return true;
-    } else {
-      echo "<span class=''>File: {$filename} try to download to {$pathToSafeFile}.</span>";
-      $newfname = $pathToSafeFile.$filename;
-      $file = fopen($pathToExternalFile, 'rb');
-      if($file) {
-          $newf = fopen($newfname, 'wb');
-          if($newf) {
-              while(!feof($file)) {
-                  fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
-              }
-          }
-      }
-      if ($file) {
-        fclose($file);
-      }
-      if ($newf) {
-        fclose($newf);
-      }
-      if(file_exists($pathToSafeFile.$filename)) {
-        echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
+    
+    try {
+      $pathToExternalFile = $this->escape_input($pathToExternalFile);
+      $pathToExternalFile = $pathToExternalFile[0];
+      $filename = $this->escape_input($filename);
+      $filename = $filename[0];
+      $pathToSafeFile = $this->escape_input($pathToSafeFile);
+      $pathToSafeFile = $pathToSafeFile[0];
+    } catch(Exception $e) {
+      echo '2. Exception abgefangen: ',  $e->getMessage(), "\n";
+    }
+    
+    try {
+      if (file_exists($pathToSafeFile.$filename)) {
+        echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
         return true;
       } else {
-        echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
-        return false;
+        $newfname = $pathToSafeFile.$filename;
+        $file = fopen($pathToExternalFile, 'rb');
+        if($file) {
+            $newf = fopen($newfname, 'wb');
+            if($newf) {
+                while(!feof($file)) {
+                    fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
+                }
+            }
+        }
+        if ($file) {
+          fclose($file);
+        }
+        if ($newf) {
+          fclose($newf);
+        }
+        if(file_exists($pathToSafeFile.$filename)) {
+          echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
+          return true;
+        } else {
+          echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
+          return false;
+        }
       }
+    } catch(Exception $e) {
+      echo '3. Exception abgefangen: ',  $e->getMessage(), "\n";
     }
+    
   }
 
   /**
@@ -237,7 +252,7 @@ class Helper {
     $pathToExtract = $this->escape_input($pathToExtract);
     $pathToExtract = $pathToExtract[0];
 
-    $pathToExtract = $pathToExtract ? $pathToExtract : "../../typo3_sources/";
+    $pathToExtract = $pathToExtract ? $pathToExtract : LOCAL_PATH_ROOT."/../typo3_sources/";
 
     if (file_exists($pathToZipFile)) {
       $phar = new PharData($pathToZipFile);
@@ -276,16 +291,15 @@ class Helper {
    * @return [type]        [description]
    */
   public function getDirList($t3_sources_dir = false) {
-    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : dir(dirname(__FILE__) . DIRECTORY_SEPARATOR ."..".DIRECTORY_SEPARATOR ."..".DIRECTORY_SEPARATOR ."typo3_sources".DIRECTORY_SEPARATOR);
-    echo "listdir: ".$listdir;
-    echo "<br />".dirname(__FILE__);
-    echo "<ul class='dirlist'>";
-    while(($fl = $listdir->read()) != false) {
-        if($fl != "." && $fl != "..") {
-           echo "<li>".$fl."</li>";
-        }
+    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : LOCAL_PATH_ROOT."/../typo3_sources";
+    $scanDir = scandir($listdir);
+
+    echo "<ul id='dirlist'>";
+    foreach ($scanDir as $k => $v) {
+      if($v != "." && $v != "..") {
+        echo "<li>".$v."</li>";
+      }
     }
-    $listdir->close();
-    echo "</ul>";
+    echo "</ul>";    
   }
 }

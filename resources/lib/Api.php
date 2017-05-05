@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 /**
  * [__construct description]
  * @param boolean $config [description]

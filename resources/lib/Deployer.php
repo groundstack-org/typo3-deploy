@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL);
+define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
+
 /**
  * [__construct description]
  * @param (array) $config [description]
@@ -29,13 +30,9 @@ class Deployer extends Helper {
   function __construct($config=false) {
     $this->helper = new Helper();
     $this->classPath = $this->helper->getClassPath();
-    // echo "string";
-    // print_r($this->classPath);
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
-
-    //print_r($config);
 
     if($config && is_array($config)){
       $this->config = $this->helper->escape_input($config);
@@ -116,9 +113,9 @@ class Deployer extends Helper {
   public function t3install_onlysymlink() {
     if($this->config['t3_install_function'] == 'onlysymlink') {
       echo "<div id='onlysymlink' class='result'>";
-      if($this->helper->createSymlink("typo3_src", "{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
-        if ($this->helper->createSymlink("typo3", "typo3_src/typo3")) {
-          if ($this->helper->createSymlink("index.php", "typo3_src/index.php")) {
+      if($this->helper->createSymlink("typo3_src", LOCAL_PATH_ROOT."/{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
+        if ($this->helper->createSymlink("typo3", LOCAL_PATH_ROOT."/typo3_src/typo3")) {
+          if ($this->helper->createSymlink("index.php", LOCAL_PATH_ROOT."/typo3_src/index.php")) {
             return true;
           } else {
             return false;
@@ -141,15 +138,30 @@ class Deployer extends Helper {
     if($this->config['t3_install_function'] == 'downloadextract') {
       echo "<div id='downloadextract' class='result'>";
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
-        if($this->helper->extractZipFile("../../typo3_sources/".$this->t3_zip_file, "../../typo3_sources/")) {
-          echo "../../typo3_sources/".$this->t3_zip_file;
-          // if ($this->helper->deleteFile("../../typo3_sources/".$this->t3_zip_file)) {
-          //   return true;
-          // } else {
-          //   return false;
-          // }
+        $pathToZipFile = LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_version_dir;
+
+        if(file_exists($pathToZipFile)) {
+          if($this->helper->deleteDir($pathToZipFile)) {
+            if($this->helper->extractZipFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file, LOCAL_PATH_ROOT."/../typo3_sources/")) {
+              if ($this->helper->deleteFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
+                return true;
+              } else {
+                return false;
+              }
+            } else {
+              return false;
+            }
+          } 
         } else {
-          return false;
+          if($this->helper->extractZipFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file, LOCAL_PATH_ROOT."/../typo3_sources/")) {
+            if ($this->helper->deleteFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return false;
+          }
         }
       }
       echo "</div>";

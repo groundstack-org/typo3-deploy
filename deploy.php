@@ -1,7 +1,9 @@
 <?php
-error_reporting(E_ALL);
+  error_reporting(E_ALL);
   require_once("resources/lib/Helper.php");
   require_once("resources/lib/Deployer.php");
+
+  define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
 
   $deployer = new Deployer($_POST);
 ?>
@@ -197,14 +199,13 @@ error_reporting(E_ALL);
       <div class="span6">
         <div class="widget-box">
           <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-            <h5>List all local Typo3 sources</h5>
+            <h5>List all local Typo3 sources (in folder 'typo3_sources')</h5>
           </div>
           <div class="widget-content">
             <div class="controls">
               <?php
-                // $deployer->helper->getDirList();
+                $deployer->helper->getDirList();
               ?>
-              <span class="help-block" data-translate="_t3functiondelete_existsversions">Typo3 versions which exists in "../typo3_sources/":</span>
             </div>
           </div>
         </div>
@@ -220,8 +221,7 @@ error_reporting(E_ALL);
               <div class="control-group">
                 <label for="normal" class="control-label">Typo3 source</label>
                 <div class="controls">
-                  <input type="text" class="span8 mask text">
-                  <span class="help-block" data-translate="_t3functiondelete_existsversions">Typo3 versions which exists in "../typo3_sources/":</span>
+                  <input id="input-delete-typo3source" type="text" class="span8 mask text">
                 </div>
               </div>
               <div class="form-actions">
