@@ -1,5 +1,4 @@
 <?php
-define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
 
 /**
  * [__construct description]
@@ -11,45 +10,11 @@ class Helper {
   }
 
   /**
-   * return the path to this class (helper.php) file
-   * @return (string)
+   * return the path to the document root
+   * @return (string) document root path
    */
-  public function getClassPath() {
-    return dirname((new ReflectionClass(static::class))->getFileName());
-  }
-
-  /**
-   * return the path to the parent class file
-   * @return (string)
-   */
-  public function getParentClassPath() {
-    return dirname((new ReflectionClass(static::class))->getFileName()).DIRECTORY_SEPARATOR;
-  }
-
-  /**
-   * deletes a file
-   * @param (string) $filename - path to file incl. filename
-   * @return (bool)
-   */
-  public function deleteFile($filename) {
-    $filename = $this->escape_input($filename);
-    $filename = $filename[0];
-
-    $fileType = filetype($filename);
-
-    switch($fileType) {
-      case "file":
-        unlink($filename);
-        echo "<span class='successful'>File: {$filename} successfully deleted!</span>";
-        return true;
-        break;
-      default:
-        echo "<span class='error'>File: {$filename} is filetype {$filetype}</span>";
-        if(file_exists($filename)) {
-          return false;
-        }
-        return true;
-    }
+  public function getDocumentRoot() {
+    return $_SERVER["DOCUMENT_ROOT"];
   }
 
   private function deleteDirs($src) {
@@ -94,6 +59,32 @@ class Helper {
         echo "<span class='error'>File: {$src} is filetype {$filetype}</span>";
         return false;
         break;
+    }
+  }
+
+  /**
+   * deletes a file
+   * @param (string) $filename - path to file incl. filename
+   * @return (bool)
+   */
+  public function deleteFile($filename) {
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+
+    $fileType = filetype($filename);
+
+    switch($fileType) {
+      case "file":
+        unlink($filename);
+        echo "<span class='successful'>File: {$filename} successfully deleted!</span>";
+        return true;
+        break;
+      default:
+        echo "<span class='error'>File: {$filename} is filetype {$filetype}</span>";
+        if(file_exists($filename)) {
+          return false;
+        }
+        return true;
     }
   }
 
@@ -148,12 +139,12 @@ class Helper {
 
   /**
    * creates a folder(dir)
-   * @param (string) $dirName - name of the folder without slashes
+   * @param (string) $dirName - name of the folder without slashes (default - DOCUMENT_ROOT)
    * @param (string) $pathToDir - path where the folder creates with ending slash
    * @return (bool)
    */
   public function createDir($dirName, $pathToDir = false) {
-    $pathToDir = $pathToDir ? $pathToDir : "./";
+    $pathToDir = $pathToDir ? $pathToDir : $this->getDocumentRoot;
 
     $pathToDir = $this->escape_input($pathToDir);
     $pathToDir = $pathToDir[0];
@@ -175,6 +166,33 @@ class Helper {
   }
 
   /**
+   * [createFile creates a file if it dosen't exists]
+   * @param  (string) $filename filename
+   * @param  (string) $pathToFile path to the file to write
+   * @param  (string) $fileContent content of file to write
+   * @return [bool]        [description]
+   */
+  public function createFile($filename, $pathToFile = false, $fileContent = false) {
+    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot;
+    $fileContent = $fileContent ? $fileContent : " ";
+
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+    $pathToFile = $this->escape_input($pathToFile);
+    $pathToFile = $pathToFile[0];
+
+    $file = fopen($pathToFile.$filename,"x");
+    if ($file != false) { // if true return resource
+      fclose($file);
+      echo "<span class='successful'>File: {$filename} in '{$pathToFile}' successfully created.</span>";
+      return true;
+    } else {
+      echo "<span class='error'>File: {$filename} in '{$pathToFile}' can't created!</span>";
+      return false;
+    }
+  }
+
+  /**
    * downloadExternalFile() - downloads a file from an external source
    * @param (string) $pathToExternalFile - path to external file (url) without filename
    * @param (string) $filename - name of the external file
@@ -182,62 +200,49 @@ class Helper {
    * @return (bool)
    */
   public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
-    try {
-      if(!$pathToSafeFile){
-        if($this->createDir("typo3_sources", LOCAL_PATH_ROOT."/../")) {
-          $pathToSafeFile = LOCAL_PATH_ROOT."/../typo3_sources/";
-        }
-      } else {
-        $pathToSafeFile = $pathToSafeFile;
+    if(!$pathToSafeFile){
+      if($this->createDir("typo3_sources", $this->getDocumentRoot."/../")) {
+        $pathToSafeFile = $this->getDocumentRoot."/../typo3_sources/";
       }
-    } catch(Exception $e) {
-      echo '1. Exception abgefangen: ',  $e->getMessage(), "\n";
+    } else {
+      $pathToSafeFile = $pathToSafeFile;
     }
-    
-    try {
-      $pathToExternalFile = $this->escape_input($pathToExternalFile);
-      $pathToExternalFile = $pathToExternalFile[0];
-      $filename = $this->escape_input($filename);
-      $filename = $filename[0];
-      $pathToSafeFile = $this->escape_input($pathToSafeFile);
-      $pathToSafeFile = $pathToSafeFile[0];
-    } catch(Exception $e) {
-      echo '2. Exception abgefangen: ',  $e->getMessage(), "\n";
-    }
-    
-    try {
-      if (file_exists($pathToSafeFile.$filename)) {
-        echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
+
+    $pathToExternalFile = $this->escape_input($pathToExternalFile);
+    $pathToExternalFile = $pathToExternalFile[0];
+    $filename = $this->escape_input($filename);
+    $filename = $filename[0];
+    $pathToSafeFile = $this->escape_input($pathToSafeFile);
+    $pathToSafeFile = $pathToSafeFile[0];
+
+    if (file_exists($pathToSafeFile.$filename)) {
+      echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
+      return true;
+    } else {
+      $newfname = $pathToSafeFile.$filename;
+      $file = fopen($pathToExternalFile, 'rb');
+      if($file) {
+          $newf = fopen($newfname, 'wb');
+          if($newf) {
+              while(!feof($file)) {
+                  fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
+              }
+          }
+      }
+      if ($file) {
+        fclose($file);
+      }
+      if ($newf) {
+        fclose($newf);
+      }
+      if(file_exists($pathToSafeFile.$filename)) {
+        echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
         return true;
       } else {
-        $newfname = $pathToSafeFile.$filename;
-        $file = fopen($pathToExternalFile, 'rb');
-        if($file) {
-            $newf = fopen($newfname, 'wb');
-            if($newf) {
-                while(!feof($file)) {
-                    fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
-                }
-            }
-        }
-        if ($file) {
-          fclose($file);
-        }
-        if ($newf) {
-          fclose($newf);
-        }
-        if(file_exists($pathToSafeFile.$filename)) {
-          echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
-          return true;
-        } else {
-          echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
-          return false;
-        }
+        echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
+        return false;
       }
-    } catch(Exception $e) {
-      echo '3. Exception abgefangen: ',  $e->getMessage(), "\n";
     }
-    
   }
 
   /**
@@ -252,7 +257,7 @@ class Helper {
     $pathToExtract = $this->escape_input($pathToExtract);
     $pathToExtract = $pathToExtract[0];
 
-    $pathToExtract = $pathToExtract ? $pathToExtract : LOCAL_PATH_ROOT."/../typo3_sources/";
+    $pathToExtract = $pathToExtract ? $pathToExtract : $this->getDocumentRoot."/../typo3_sources/";
 
     if (file_exists($pathToZipFile)) {
       $phar = new PharData($pathToZipFile);
@@ -291,7 +296,7 @@ class Helper {
    * @return [type]        [description]
    */
   public function getDirList($t3_sources_dir = false) {
-    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : LOCAL_PATH_ROOT."/../typo3_sources";
+    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot."/../typo3_sources";
     $scanDir = scandir($listdir);
 
     echo "<ul id='dirlist'>";
@@ -300,6 +305,8 @@ class Helper {
         echo "<li>".$v."</li>";
       }
     }
-    echo "</ul>";    
+    echo "</ul>";
   }
+
+
 }

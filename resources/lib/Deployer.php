@@ -1,5 +1,4 @@
 <?php
-define("LOCAL_PATH_ROOT", $_SERVER["DOCUMENT_ROOT"]);
 
 /**
  * [__construct description]
@@ -25,11 +24,11 @@ class Deployer extends Helper {
   private $t3_config_date;
   private $t3_function;
   private $t3_path_to_source_file;
-  private $classPath;
+  private $documentRoot;
 
   function __construct($config=false) {
     $this->helper = new Helper();
-    $this->classPath = $this->helper->getClassPath();
+    $this->documentRoot = $this->helper->getDocumentRoot;
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
@@ -72,7 +71,7 @@ class Deployer extends Helper {
         break;
 
       default:
-        echo "No specifyed form";
+        echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete!";
         break;
     }
 
@@ -88,10 +87,27 @@ class Deployer extends Helper {
    */
   public function deleteDeployment() {
     if(isset($this->config['sendt3versiondelete'])) {
-      echo "<span class='success'>File successfully deleted!</span>";
-      $this->helper->deleteDir("/resources");
-      unlink("deploy.php");
-      exit();
+      echo __DIR__;
+
+      // if (chmod (__DIR__, 0777)) {
+      //   # code...
+      // }
+      //
+      //
+      // echo "<div id='deletedeployment' class='result'>";
+      // if ($this->helper->deleteDir("/resources")) {
+      //   if (unlink("index.php")) {
+      //     echo "<span class='success'>File successfully deleted!</span>";
+      //   } else {
+      //     echo "<span class='error'>Can't delete Typo3 deployer 'index.php'!</span>";
+      //   }
+      // } else {
+      //   echo "<span class='error'>Can't delete Typo3 deployer 'resources' folder!</span>";
+      // }
+
+
+      // echo "</div>";
+      // exit();
     }
     return false;
   }
@@ -102,30 +118,93 @@ class Deployer extends Helper {
    */
   public function t3install_completeinstall() {
     if($this->config['t3_install_function'] == 'completeinstall') {
-      echo "bla";
-    }
-  }
+      $documentRoot = $this->getDocumentRoot;
 
-  /**
-   * creates the nessasary symlinks for Typo3
-   * @return (bool)
-   */
-  public function t3install_onlysymlink() {
-    if($this->config['t3_install_function'] == 'onlysymlink') {
-      echo "<div id='onlysymlink' class='result'>";
-      if($this->helper->createSymlink("typo3_src", LOCAL_PATH_ROOT."/{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
-        if ($this->helper->createSymlink("typo3", LOCAL_PATH_ROOT."/typo3_src/typo3")) {
-          if ($this->helper->createSymlink("index.php", LOCAL_PATH_ROOT."/typo3_src/index.php")) {
-            return true;
+      echo "<div id='completeinstall' class='result'>";
+
+      // downloadextractlink();
+
+      if($this->createDir("typo3conf", $documentRoot."/")) {
+        $pathToTypo3conf = $documentRoot."/typo3conf";
+        $currentDateTime = $this->t3_config_date;
+
+        echo "<span class='successful'>Dir 'typo3conf' successfully created.</span>";
+
+        if(!file_exists($pathToTypo3conf."/AdditionalConfiguration.php")) {
+          if(file_put_contents($pathToTypo3conf."/AdditionalConfiguration.php", "
+<?php
+if (!defined('TYPO3_MODE')) {
+	die('Access denied.');
+}
+\$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db_{$currentDateTime}.php';
+if (file_exists(\$databaseCredentialsFile)) {
+    require_once (\$databaseCredentialsFile);
+}
+          ") ) {
+            echo "<span class='successful'>File 'AdditionalConfiguration.php' successfully created.</span>";
+            if($this->helper->createDir('typo3_config', $documentRoot.'/')) {
+              echo "<span class='successful'>Dir 'typo3_config' successfully created.</span>";
+              $typo3configPath = $documentRoot.'/typo3_config';
+
+
+              if (!file_exists($typo3configPath."/typo3_db_{$currentDateTime}.php")) {
+
+                
+                $v = explode(".",$this->t3_version);
+                switch ($v[0]) {
+                  case 6:
+                    // addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime);
+                    break;
+                  case 7:
+                    // addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime);
+                    break;
+                  default:
+                    // addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime);
+                }
+              }
+
+
+
+
+            } else {
+              echo "<span class='error'>Dir 'typo3conf' could not be created!</span>";
+            }
           } else {
-            return false;
+            echo "<span class='error'>File 'AdditionalConfiguration.php' could not be created!</span>";
           }
-        } else {
-          return false;
         }
       } else {
-        return false;
+        echo "<span class='error'>Dir 'typo3conf' could not be created!</span>";
       }
+
+      if (copy($documentRoot."/resources/files/robots.txt", $documentRoot."/robots.txt")) {
+        echo "<span class='successful'>File 'robots.txt' successfully created.</span>";
+      } else {
+        echo "<span class='warning'>File 'robots.txt' could not be created!</span>";
+      }
+
+      if (copy($documentRoot."/resources/files/.htaccess", $documentRoot."/.htaccess")) {
+        echo "<span class='successful'>File '.htaccess' successfully created.</span>";
+      } else {
+        echo "<span class='warning'>File '.htaccess' could not be created!</span>";
+      }
+
+      if (copy($documentRoot."/resources/files/humans.txt", $documentRoot."/humans.txt")) {
+        echo "<span class='successful'>File 'humans.txt' successfully created.</span>";
+      } else {
+        echo "<span class='warning'>File 'humans.txt' could not be created!</span>";
+      }
+
+      if (!file_exists($documentRoot."FIRST_INSTALL")) {
+        if(file_put_contents($documentRoot."FIRST_INSTALL", "") != false) {
+          echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
+          echo "<span class='successful'>File 'FIRST_INSTALL' successfully created.</span>";
+          echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
+        } else {
+          echo "<span class='error'>File 'FIRST_INSTALL' could not be created!</span>";
+        }
+      }
+
       echo "</div>";
     }
   }
@@ -136,14 +215,16 @@ class Deployer extends Helper {
    */
   public function t3install_downloadextract() {
     if($this->config['t3_install_function'] == 'downloadextract') {
+      $documentRoot = $this->getDocumentRoot;
+
       echo "<div id='downloadextract' class='result'>";
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
-        $pathToZipFile = LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_version_dir;
+        $pathToZipFile = $documentRoot."/".$this->t3_src_dir_name."/".$this->t3_version_dir;
 
         if(file_exists($pathToZipFile)) {
           if($this->helper->deleteDir($pathToZipFile)) {
-            if($this->helper->extractZipFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file, LOCAL_PATH_ROOT."/../typo3_sources/")) {
-              if ($this->helper->deleteFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
+            if($this->helper->extractZipFile($documentRoot."/".$this->t3_src_dir_name."/".$this->t3_zip_file, $documentRoot."/../typo3_sources/")) {
+              if ($this->helper->deleteFile($documentRoot."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
                 return true;
               } else {
                 return false;
@@ -151,10 +232,10 @@ class Deployer extends Helper {
             } else {
               return false;
             }
-          } 
+          }
         } else {
-          if($this->helper->extractZipFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file, LOCAL_PATH_ROOT."/../typo3_sources/")) {
-            if ($this->helper->deleteFile(LOCAL_PATH_ROOT."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
+          if($this->helper->extractZipFile($documentRoot."/".$this->t3_src_dir_name."/".$this->t3_zip_file, $documentRoot."/../typo3_sources/")) {
+            if ($this->helper->deleteFile($documentRoot."/".$this->t3_src_dir_name."/".$this->t3_zip_file)) {
               return true;
             } else {
               return false;
@@ -177,8 +258,28 @@ class Deployer extends Helper {
     if($this->config['t3_function'] == 'downloadextractlink') {
       echo "<div id='downloadextractlink' class='result'>";
       if ($this->t3install_downloadextract()) {
-        if ($this->helper->deleteFile($this->t3_zip_file)) {
-          if ($this->t3install_onlysymlink()) {
+        if ($this->t3install_onlysymlink()) {
+
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
+    echo "</div>";
+  }
+
+  /**
+   * creates the nessasary symlinks for Typo3
+   * @return (bool)
+   */
+  public function t3install_onlysymlink() {
+    if($this->config['t3_install_function'] == 'onlysymlink') {
+      echo "<div id='onlysymlink' class='result'>";
+      if($this->helper->createSymlink("typo3_src", $this->documentRoot."/{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
+        if ($this->helper->createSymlink("typo3", $this->documentRoot."/typo3_src/typo3")) {
+          if ($this->helper->createSymlink("index.php", $this->documentRoot."/typo3_src/index.php")) {
             return true;
           } else {
             return false;
@@ -189,9 +290,7 @@ class Deployer extends Helper {
       } else {
         return false;
       }
+      echo "</div>";
     }
-    echo "</div>";
   }
 }
-
-?>
