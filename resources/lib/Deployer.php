@@ -277,9 +277,9 @@ if (file_exists(\$databaseCredentialsFile)) {
   public function t3install_onlysymlink() {
     if($this->config['t3_install_function'] == 'onlysymlink') {
       echo "<div id='onlysymlink' class='result'>";
-      if($this->helper->createSymlink("typo3_src", $this->documentRoot."/{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
-        if ($this->helper->createSymlink("typo3", $this->documentRoot."/typo3_src/typo3")) {
-          if ($this->helper->createSymlink("index.php", $this->documentRoot."/typo3_src/index.php")) {
+      if($this->helper->createSymlink(realpath($this->helper->getDocumentRoot())."/typo3_src", $this->documentRoot."/{$this->t3_src_dir_name}/{$this->t3_version_dir}")) {
+        if ($this->helper->createSymlink(realpath($this->helper->getDocumentRoot())."/typo3", $this->documentRoot."/typo3_src/typo3")) {
+          if ($this->helper->createSymlink(realpath($this->helper->getDocumentRoot())."/index.php", $this->documentRoot."/typo3_src/index.php")) {
             return true;
           } else {
             return false;
