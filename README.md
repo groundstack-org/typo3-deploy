@@ -18,7 +18,7 @@ Your existing files won't be overwritten during the deployment process.<br />
 
 ### Installation default way
 1. Download the [**deploy.php**](https://github.com/Teisi/typo3-deploy/archive/master.zip) and upload it to your document root (e.g. httpdocs).<br />
-2. Unzip it than you can open the deployment tool - open your browser 'www.yourDomain.de/typo3-deploy-master'. (You can change the folder name (typo3-deploy-master) to what you like e. g. 'deploy' than open your browser 'www.yourDomain.de/deploy'.)
+2. Unzip it than you can open the deployment tool - open your browser 'www.yourDomain.de/typo3-deploy-master'. (You can change the folder name (typo3-deploy-master) to what you like e. g. 'deploy' than open your browser 'www.yourDomain.de/deploy/index.php'.)
 3. Have fun.<br />
 
 ![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")

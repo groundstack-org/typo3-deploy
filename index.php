@@ -4,6 +4,9 @@
   require_once("resources/lib/Deployer.php");
 
   $deployer = new Deployer($_POST);
+
+  unlink("getTypo3Deployer.php");
+  unlink("_config.yml");
 ?>
 
 <!DOCTYPE html>
@@ -107,11 +110,6 @@
                 <button type="submit" class="btn btn-danger" type="submit" name="sent" value="Senden" data-translate="_send">Delete!</button>
               </div>
             </form>
-            <br />
-            <?php
-            $debug_files = debug_backtrace();       $initial_called_file = count($debug_files) ? $debug_files[count($debug_files) - 1]['file'] : __FILE__;
-            echo $debug_files;
-            ?>
           </div>
         </div>
 

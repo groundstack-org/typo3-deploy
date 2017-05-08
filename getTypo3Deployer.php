@@ -97,7 +97,7 @@ if(downloadExternalFile('https://github.com/Teisi/typo3-deploy/archive/', 'maste
     unlink(getDocumentRoot()."master.zip");
     if(rename(getDocumentRoot()."typo3-deploy-master", getDocumentRoot()."deploy")) {
       $url = $_SERVER['SERVER_NAME'];
-      echo "<span>Now you can open <a href='//{$url}/deploy' title='click me'>Typo3 deployment</a>.</span>";
+      echo "<span>Now you can open <a href='//{$url}/deploy/index.php' title='click me'>Typo3 deployment</a>.</span>";
     }
 
 
