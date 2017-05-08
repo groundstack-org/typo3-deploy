@@ -67,7 +67,7 @@ class Deployer extends Helper {
         break;
 
       case 't3sourcedelete':
-        $this->helper->deleteDir($this->t3_src_dir_name.$this->config['t3_function_delete']);
+        $this->helper->deleteDir($this->helper->getDocumentRoot()."/".$this->t3_src_dir_name."/".$this->config['t3_version']);
         break;
 
       default:

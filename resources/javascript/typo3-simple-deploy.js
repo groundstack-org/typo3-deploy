@@ -116,7 +116,7 @@
   // List Typo3 sources in '/typo3_sources/' and create select for delete form
   var existing_typo3sources = $("#dirlist"), input_delete_typo3source = $("#input-delete-typo3source");
   if(existing_typo3sources.children("li").length > 0) {
-    input_delete_typo3source.replaceWith("<select id='select-delete-typo3source'></select>");
+    input_delete_typo3source.replaceWith("<select id='select-delete-typo3source' name='t3_version'></select>");
     var select_delete_typo3source = $("#select-delete-typo3source");
     existing_typo3sources.children("li").each(function( index ) {
       var $this = $(this);

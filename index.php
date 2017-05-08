@@ -223,7 +223,7 @@
               <div class="control-group">
                 <label for="normal" class="control-label">Typo3 source</label>
                 <div class="controls">
-                  <input id="input-delete-typo3source" type="text" class="span8 mask text">
+                  <input id="input-delete-typo3source" type="text" name="t3_version" class="span8 mask text">
                 </div>
               </div>
               <div class="form-actions">
