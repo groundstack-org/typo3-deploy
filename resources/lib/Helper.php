@@ -144,7 +144,7 @@ class Helper {
    * @return (bool)
    */
   public function createDir($dirName, $pathToDir = false) {
-    $pathToDir = $pathToDir ? $pathToDir : $this->getDocumentRoot;
+    $pathToDir = $pathToDir ? $pathToDir : $this->getDocumentRoot();
 
     $pathToDir = $this->escape_input($pathToDir);
     $pathToDir = $pathToDir[0];
@@ -173,7 +173,7 @@ class Helper {
    * @return [bool]        [description]
    */
   public function createFile($filename, $pathToFile = false, $fileContent = false) {
-    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot;
+    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot();
     $fileContent = $fileContent ? $fileContent : " ";
 
     $filename = $this->escape_input($filename);
@@ -201,8 +201,8 @@ class Helper {
    */
   public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
     if(!$pathToSafeFile){
-      if($this->createDir("typo3_sources", $this->getDocumentRoot."/../")) {
-        $pathToSafeFile = $this->getDocumentRoot."/../typo3_sources/";
+      if($this->createDir("typo3_sources", $this->getDocumentRoot()."/../")) {
+        $pathToSafeFile = $this->getDocumentRoot()."/../typo3_sources/";
       }
     } else {
       $pathToSafeFile = $pathToSafeFile;
@@ -257,7 +257,7 @@ class Helper {
     $pathToExtract = $this->escape_input($pathToExtract);
     $pathToExtract = $pathToExtract[0];
 
-    $pathToExtract = $pathToExtract ? $pathToExtract : $this->getDocumentRoot."/../typo3_sources/";
+    $pathToExtract = $pathToExtract ? $pathToExtract : $this->getDocumentRoot()."/../typo3_sources/";
 
     if (file_exists($pathToZipFile)) {
       $phar = new PharData($pathToZipFile);
@@ -296,7 +296,7 @@ class Helper {
    * @return [type]        [description]
    */
   public function getDirList($t3_sources_dir = false) {
-    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot."/../typo3_sources";
+    $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot()."/../typo3_sources";
     $scanDir = scandir($listdir);
 
     echo "<ul id='dirlist'>";

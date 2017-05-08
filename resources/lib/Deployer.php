@@ -28,7 +28,7 @@ class Deployer extends Helper {
 
   function __construct($config=false) {
     $this->helper = new Helper();
-    $this->documentRoot = $this->helper->getDocumentRoot;
+    $this->documentRoot = $this->helper->getDocumentRoot();
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
@@ -118,7 +118,7 @@ class Deployer extends Helper {
    */
   public function t3install_completeinstall() {
     if($this->config['t3_install_function'] == 'completeinstall') {
-      $documentRoot = $this->getDocumentRoot;
+      $documentRoot = $this->getDocumentRoot();
 
       echo "<div id='completeinstall' class='result'>";
 
@@ -149,7 +149,7 @@ if (file_exists(\$databaseCredentialsFile)) {
 
               if (!file_exists($typo3configPath."/typo3_db_{$currentDateTime}.php")) {
 
-                
+
                 $v = explode(".",$this->t3_version);
                 switch ($v[0]) {
                   case 6:
@@ -215,7 +215,7 @@ if (file_exists(\$databaseCredentialsFile)) {
    */
   public function t3install_downloadextract() {
     if($this->config['t3_install_function'] == 'downloadextract') {
-      $documentRoot = $this->getDocumentRoot;
+      $documentRoot = $this->getDocumentRoot();
 
       echo "<div id='downloadextract' class='result'>";
       if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {

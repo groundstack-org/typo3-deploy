@@ -28,13 +28,13 @@
 </head>
 <body>
 
-<!--Header-part-->
+<!-- Header-part -->
 <div id="header">
   <h1><a href="http://groundstack.de">Typo3 simple deployer</a></h1>
 </div>
-<!--close-Header-part-->
+<!-- close-Header-part -->
 
-<!--top-Header-menu-->
+<!-- top-Header-menu -->
 <div id="user-nav" class="navbar navbar-inverse">
   <ul class="nav">
     <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
@@ -47,7 +47,7 @@
   </ul>
 </div>
 
-<!--sidebar-menu-->
+<!-- sidebar-menu -->
 
 <div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-list"></i>Forms</a>
   <ul>
@@ -57,7 +57,7 @@
   </ul>
 </div>
 
-<!--close-left-menu-stats-sidebar-->
+<!-- close-left-menu-stats-sidebar -->
 
 <div id="content" class="deploy-typo3">
   <div id="content-header">

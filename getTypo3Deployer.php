@@ -74,13 +74,15 @@
     $pathToExtract = $pathToExtract ? $pathToExtract : getDocumentRoot();
 
     if (file_exists($pathToZipFile)) {
-      $phar = new PharData($pathToZipFile);
-      if($phar->extractTo($pathToExtract)) {
+      $zip = new ZipArchive;
+      if ($zip->open($pathToZipFile) === TRUE) {
+        $zip->extractTo($pathToExtract);
+        $zip->close();
         echo "<span class='successful'>ZipFile: {$pathToZipFile} successfully extracted!</span>";
-        return true;
+      	return true;
       } else {
-        echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! ZipFile corrupt?</span>";
-        return false;
+        echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! File dosen't exist</span>";
+      	return false;
       }
     } else {
       echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! File dosen't exist</span>";
