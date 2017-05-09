@@ -21,8 +21,6 @@ Your existing files won't be overwritten during the deployment process.<br />
 2. Unzip it than you can open the deployment tool - open your browser 'www.yourDomain.de/typo3-deploy-master'. (You can change the folder name (typo3-deploy-master) to what you like e. g. 'deploy' than open your browser 'www.yourDomain.de/deploy/index.php'.)
 3. Have fun.<br />
 
-![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
-
 #### Dirs befor installation e. g.
 /etc/<br />
 /logs/<br />
@@ -65,8 +63,6 @@ Deine bestehenden Dateien werden beim deployment Vorgang nicht gelöscht.<br />
 2. Nachdem du es entpackt hast, kannst du das Tool unter 'www.yourDomain.de/typo3-deploy-master' aufrufen. (Den Namen des Tools (typo3-deploy-master) kannst du ändern zu was du willst z. B. 'deploy' dann würde der Aufruf so aussehen 'www.yourDomain.de/deploy'.)
 3. Have fun.<br />
 
-![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
-
 #### Ordner die zum Beispiel vor dem deployment auf deinem Server liegen:
 /etc/<br />
 /logs/<br />
@@ -86,3 +82,5 @@ Wenn du dies nicht willst, erstelle in deinem documentroot einen neuen leeren Or
 
 ## bekannte Fehler
 - Sprache ändern fehlt
+
+![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
