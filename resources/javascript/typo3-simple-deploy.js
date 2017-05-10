@@ -108,13 +108,11 @@
     var tmpData = JSON.stringify(assocJSON(data));
 
     $.post('api/index.php', tmpData, function(returnedData) {
-      // console.log("data returnedData:       " + returnedData + "      ");
       $("#deploy-output").html(returnedData);
 
       var ajaxData = $("#list-typo3-sources").data("ajax");
       var ajaxTmpData = JSON.stringify(ajaxData);
       $.post('api/index.php', ajaxTmpData, function(returnedData) {
-        // console.log("data returnedData:       " + returnedData + "      ");
         $("#list-typo3-sources").html(returnedData);
         listTypo3Sources();
       });

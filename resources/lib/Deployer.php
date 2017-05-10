@@ -25,6 +25,7 @@ class Deployer extends Helper {
   private $t3_function;
   private $t3_path_to_source_file;
   private $documentRoot;
+  private $index;
 
   function __construct($config=false) {
     $this->helper = new Helper();
@@ -67,7 +68,13 @@ class Deployer extends Helper {
         break;
 
       case 't3sourcedelete':
-        $this->helper->deleteDir($this->helper->getDocumentRoot().$this->t3_src_dir_name."/".$this->config['t3_version']);
+        $this->index = 0;
+        for ($i=0; $i <= $this->config['t3sourcesanz']; $i++) {
+          if ($this->config['typo3Source_'.$this->index]) {
+            $this->helper->deleteDir($this->helper->getDocumentRoot()."/".$this->t3_src_dir_name."/".$this->config['typo3Source_'.$this->index]);
+          }
+          $this->index = $this->index + 1;
+        }
         break;
 
       case 'ajaxpost':

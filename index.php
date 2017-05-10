@@ -205,31 +205,10 @@
           </div>
           <div class="widget-content">
             <div id="list-typo3-sources" class="controls ajaxpost" data-ajax='{ "formtype":"ajaxpost", "ajax_function":"getTypo3Sources" }'>
-              <?php
-                $deployer->helper->getDirList();
-              ?>
+                <?php
+                  $deployer->helper->getDirList();
+                ?>
             </div>
-          </div>
-        </div>
-
-        <!-- form to delete existing Typo3 sources -->
-        <div class="widget-box">
-          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-            <h5>Delete unused Typo3 source</h5>
-          </div>
-          <div class="widget-content nopadding">
-            <form id="form-delete-typo3source" class="form-horizontal" method="post" action="#">
-              <input type="hidden" name="formtype" value="t3sourcedelete" />
-              <div class="control-group">
-                <label for="normal" class="control-label">Typo3 source</label>
-                <div class="controls">
-                  <input id="input-delete-typo3source" type="text" name="t3_version" class="span8 mask text">
-                </div>
-              </div>
-              <div class="form-actions">
-                <button id="submitdelete" class="btn btn-success" type="submit" name="sendt3versiondelete" value="Senden" data-translate="_senddelete">Delete</button>
-              </div>
-            </form>
           </div>
         </div>
       </div>

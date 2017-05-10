@@ -57,6 +57,11 @@ class Helper {
         break;
       default:
         echo "<span class='error'>File: {$src} is filetype {$filetype}</span>";
+        if(file_exists($src)) {
+          echo "<span class='error'>But file exists!</span>";
+        } else {
+          echo "<span class='warning'>File not deleted, file not exists!</span>";
+        }
         return false;
         break;
     }
@@ -298,17 +303,22 @@ class Helper {
   public function getDirList($t3_sources_dir = false) {
     $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot()."/../typo3_sources";
     $scanDir = scandir($listdir);
+    $i = 0;
 
+    echo "<form id='form-delete-typo3source' class='form-horizontal' method='post' action='#'>";
+    echo "<input type='hidden' name='t3_version' value='' />";
+    echo "<input type='hidden' name='formtype' value='t3sourcedelete' />";
     echo "<ul id='dirlist'>";
     foreach ($scanDir as $k => $v) {
-      $i = 1;
       if($v != "." && $v != "..") {
-        echo "<li><input type='checkbox' name='typo3Source_{$i}' value='{$v}'>".$v."</li>";
+        echo "<li><input type='checkbox' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>".$v."</li>";
+		    $i = $i + 1;
       }
-      $i++;
     }
     echo "</ul>";
+    echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
+    echo "<div class='form-actions'>";
+    echo "<button id='submitdelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
+    echo "</div></from>";
   }
-
-
 }
