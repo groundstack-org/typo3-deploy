@@ -62,7 +62,8 @@ class Deployer extends Helper {
       case 't3install':
         $this->t3_zip_file = "{$this->t3_version_dir}.tar.gz";
         $this->typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$this->t3_version}/{$this->t3_zip_file}";
-
+        break;
+        
       case 'deletedeployment':
         $this->deleteDeployment();
         break;
