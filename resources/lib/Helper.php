@@ -301,9 +301,11 @@ class Helper {
 
     echo "<ul id='dirlist'>";
     foreach ($scanDir as $k => $v) {
+      $i = 1;
       if($v != "." && $v != "..") {
-        echo "<li>".$v."</li>";
+        echo "<li><input type='checkbox' name='typo3Source_{$i}' value='{$v}'>".$v."</li>";
       }
+      $i++;
     }
     echo "</ul>";
   }

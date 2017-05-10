@@ -67,11 +67,15 @@ class Deployer extends Helper {
         break;
 
       case 't3sourcedelete':
-        $this->helper->deleteDir($this->helper->getDocumentRoot()."/".$this->t3_src_dir_name."/".$this->config['t3_version']);
+        $this->helper->deleteDir($this->helper->getDocumentRoot().$this->t3_src_dir_name."/".$this->config['t3_version']);
+        break;
+
+      case 'ajaxpost':
+        $this->handleAjax();
         break;
 
       default:
-        echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete!";
+        echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete, ajaxpost!";
         break;
     }
 
@@ -291,6 +295,17 @@ if (file_exists(\$databaseCredentialsFile)) {
         return false;
       }
       echo "</div>";
+    }
+  }
+
+  public function handleAjax() {
+    switch ($this->config['ajax_function']) {
+      case 'getTypo3Sources':
+        return $this->helper->getDirList();
+        break;
+      default:
+        echo "No specifyed ajax_function. Available ajax_function are: getTypo3Sources!";
+        break;
     }
   }
 }

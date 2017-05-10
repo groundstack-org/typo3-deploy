@@ -204,7 +204,7 @@
             <h5>List all local Typo3 sources (in folder 'typo3_sources')</h5>
           </div>
           <div class="widget-content">
-            <div class="controls">
+            <div id="list-typo3-sources" class="controls ajaxpost" data-ajax='{ "formtype":"ajaxpost", "ajax_function":"getTypo3Sources" }'>
               <?php
                 $deployer->helper->getDirList();
               ?>
