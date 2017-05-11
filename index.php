@@ -108,7 +108,7 @@
           <div id="delete-deployment" class="widget-content nopadding">
             <form id="form-delete-deployment" class="form-horizontal" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
               <input type="hidden" name="formtype" value="deletedeployment" />
-              <?php echo "<input type='hidden' name='deploymentfolder' value='{__DIR__}' />"; ?>
+              <?php echo "<input type='hidden' name='deploymentfolder' value='".__DIR__."' />"; ?>
               <div class="form-actions">
                 <button type="submit" class="btn btn-danger" type="submit" name="sent" value="Senden" data-translate="_send">Delete!</button>
               </div>
@@ -124,6 +124,7 @@
           <div class="widget-content nopadding">
             <form id="form-install-typo3" action="#" method="post" class="form-horizontal ajax_form">
               <input type="hidden" name="formtype" value="t3install" />
+              <?php echo "<input type='hidden' name='deploymentfolder' value='".__DIR__."' />"; ?>
 
               <div id="t3version" class="control-group">
                 <label for="t3_version" class="control-label">
