@@ -5,8 +5,12 @@
 
   $deployer = new Deployer($_POST);
 
-  unlink("getTypo3Deployer.php");
-  unlink("_config.yml");
+  // if(file_exists("getTypo3Deployer.php")) {
+  //   unlink("getTypo3Deployer.php");
+  // }
+  // if(file_exists("_config.yml")) {
+  //   unlink("_config.yml");
+  // }
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +31,6 @@
   <link rel="stylesheet" href="resources/css/bootstrap-wysihtml5.css" />
   <link rel="stylesheet" href="resources/css/typo3-simple-deploy.css" />
   <link href="resources/css/font-awesome.css" rel="stylesheet" />
-  <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'> -->
 </head>
 <body>
 

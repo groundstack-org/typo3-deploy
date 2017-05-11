@@ -79,10 +79,10 @@
         $zip->extractTo($pathToExtract);
         $zip->close();
         echo "<span class='successful'>ZipFile: {$pathToZipFile} successfully extracted!</span>";
-      	return true;
+        return true;
       } else {
         echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! File dosen't exist</span>";
-      	return false;
+        return false;
       }
     } else {
       echo "<span class='error'>ZipFile: {$pathToZipFile} not extracted! File dosen't exist</span>";

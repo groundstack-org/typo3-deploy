@@ -303,18 +303,23 @@ class Helper {
   public function getDirList($t3_sources_dir = false) {
     $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot()."/../typo3_sources";
     $scanDir = scandir($listdir);
-    $i = 0;
 
     echo "<form id='form-delete-typo3source' class='form-horizontal' method='post' action='#'>";
     echo "<input type='hidden' name='t3_version' value='' />";
     echo "<input type='hidden' name='formtype' value='t3sourcedelete' />";
     echo "<ul id='dirlist'>";
+
+    $i = 0;
     foreach ($scanDir as $k => $v) {
       if($v != "." && $v != "..") {
-        echo "<li><input type='checkbox' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>".$v."</li>";
+        echo "<li><label for='typo3Source_{$i}' class='control control--checkbox'>{$v}
+            <input type='checkbox' id='typo3Source_{$i}' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>
+            <div class='control__indicator'></div>
+          </label></li>";
 		    $i = $i + 1;
       }
     }
+
     echo "</ul>";
     echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
     echo "<div class='form-actions'>";
