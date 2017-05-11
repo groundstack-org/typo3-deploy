@@ -216,13 +216,33 @@
           </div>
         </div>
       </div>
-
     </div>
 
     <div class="row-fluid">
       <div class="span12">
         <div id="deploy-output">
 
+        </div>
+      </div>
+    </div>
+
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="widget-box" id="typo3-delete-temp">
+          <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
+            <h5>Delets all files and folders in '/typo3temp/'! Then trys to recreate nessasary tmp files and folders.</h5>
+          </div>
+          <div class="widget-content">
+            <div id="delete-typo3temp" class="controls">
+              <form id='form-delete-typo3temp' class='form-horizontal' method='post' action='#'>
+                <input type='hidden' name='t3_version' value='' />
+                <input type='hidden' name='formtype' value='deletetypo3temp' />
+                <div class="form-actions">
+                  <button id="submit" class="btn btn-success" type="submit" name="deletetypo3temp" value="Senden" data-translate="_deletetempfiles">Delete Typo3 temp files</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
