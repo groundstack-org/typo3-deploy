@@ -315,7 +315,7 @@ class Helper {
       if($v != "." && $v != "..") {
         echo "<li><label for='typo3Source_{$i}' class='control control--checkbox'>{$v}
             <input type='checkbox' id='typo3Source_{$i}' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>
-            <div class='control__indicator'></div>
+            <span class='control__indicator'></span>
           </label></li>";
 		    $i = $i + 1;
       }
@@ -324,8 +324,8 @@ class Helper {
     echo "</ul>";
     echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
     echo "<div class='form-actions'>";
-    echo "<button id='submitdelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
-    echo "</div></from>";
+    echo "<button id='submitsourcedelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
+    echo "</div></form>";
   }
 
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {

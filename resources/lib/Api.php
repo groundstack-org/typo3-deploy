@@ -53,11 +53,19 @@ class Api extends Deployer {
         break;
 
       case 't3sourcedelete':
-        # code...
+        $this->deployer->typo3SourceDelete();
+        break;
+
+      case 'deletetypo3temp':
+        $this->deployer->deleteTypo3Temp();
+        break;
+
+      case 'ajaxpost':
+        $this->deployer->handleAjax();
         break;
 
       default:
-        # code...
+        echo "<span class='error'>Available API options formtype are: t3install, deletedeployment, t3sourcedelete, deletetypo3temp, ajaxpost!</span>";
         break;
     }
   }

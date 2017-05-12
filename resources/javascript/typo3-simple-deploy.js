@@ -101,20 +101,20 @@
     });
     return tmp;
   }
+  $("body").on("submit", "#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp", function(e) {
+      e.preventDefault();
+      var $this = $(this), data = $this.serializeArray();
+      var tmpData = JSON.stringify(assocJSON(data));
 
-  $("#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp").on("submit", function(e) {
-    e.preventDefault();
-    var $this = $(this), data = $this.serializeArray();
-    var tmpData = JSON.stringify(assocJSON(data));
+      $.post('api/index.php', tmpData, function(returnedData) {
+        $("#deploy-output").html(returnedData);
 
-    $.post('api/index.php', tmpData, function(returnedData) {
-      $("#deploy-output").html(returnedData);
-
-      var ajaxData = $("#list-typo3-sources").data("ajax");
-      var ajaxTmpData = JSON.stringify(ajaxData);
-      $.post('api/index.php', ajaxTmpData, function(returnedData) {
-        $("#list-typo3-sources").html(returnedData);
-        listTypo3Sources();
+        var ajaxData = $("#list-typo3-sources").data("ajax");
+        var ajaxTmpData = JSON.stringify(ajaxData);
+        $.post('api/index.php', ajaxTmpData, function(returnedData) {
+          $("#list-typo3-sources").html(returnedData);
+          listTypo3Sources();
+        });
       });
     });
   });

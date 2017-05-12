@@ -110,7 +110,7 @@
               <input type="hidden" name="formtype" value="deletedeployment" />
               <?php echo "<input type='hidden' name='deploymentfolder' value='".__DIR__."' />"; ?>
               <div class="form-actions">
-                <button type="submit" class="btn btn-danger" type="submit" name="sent" value="Senden" data-translate="_send">Delete!</button>
+                <button type="submit" class="btn btn-danger" name="sent" value="Senden" data-translate="_send">Delete!</button>
               </div>
             </form>
           </div>
@@ -172,7 +172,7 @@
                 </div>
               </div>
               <div class="control-group display">
-                <label class="control-label" for="db-host"data-translate="_databasehost">Database host</label>
+                <label class="control-label" for="db-host" data-translate="_databasehost">Database host</label>
                 <div class="controls">
                   <input id="db-host" class="input-big span8" type="text" name="t3_db_host" value="localhost">
                 </div>
@@ -184,9 +184,7 @@
                 </div>
               </div>
               <div class="control-group display">
-                <label class="control-label">
-                  <label class="label label-install-tool-pw" for="install-tool-pw" data-translate="_installpassword">Install Tool password</label>
-                </label>
+                <label class="label control-label label-install-tool-pw" for="install-tool-pw" data-translate="_installpassword">Install Tool password</label>
                 <div class="controls">
                   <input type="password" class="input-big span8" id="install-tool-pw" name="t3_install_tool" value="" />
                   <a href="#" class="btn btn-danger form-btn" id="generate-install-pw" data-translate="_generatepassword">Generate a password</a>
@@ -195,7 +193,7 @@
                 </div>
               </div>
               <div class="form-actions">
-                <button id="submit" class="btn btn-success" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
+                <button id="submitinstall" class="btn btn-success" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>
               </div>
             </form>
           </div>

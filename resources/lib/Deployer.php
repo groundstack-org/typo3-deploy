@@ -37,16 +37,7 @@ class Deployer extends Helper {
     if($config && is_array($config)){
       $this->config = $this->helper->escape_input($config);
       $this->initConfig($this->config);
-      $this->deleteDeployment();
     }
-  }
-
-  /**
-   * [getConfig description]
-   * @return (array) [description]
-   */
-  public function getConfig() {
-    return $this->config;
   }
 
   /**
@@ -65,25 +56,15 @@ class Deployer extends Helper {
         break;
 
       case 'deletedeployment':
-        $this->deleteDeployment();
         break;
 
       case 't3sourcedelete':
-        $this->index = 0;
-        for ($i=0; $i <= $this->config['t3sourcesanz']; $i++) {
-          if ($this->config['typo3Source_'.$this->index]) {
-            $this->helper->deleteDir($this->documentRoot."/".$this->t3_src_dir_name."/".$this->config['typo3Source_'.$this->index]);
-          }
-          $this->index = $this->index + 1;
-        }
         break;
 
       case 'deletetypo3temp':
-        $this->deleteTypo3Temp();
         break;
 
       case 'ajaxpost':
-        $this->handleAjax();
         break;
 
       default:
@@ -98,34 +79,39 @@ class Deployer extends Helper {
   }
 
   /**
+   * [getConfig description]
+   * @return (array) [description]
+   */
+  public function getConfig() {
+    return $this->config;
+  }
+
+  /**
    * deletes the Typo3 simple deployment app
    * @return (bool)
    */
   public function deleteDeployment() {
-    if(isset($this->config['sendt3versiondelete'])) {
+    if($this->config['formtype'] == 'deletedeployment') {
       echo __DIR__;
-
-      // if (chmod (__DIR__, 0777)) {
-      //   # code...
-      // }
-      //
-      //
-      // echo "<div id='deletedeployment' class='result'>";
-      // if ($this->helper->deleteDir("/resources")) {
-      //   if (unlink("index.php")) {
-      //     echo "<span class='success'>File successfully deleted!</span>";
-      //   } else {
-      //     echo "<span class='error'>Can't delete Typo3 deployer 'index.php'!</span>";
-      //   }
-      // } else {
-      //   echo "<span class='error'>Can't delete Typo3 deployer 'resources' folder!</span>";
-      // }
-
-
-      // echo "</div>";
-      // exit();
+    } else {
+      return false;
     }
-    return false;
+  }
+
+  public function typo3SourceDelete() {
+    if($this->config['formtype'] == 't3sourcedelete') {
+      $this->index = 0;
+      for ($i=0; $i <= $this->config['t3sourcesanz']; $i++) {
+        if ($this->config['typo3Source_'.$this->index]) {
+          if($this->helper->deleteDir($this->documentRoot."/".$this->t3_src_dir_name."/".$this->config['typo3Source_'.$this->index])) {
+            echo "<span class='successful'>Successfully deleted ".$this->config['typo3Source_'.$this->index]."</span>";
+          } else {
+            echo "<span class='error'>Can't delete ".$this->config['typo3Source_'.$this->index]."</span>";
+          }
+        }
+        $this->index = $this->index + 1;
+      }
+    }
   }
 
   /**
@@ -315,62 +301,66 @@ if (file_exists(\$databaseCredentialsFile)) {
   }
 
   public function deleteTypo3Temp() {
-    if(file_exists($this->documentRoot."/typo3temp/")) {
-      if($this->helper->deleteDir($this->documentRoot."/typo3temp/")) {
-        $this->helper->createDir("typo3temp");
-        file_put_contents($this->getDocumentRoot()."/typo3temp/index.html", " ");
-        $this->helper->createDir("typo3temp/assets");
-        $this->helper->createDir("typo3temp/assets/compressed");
-        $this->helper->createDir("typo3temp/assets/css");
-        $this->helper->createDir("typo3temp/assets/js");
-        $this->helper->createDir("typo3temp/assets/images");
-        $this->helper->createDir("typo3temp/assets/images/_processed_");
-        $this->helper->createDir("typo3temp/var");
-        $this->helper->createDir("typo3temp/var/charset");
-        $this->helper->createDir("typo3temp/var/Cache");
-        $this->helper->createDir("typo3temp/var/locks");
-        $this->helper->createFile("typo3temp/var/.htaccess", $fileContent = false);
-        file_put_contents($this->getDocumentRoot()."/typo3temp/var/.htaccess", "
-# This file restricts access to the typo3temp/var/ directory. It is
-# meant to protect temporary files which could contain sensible
-# information. Please do not touch.
+    if($this->config['formtype'] == 'deletetypo3temp') {
+      if(file_exists($this->documentRoot."/typo3temp/")) {
+        if($this->helper->deleteDir($this->documentRoot."/typo3temp/")) {
+          $this->helper->createDir("typo3temp");
+          file_put_contents($this->getDocumentRoot()."/typo3temp/index.html", " ");
+          $this->helper->createDir("typo3temp/assets");
+          $this->helper->createDir("typo3temp/assets/compressed");
+          $this->helper->createDir("typo3temp/assets/css");
+          $this->helper->createDir("typo3temp/assets/js");
+          $this->helper->createDir("typo3temp/assets/images");
+          $this->helper->createDir("typo3temp/assets/images/_processed_");
+          $this->helper->createDir("typo3temp/var");
+          $this->helper->createDir("typo3temp/var/charset");
+          $this->helper->createDir("typo3temp/var/Cache");
+          $this->helper->createDir("typo3temp/var/locks");
+          $this->helper->createFile("typo3temp/var/.htaccess", $fileContent = false);
+          file_put_contents($this->getDocumentRoot()."/typo3temp/var/.htaccess", "
+  # This file restricts access to the typo3temp/var/ directory. It is
+  # meant to protect temporary files which could contain sensible
+  # information. Please do not touch.
 
-# Apache < 2.3
-<IfModule !mod_authz_core.c>
-	Order allow,deny
-	Deny from all
-	Satisfy All
-</IfModule>
+  # Apache < 2.3
+  <IfModule !mod_authz_core.c>
+  	Order allow,deny
+  	Deny from all
+  	Satisfy All
+  </IfModule>
 
-# Apache ≥ 2.3
-<IfModule mod_authz_core.c>
-	Require all denied
-</IfModule>");
-        echo "<span class='successful'>Typo3temp folder successfully deleted!</span>";
-        return true;
+  # Apache ≥ 2.3
+  <IfModule mod_authz_core.c>
+  	Require all denied
+  </IfModule>");
+          echo "<span class='successful'>Typo3temp folder successfully deleted!</span>";
+          return true;
+        } else {
+          echo "<span class='error'>Typo3temp folder could not be deleted!</span>";
+          return false;
+        }
       } else {
-        echo "<span class='error'>Typo3temp folder could not be deleted!</span>";
+        echo "<span class='error'>Typo3 temp folder 'typo3temp' dos not exist!</span>";
         return false;
       }
-    } else {
-      echo "<span class='error'>Typo3 temp folder 'typo3temp' dos not exist!</span>";
-      return false;
     }
   }
 
   public function handleAjax() {
-    switch ($this->config['ajax_function']) {
-      case 'getTypo3Sources':
-        return $this->helper->getDirList();
-        break;
+    if($this->config['formtype'] == 'ajaxpost') {
+      switch ($this->config['ajax_function']) {
+        case 'getTypo3Sources':
+          return $this->helper->getDirList();
+          break;
 
-      case 'getTypo3TempDir':
-        return $this->helper->getTypo3TempDir();
-        break;
+        case 'getTypo3TempDir':
+          return $this->helper->getTypo3TempDir();
+          break;
 
-      default:
-        echo "No specifyed ajax_function. Available ajax_function are: getTypo3Sources, getTypo3TempDir!";
-        break;
+        default:
+          echo "<span class='error'>No specifyed ajax_function. Available ajax_function are: getTypo3Sources, getTypo3TempDir!</span>";
+          break;
+      }
     }
   }
 }
