@@ -302,30 +302,34 @@ class Helper {
    */
   public function getDirList($t3_sources_dir = false) {
     $listdir = $t3_sources_dir ? dir($t3_sources_dir) : $this->getDocumentRoot()."/../typo3_sources";
-    $scanDir = scandir($listdir);
+    if (file_exists($listdir)) {
+      $scanDir = scandir($listdir);
 
-    echo "<form id='form-delete-typo3source' class='form-horizontal' method='post' action='#'>";
-    echo "<input type='hidden' name='t3_version' value='' />";
-    echo "<input type='hidden' name='formtype' value='t3sourcedelete' />";
+      echo "<form id='form-delete-typo3source' class='form-horizontal' method='post' action='#'>";
+      echo "<input type='hidden' name='t3_version' value='' />";
+      echo "<input type='hidden' name='formtype' value='t3sourcedelete' />";
 
-    echo "<ul id='dirlist'>";
+      echo "<ul id='dirlist'>";
 
-    $i = 0;
-    foreach ($scanDir as $k => $v) {
-      if($v != "." && $v != "..") {
-        echo "<li><label for='typo3Source_{$i}' class='control control--checkbox'>{$v}
-            <input type='checkbox' id='typo3Source_{$i}' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>
-            <span class='control__indicator'></span>
-          </label></li>";
-		    $i = $i + 1;
+      $i = 0;
+      foreach ($scanDir as $k => $v) {
+        if($v != "." && $v != "..") {
+          echo "<li><label for='typo3Source_{$i}' class='control control--checkbox'>{$v}
+              <input type='checkbox' id='typo3Source_{$i}' name='typo3Source_{$i}' form='form-delete-typo3source' value='{$v}'>
+              <span class='control__indicator'></span>
+            </label></li>";
+  		    $i = $i + 1;
+        }
       }
-    }
 
-    echo "</ul>";
-    echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
-    echo "<div class='form-actions'>";
-    echo "<button id='submitsourcedelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
-    echo "</div></form>";
+      echo "</ul>";
+      echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
+      echo "<div class='form-actions'>";
+      echo "<button id='submitsourcedelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
+      echo "</div></form>";
+    } else {
+      echo "<span class='error'>No folder found '{$listdir}'</span>";
+    }
   }
 
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {

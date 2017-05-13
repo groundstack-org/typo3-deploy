@@ -30,12 +30,18 @@
     var selectT3Version = $("#t3_version");
     selectT3Version.html("");
     $.each(items, function(i, el) {
-      selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
+      if(i == 0) {
+        selectT3Version.prepend("<option value=" + el + " selected>Typo3 " + el + "</option>");
+      } else {
+        selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
+      }
+
     });
-    selectT3Version.find("option:first-child").attr("selected='selected'");
+    $("#s2id_t3_version").find("span").text($("#t3_version").find("option:last-child").text());
   }).fail(function() {
     label_info_version.text(label_info_version_init_text);
-    console.log("getJSON for all available Typo3 versions failed!");
+    console.log("getJSON for all available Typo3 versions failed! (https://get.typo3.org/json)");
+    alert("getJSON for all available Typo3 versions failed! (https://get.typo3.org/json)");
   });
 })(jQuery);
 
@@ -101,8 +107,11 @@
     });
     return tmp;
   }
+
+  var loader = $("#loader");
   $("body").on("submit", "#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp", function(e) {
       e.preventDefault();
+      loader.fadeIn("slow");
       var $this = $(this), data = $this.serializeArray();
       var tmpData = JSON.stringify(assocJSON(data));
 
@@ -113,6 +122,7 @@
         var ajaxTmpData = JSON.stringify(ajaxData);
         $.post('api/index.php', ajaxTmpData, function(returnedData) {
           $("#list-typo3-sources").html(returnedData);
+          loader.fadeOut("fast");
         });
       });
   });
