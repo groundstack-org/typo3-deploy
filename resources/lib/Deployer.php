@@ -46,7 +46,10 @@ class Deployer extends Helper {
    * @return [type]         [description]
    */
   public function initConfig($config) {
-    $this->t3_version = $config['t3_version'];
+    if(isset($config['t3_version'])) {
+      $this->t3_version = $config['t3_version'];
+    }
+
     $this->t3_version_dir = "typo3_src-{$this->t3_version}";
 
     switch ($config['formtype']) {
@@ -91,8 +94,14 @@ class Deployer extends Helper {
    * @return (bool)
    */
   public function deleteDeployment() {
-    if($this->config['formtype'] == 'deletedeployment') {
-      echo __DIR__;
+    if ($this->config['formtype'] == 'deletedeployment') {
+      if ($this->helper->deleteDir($this->config['deploymentfolder'])) {
+        echo "<h1>Deployment tool successfully deleted!</h1>";
+        echo "<h3>Script reloads after 5 seconds, to test if it is really deleted.</h3>";
+        echo "<script>var timeout = setTimeout('location.reload(true);',5000);</script>";
+      } else {
+        echo "<span class='error'>Deployment tool not deleted! Error occurred!</span>";
+      }
     } else {
       return false;
     }
