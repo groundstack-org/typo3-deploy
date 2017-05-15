@@ -26,13 +26,17 @@ class Deployer extends Helper {
   private $t3_path_to_source_file;
   private $documentRoot;
   private $index;
+  private $deployerFileConfig;
+  private $deployerFileConfigPath;
 
   function __construct($config = false) {
+    $this->initSession();
     $this->helper = new Helper();
     $this->documentRoot = $this->helper->getDocumentRoot();
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
+    $this->initDeployerFileConfig();
 
     if($config && is_array($config)){
       $this->config = $this->helper->escape_input($config);
@@ -70,6 +74,12 @@ class Deployer extends Helper {
       case 'ajaxpost':
         break;
 
+      case 'login':
+        break;
+
+      case 'logout':
+        break;
+
       default:
         echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete, deletetypo3temp, ajaxpost!";
         break;
@@ -87,6 +97,85 @@ class Deployer extends Helper {
    */
   public function getConfig() {
     return $this->config;
+  }
+
+  /**
+   * [userSetPassword description]
+   * @param  [type] $pw [description]
+   * @return [type]     [description]
+   */
+  public function userSetPassword($pw) {
+    if (!file_exists($this->documentRoot."/../typo3_config/deployer_config.php")) {
+      // $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/","\$GLOBAL['login_pw'] = '".md5($pw)."';");
+      $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/", "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * [loginForm description]
+   * @return [type] [description]
+   */
+  public function userLoginForm() {
+    echo "
+    <form id='form-login' class='userlogin' method='POST' >
+      <input type='hidden' name='formtype' value='login' />
+      <label class='control-label' for='user-pw' data-translate=''>Login</label>
+      <div class='controls'>
+        <input id='user-pw' class='input-small span4' type='password' name='login_pw' value=''>
+      </div>
+    </form>
+    ";
+  }
+
+  public function userLogoutForm() {
+    echo "
+    <form id='form-logout' class='userlogin'>
+      <input type='hidden' name='formtype' value='logout' />
+      <input type='hidden' name='deploymentfolder' value='".__DIR__."' />
+      <label class='control-label' for='user-pw' data-translate=''>Logout</label>
+    </form>
+    ";
+  }
+
+  public function userLogout() {
+    session_destroy();
+    echo "<div id='alert-logedout'>You were logedout!</div>";
+    echo "<script>setTimeout(function() { location.reload(); }, 4000);</script>";
+    exit();
+  }
+
+  public function initDeployerFileConfig(){
+    $this->$deployerFileConfigPath = file_exists($this->documentRoot."/../typo3_config/deployer_config.php") ? $this->documentRoot."/../typo3_config/deployer_config.php" : false;
+
+    if($this->$deployerFileConfigPath){
+      $this->$deployerFileConfig = include_once($this->$deployerFileConfigPath);
+    }
+  }
+
+  public function userLoginCheck(){
+    if($_SESSION['login_pw'] == $this->deployerFileConfig['config']['login_pw'] && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public function initSession($pw = false) {
+    $this->config['login_pw'] = $pw ? $pw : ($this->config['login_pw'] ? $this->config['login_pw'] : false);
+    if ($this->config['login_pw']) {
+      session_start();
+      $_SESSION['login_pw'] = md5($this->config['login_pw']);
+      $_SESSION['browser'] = $_SERVER['HTTP_USER_AGENT'];
+      $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
+      $this->userLogoutForm();
+      return true;
+    } else {
+      $this->userLoginForm();
+      return false;
+    }
   }
 
   /**

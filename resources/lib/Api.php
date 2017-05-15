@@ -64,6 +64,13 @@ class Api extends Deployer {
         $this->deployer->handleAjax();
         break;
 
+      case 'login':
+        $this->initSession($this->config['user_pw']);
+        break;
+      case 'logout':
+        $this->userLogout();
+        break;
+
       default:
         echo "<span class='error'>Available API options formtype are: t3install, deletedeployment, t3sourcedelete, deletetypo3temp, ajaxpost!</span>";
         break;
