@@ -149,7 +149,7 @@ class Helper {
    * @return (bool)
    */
   public function createDir($dirName, $pathToDir = false) {
-    $pathToDir = $pathToDir ? $pathToDir : $this->getDocumentRoot();
+    $pathToDir = $pathToDir ? $pathToDir : $this->getDocumentRoot()."/";
 
     $pathToDir = $this->escape_input($pathToDir);
     $pathToDir = $pathToDir[0];
@@ -178,7 +178,7 @@ class Helper {
    * @return [bool]        [description]
    */
   public function createFile($filename, $pathToFile = false, $fileContent = false) {
-    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot();
+    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot()."/";
     $fileContent = $fileContent ? $fileContent : " ";
 
     $filename = $this->escape_input($filename);
@@ -334,6 +334,9 @@ class Helper {
 
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
     $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
+
+    $t3_install_tool = md5($t3_install_tool);
+
     if(file_exists($str)) {
       echo "<span class='exists'>File: {$str} already exists.</span>";
       return false;
@@ -360,6 +363,9 @@ if (!defined('TYPO3_MODE')) {
 
   public function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
     $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
+
+    $t3_install_tool = md5($t3_install_tool);
+
     if(file_exists($str)) {
       echo "<span class='exists'>File: {$str} already exists.</span>";
       return false;
@@ -383,7 +389,7 @@ if (!defined('TYPO3_MODE')) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
       ");
-      echo "<span clas='success'>File {$str} is created.</span>";
+      echo "<span class='success'>File {$str} is created.</span>";
     }
   }
 }
