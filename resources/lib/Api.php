@@ -67,6 +67,7 @@ class Api extends Deployer {
       case 'login':
         $this->initSession($this->config['user_pw']);
         break;
+        
       case 'logout':
         $this->userLogout();
         break;

@@ -106,7 +106,6 @@ class Deployer extends Helper {
    */
   public function userSetPassword($pw) {
     if (!file_exists($this->documentRoot."/../typo3_config/deployer_config.php")) {
-      // $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/","\$GLOBAL['login_pw'] = '".md5($pw)."';");
       $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/", "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );");
       return true;
     } else {
@@ -124,12 +123,16 @@ class Deployer extends Helper {
       <input type='hidden' name='formtype' value='login' />
       <label class='control-label' for='user-pw' data-translate=''>Login</label>
       <div class='controls'>
-        <input id='user-pw' class='input-small span4' type='password' name='login_pw' value=''>
+        <input id='user-pw' class='input-small span2' type='password' name='login_pw' value=''>
       </div>
     </form>
     ";
   }
 
+  /**
+   * [userLogoutForm description]
+   * @return [type] [description]
+   */
   public function userLogoutForm() {
     echo "
     <form id='form-logout' class='userlogin'>
@@ -140,6 +143,10 @@ class Deployer extends Helper {
     ";
   }
 
+  /**
+   * [userLogout description]
+   * @return [type] [description]
+   */
   public function userLogout() {
     session_destroy();
     echo "<div id='alert-logedout'>You were logedout!</div>";
@@ -147,15 +154,23 @@ class Deployer extends Helper {
     exit();
   }
 
-  public function initDeployerFileConfig(){
+  /**
+   * [initDeployerFileConfig description]
+   * @return [type] [description]
+   */
+  public function initDeployerFileConfig() {
     $this->$deployerFileConfigPath = file_exists($this->documentRoot."/../typo3_config/deployer_config.php") ? $this->documentRoot."/../typo3_config/deployer_config.php" : false;
 
-    if($this->$deployerFileConfigPath){
+    if($this->$deployerFileConfigPath) {
       $this->$deployerFileConfig = include_once($this->$deployerFileConfigPath);
     }
   }
 
-  public function userLoginCheck(){
+  /**
+   * [userLoginCheck description]
+   * @return [type] [description]
+   */
+  public function userLoginCheck() {
     if($_SESSION['login_pw'] == $this->deployerFileConfig['config']['login_pw'] && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
       return true;
     } else {
@@ -163,6 +178,11 @@ class Deployer extends Helper {
     }
   }
 
+  /**
+   * [initSession description]
+   * @param  boolean $pw [description]
+   * @return [type]      [description]
+   */
   public function initSession($pw = false) {
     $this->config['login_pw'] = $pw ? $pw : ($this->config['login_pw'] ? $this->config['login_pw'] : false);
     if ($this->config['login_pw']) {
@@ -196,6 +216,10 @@ class Deployer extends Helper {
     }
   }
 
+  /**
+   * [typo3SourceDelete description]
+   * @return [type] [description]
+   */
   public function typo3SourceDelete() {
     if($this->config['formtype'] == 't3sourcedelete') {
       $this->index = 0;
