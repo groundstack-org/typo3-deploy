@@ -109,7 +109,7 @@
   }
 
   var loader = $("#loader");
-  $("body").on("submit", "#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp", function(e) {
+  $("body").on("submit", "#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp, #form-set-typo3filepermission", function(e) {
       e.preventDefault();
       loader.fadeIn("slow");
       var $this = $(this), data = $this.serializeArray();

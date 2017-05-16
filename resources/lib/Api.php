@@ -64,10 +64,14 @@ class Api extends Deployer {
         $this->deployer->handleAjax();
         break;
 
+      case 'setTypo3FilePermissions':
+        $this->deployer->setTypo3FilePermissions();
+        break;
+
       case 'login':
         $this->initSession($this->config['user_pw']);
         break;
-        
+
       case 'logout':
         $this->userLogout();
         break;

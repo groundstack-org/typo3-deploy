@@ -71,6 +71,9 @@ class Deployer extends Helper {
       case 'deletetypo3temp':
         break;
 
+      case 'setTypo3FilePermissions':
+        break;
+
       case 'ajaxpost':
         break;
 
@@ -468,6 +471,61 @@ if (file_exists(\$databaseCredentialsFile)) {
     }
   }
 
+  /**
+   * [setTypo3FilePermissions trys to set default Typo3 file permissions]
+   */
+  public function setTypo3FilePermissions() {
+    $typo3Files[] = array('/typo3temp/compressor' => 2770,
+                  '/typo3temp/cs' => 2770,
+                  '/typo3temp/Cache' => 2770,
+                  '/typo3temp/GB' => 2770,
+                  '/typo3temp/llxml' => 2770,
+                  '/typo3temp/locks' => 2770,
+                  '/typo3temp/pics' => 2770,
+                  '/typo3temp/sprites' => 2770,
+                  '/typo3temp/temp' => 2770,
+                  '/typo3conf' => 2770,
+                  '/typo3conf/ext' => 2770,
+                  '/typo3conf/l10n' => 2770,
+                  '/uploads' => 2770,
+                  '/uploads/media' => 2770,
+                  '/uploads/pics' => 2770,
+                  '/uploads/tf' => 2770,
+                  '/fileadmin' => 2770,
+                  '/fileadmin/_temp_' => 2770,
+                  '/fileadmin/user_upload' => 2770,
+                  '/fileadmin/user_upload/_temp_' => 2770,
+                  '/fileadmin/user_upload/_temp_/importexport' => 2770,
+                  '/' => 2770,
+                  '/typo3temp' => 2770,
+                  '/uploads/media/index.html' => 0660,
+                  '/uploads/index.html' => 0660,
+                  '/uploads/pics/index.html' => 0660,
+                  '/uploads/tf/index.html' => 0660,
+                  '/fileadmin/_temp_/.htaccess' => 0660,
+                  '/fileadmin/_temp_/index.html' => 0660,
+                  '/fileadmin/user_upload/_temp_/index.html' => 0660,
+                  '/fileadmin/user_upload/_temp_/importexport/.htaccess' => 0660,
+                  '/fileadmin/user_upload/_temp_/importexport/index.html' => 0660,
+                  '/fileadmin/user_upload/index.html' => 0660,
+                  '/typo3temp/index.html' => 0660,
+                  '/uploads/index.html' => 0660,
+                  '/uploads/media/index.html' => 0660,
+                  '/uploads/pics/index.html' => 0660,
+                  '/uploads/tf/index.html' => 0660,
+                  '/fileadmin/_temp_/.htaccess' => 0660,
+                  '/fileadmin/_temp_/index.html' => 0660,
+                  '/fileadmin/user_upload/_temp_/index.html' => 0660,
+                  '/fileadmin/user_upload/_temp_/importexport/.htaccess' => 0660,
+                  '/fileadmin/user_upload/_temp_/importexport/index.html' => 0660,
+                  '/fileadmin/user_upload/index.html' => 0660
+                );
+
+    foreach ($typo3Files as $key => $value) {
+      $this->helper->setFilepermissions($key, $value);
+    }
+  }
+
   public function handleAjax() {
     if($this->config['formtype'] == 'ajaxpost') {
       switch ($this->config['ajax_function']) {
@@ -479,8 +537,12 @@ if (file_exists(\$databaseCredentialsFile)) {
           return $this->helper->getTypo3TempDir();
           break;
 
+        case 'setTypo3FilePermissions':
+          return $this->helper->setTypo3FilePermissions();
+          break;
+
         default:
-          echo "<span class='error'>No specifyed ajax_function. Available ajax_function are: getTypo3Sources, getTypo3TempDir!</span>";
+          echo "<span class='error'>No specifyed ajax_function. Available ajax_function are: getTypo3Sources, getTypo3TempDir, setTypo3FilePermissions!</span>";
           break;
       }
     }

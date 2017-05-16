@@ -332,6 +332,16 @@ class Helper {
     }
   }
 
+  /**
+   * [addDbVersion7 description]
+   * @param [string] $t3_db_name      [description]
+   * @param [string] $t3_db_host      [description]
+   * @param [string] $t3_db_password  [description]
+   * @param [string] $t3_db_user      [description]
+   * @param [string] $t3_db_socket    [description]
+   * @param [string] $t3_install_tool [Password]
+   * @param [datetime] $currentDateTime [description]
+   */
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
     $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
 
@@ -361,6 +371,16 @@ if (!defined('TYPO3_MODE')) {
     }
   }
 
+  /**
+   * [addDbVersion8 description]
+   * @param [string] $t3_db_name      [description]
+   * @param [string] $t3_db_host      [description]
+   * @param [string] $t3_db_password  [description]
+   * @param [string] $t3_db_user      [description]
+   * @param [string] $t3_db_socket    [description]
+   * @param [string] $t3_install_tool [Password]
+   * @param [datetime] $currentDateTime [description]
+   */
   public function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
     $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
 
@@ -390,6 +410,31 @@ if (!defined('TYPO3_MODE')) {
 \$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
       ");
       echo "<span class='success'>File {$str} is created.</span>";
+    }
+  }
+
+  /**
+   * [setFilepermissions sets file permissions, uses php chmod();]
+   * @param [string] $filepath   [path to file]
+   * @param [int+] $permission [file permission e. g. 2770]
+   */
+  public function setFilepermissions($filepath, $permission) {
+    $filepath = $this->escape_input($filepath);
+    $filepath = $filepath[0];
+    $permission = (int)$permission;
+
+    if (chmod($filename, $permission)) {
+      echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
+      return true;
+    } else {
+      if (file_exists($filename)) {
+        $filePermission = fileperms($filepath);
+        echo "<span class='error'>File permission for file: {$filepath} couldn't set. File have permission: {$filePermission}!</span>";
+        return false;
+      } else {
+        echo "<span class='warning'>File dosen't exists: {$filepath}! Permission not set.</span>";
+        return false;
+      }
     }
   }
 }
