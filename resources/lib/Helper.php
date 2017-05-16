@@ -423,11 +423,11 @@ if (!defined('TYPO3_MODE')) {
     $filepath = $filepath[0];
     $permission = (int)$permission;
 
-    if (chmod($filename, $permission)) {
+    if (chmod($filepath, $permission)) {
       echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
       return true;
     } else {
-      if (file_exists($filename)) {
+      if (file_exists($filepath)) {
         $filePermission = fileperms($filepath);
         echo "<span class='error'>File permission for file: {$filepath} couldn't set. File have permission: {$filePermission}!</span>";
         return false;

@@ -234,7 +234,7 @@
     </div>
 
     <div class="row-fluid">
-      
+
       <div class="span6">
         <div class="widget-box" id="typo3-delete-temp">
           <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
