@@ -1,3 +1,4 @@
+// magic do not touch
 (function($) {
   var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
   $.fn.reverse = [].reverse;
