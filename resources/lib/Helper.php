@@ -5,8 +5,10 @@
  */
 class Helper {
 
-  function __construct() {
+  private $permissionIndex;
 
+  function __construct() {
+    $this->permissionIndex = 0;
   }
 
   /**
@@ -189,6 +191,7 @@ class Helper {
     $file = fopen($pathToFile.$filename,"x");
     if ($file != false) { // if true return resource
       fclose($file);
+      file_put_contents($pathToFile.$filename, $fileContent);
       echo "<span class='successful'>File: {$filename} in '{$pathToFile}' successfully created.</span>";
       return true;
     } else {
@@ -418,8 +421,8 @@ if (!defined('TYPO3_MODE')) {
    * @param [string] $filepath   [path to file]
    * @param [int+] $permission [file permission e. g. 2770]
    */
-  $permissionIndex = 0;
   public function setFilePermissions($filepath, $permission) {
+    $permissionIndex = $this->permissionIndex;
     $filepath = $this->escape_input($filepath);
     $filepath = $filepath[0];
     $permission = (int)$permission;

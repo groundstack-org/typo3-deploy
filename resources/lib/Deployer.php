@@ -31,12 +31,16 @@ class Deployer extends Helper {
 
   function __construct($config = false) {
     $this->initSession();
+
     $this->helper = new Helper();
     $this->documentRoot = $this->helper->getDocumentRoot();
+
+
+    // $this->initDeployerFileConfig();
+
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
     $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
-    $this->initDeployerFileConfig();
 
     if($config && is_array($config)){
       $this->config = $this->helper->escape_input($config);
@@ -103,20 +107,6 @@ class Deployer extends Helper {
   }
 
   /**
-   * [userSetPassword description]
-   * @param  [type] $pw [description]
-   * @return [type]     [description]
-   */
-  public function userSetPassword($pw) {
-    if (!file_exists($this->documentRoot."/../typo3_config/deployer_config.php")) {
-      $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/", "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );");
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  /**
    * [loginForm description]
    * @return [type] [description]
    */
@@ -125,8 +115,9 @@ class Deployer extends Helper {
     <form id='form-login' class='userlogin' method='POST' >
       <input type='hidden' name='formtype' value='login' />
       <label class='control-label' for='user-pw' data-translate=''>Login</label>
-      <div class='controls'>
-        <input id='user-pw' class='input-small span2' type='password' name='login_pw' value=''>
+      <input id='user-pw' class='input-small span2' type='password' name='user_pw' value=''>
+      <div class='form-actions'>
+        <button type='submit' class='btn btn-danger' name='sent' value='Login' data-translate='_login'>Login</button>
       </div>
     </form>
     ";
@@ -158,14 +149,36 @@ class Deployer extends Helper {
   }
 
   /**
-   * [initDeployerFileConfig description]
-   * @return [type] [description]
+   * [userSetPassword description]
+   * @param  [type] $pw [description]
+   * @return [type]     [description]
+   */
+  public function userSetPassword($pw) {
+    if (!file_exists($this->documentRoot."/../typo3_config/deployer_config.php")) {
+      $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/", "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * [initDeployerFileConfig if deployer_config.php exists include it else set it to false]
+   * @return [bool] [true or false]
    */
   public function initDeployerFileConfig() {
-    $this->$deployerFileConfigPath = file_exists($this->documentRoot."/../typo3_config/deployer_config.php") ? $this->documentRoot."/../typo3_config/deployer_config.php" : false;
+    $file = $this->documentRoot."/../typo3_config/deployer_config.php";
+    if(file_exists($file) == true) {
+      $this->deployerFileConfigPath = $file;
+    } else {
+      $this->deployerFileConfigPath = false;
+    }
 
-    if($this->$deployerFileConfigPath) {
-      $this->$deployerFileConfig = include_once($this->$deployerFileConfigPath);
+    if($this->deployerFileConfigPath) {
+      $this->deployerFileConfig = include_once($this->deployerFileConfigPath);
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -175,8 +188,10 @@ class Deployer extends Helper {
    */
   public function userLoginCheck() {
     if($_SESSION['login_pw'] == $this->deployerFileConfig['config']['login_pw'] && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
+      $this->userLogoutForm();
       return true;
     } else {
+      $this->userLoginForm();
       return false;
     }
   }
@@ -193,10 +208,8 @@ class Deployer extends Helper {
       $_SESSION['login_pw'] = md5($this->config['login_pw']);
       $_SESSION['browser'] = $_SERVER['HTTP_USER_AGENT'];
       $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-      $this->userLogoutForm();
       return true;
     } else {
-      $this->userLoginForm();
       return false;
     }
   }

@@ -44,7 +44,7 @@
 <body>
 
 <noscript><h1>THIS DEPLOMENT NEEDS JAVASCRIPT ON!</h1></noscript>
-
+<?php if (true) { ?>
 <!-- Header-part -->
 <div id="header">
   <h1><a href="http://groundstack.de">Typo3 simple deployer</a></h1>
@@ -56,14 +56,17 @@
   <ul class="nav">
     <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
       <ul class="dropdown-menu">
-        <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li>
-        <form id='form-login' class='userlogin' method='POST' >
-          <input type='hidden' name='formtype' value='login' />
-          <label class='control-label' for='user-pw' data-translate=''>Login</label>
-          <div class='controls'>
-            <input id='user-pw' class='input-small span2' type='password' name='login_pw' value=''>
-          </div>
-        </form>
+        <!-- <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li> -->
+        <li id="form-login-out">
+          <form id='form-login' class='userlogin' method='POST' >
+            <input type='hidden' name='formtype' value='login' />
+            <label class='control-label' for='user-pw' data-translate=''>Login</label>
+            <input id='user-pw' class='input-small span2' type='password' name='user_pw' value=''>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-danger" name="sent" value="Senden" data-translate="_send">Delete!</button>
+            </div>
+          </form>
+        </li>
       </ul>
     </li>
 
@@ -578,6 +581,7 @@
 
 		</div>
 
+<?php } ?>
 
 <!--end-Footer-part-->
 <script src="resources/javascript/jquery.min.js"></script>

@@ -69,11 +69,14 @@ class Api extends Deployer {
         break;
 
       case 'login':
-        $this->initSession($this->config['user_pw']);
+        $this->deployer->userSetPassword($this->config['user_pw']);
+        $this->deployer->initDeployerFileConfig();
+        $this->deployer->initSession($this->config['user_pw']);
+        $this->deployer->userLoginCheck();
         break;
 
       case 'logout':
-        $this->userLogout();
+        $this->deployer->userLogout();
         break;
 
       default:

@@ -109,6 +109,17 @@
     return tmp;
   }
 
+  $("body").on("submit", "#form-login, #form-logout", function(e) {
+    e.preventDefault();
+    var $this = $(this), data = $this.serializeArray();
+    var tmpData = JSON.stringify(assocJSON(data));
+
+    $.post('api/index.php', tmpData, function(returnedData) {
+      $("#form-login-out").html(returnedData);
+      console.log(returnedData);
+    });
+  });
+
   var loader = $("#loader");
   $("body").on("submit", "#form-delete-deployment, #form-install-typo3, #form-delete-typo3source, #form-delete-typo3temp, #form-set-typo3filepermission", function(e) {
       e.preventDefault();
