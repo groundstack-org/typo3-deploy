@@ -266,7 +266,7 @@
       <div class="span6">
         <div class="widget-box" id="typo3-file-permission">
           <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-            <h5>Trys to set default Typo3 file permissions.</h5>
+            <h5>Trys to set default Typo3 file permissions. For change permissions to e.g. 2775 and it faild, the script trys to set 0755!</h5>
           </div>
           <div class="widget-content">
             <div id="set-typo3-permissions" class="controls">

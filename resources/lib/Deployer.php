@@ -522,7 +522,7 @@ if (file_exists(\$databaseCredentialsFile)) {
                 );
 
     foreach ($typo3Files as $key => $value) {
-      $this->helper->setFilepermissions($key, $value);
+      $this->helper->setFilePermissions($key, $value);
     }
   }
 

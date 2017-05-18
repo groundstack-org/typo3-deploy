@@ -418,14 +418,26 @@ if (!defined('TYPO3_MODE')) {
    * @param [string] $filepath   [path to file]
    * @param [int+] $permission [file permission e. g. 2770]
    */
-  public function setFilepermissions($filepath, $permission) {
+  $permissionIndex = 0;
+  public function setFilePermissions($filepath, $permission) {
     $filepath = $this->escape_input($filepath);
     $filepath = $filepath[0];
     $permission = (int)$permission;
 
     if (chmod($filepath, $permission)) {
-      echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
-      return true;
+      if(fileperms($filepath) == $permission) {
+        echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
+        return true;
+      } else {
+        if($permissionIndex == 0) {
+          $tempPermissions = "0".substr($permission, 1, 3);
+          $this->setFilePermissions($filepath, (int)$tempPermissions);
+          $permissionIndex++;
+        } else {
+          echo "<span class='error'>File permission for file: {$filepath} couldn't set. File have permission: {$filePermission}!</span>";
+          return false;
+        }
+      }
     } else {
       if (file_exists($filepath)) {
         $filePermission = fileperms($filepath);
