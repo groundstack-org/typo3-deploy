@@ -7,7 +7,7 @@
   // to the next guy:
   //
   // total_hours_wasted_here = 12
-
+  session_start();
   error_reporting(E_ALL);
   require_once("resources/lib/Helper.php");
   require_once("resources/lib/Deployer.php");
@@ -44,7 +44,9 @@
 <body>
 
 <noscript><h1>THIS DEPLOMENT NEEDS JAVASCRIPT ON!</h1></noscript>
+
 <?php if (true) { ?>
+
 <!-- Header-part -->
 <div id="header">
   <h1><a href="http://groundstack.de">Typo3 simple deployer</a></h1>
@@ -58,14 +60,7 @@
       <ul class="dropdown-menu">
         <!-- <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li> -->
         <li id="form-login-out">
-          <form id='form-login' class='userlogin' method='POST' >
-            <input type='hidden' name='formtype' value='login' />
-            <label class='control-label' for='user-pw' data-translate=''>Login</label>
-            <input id='user-pw' class='input-small span2' type='password' name='user_pw' value=''>
-            <div class="form-actions">
-              <button type="submit" class="btn btn-danger" name="sent" value="Senden" data-translate="_send">Delete!</button>
-            </div>
-          </form>
+          <?php $deployer->userLoginCheck(); ?>
         </li>
       </ul>
     </li>

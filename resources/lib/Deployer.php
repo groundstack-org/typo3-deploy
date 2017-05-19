@@ -30,13 +30,11 @@ class Deployer extends Helper {
   private $deployerFileConfigPath;
 
   function __construct($config = false) {
+    session_start();
     $this->initSession();
 
     $this->helper = new Helper();
     $this->documentRoot = $this->helper->getDocumentRoot();
-
-
-    // $this->initDeployerFileConfig();
 
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
@@ -132,7 +130,9 @@ class Deployer extends Helper {
     <form id='form-logout' class='userlogin'>
       <input type='hidden' name='formtype' value='logout' />
       <input type='hidden' name='deploymentfolder' value='".__DIR__."' />
-      <label class='control-label' for='user-pw' data-translate=''>Logout</label>
+      <div class='form-actions'>
+        <button type='submit' class='btn btn-danger' name='sent' value='Logout' data-translate='_logout'>Logout</button>
+      </div>
     </form>
     ";
   }
@@ -155,7 +155,9 @@ class Deployer extends Helper {
    */
   public function userSetPassword($pw) {
     if (!file_exists($this->documentRoot."/../typo3_config/deployer_config.php")) {
-      $this->helper->createFile("deployer_config.php", $this->documentRoot."/../typo3_config/", "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );");
+      $path = $this->documentRoot."/../typo3_config/";
+      $string = "<?php return array( 'config' => array( 'login_pw' => '".md5($pw)."' ) );";
+      $this->helper->createFile("deployer_config.php", $path, $string);
       return true;
     } else {
       return false;
@@ -187,7 +189,13 @@ class Deployer extends Helper {
    * @return [type] [description]
    */
   public function userLoginCheck() {
-    if($_SESSION['login_pw'] == $this->deployerFileConfig['config']['login_pw'] && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
+    print_r("Session loginpw: ".$_SESSION['login_pw']);
+    if($this->initDeployerFileConfig()) {
+      $login_pw = $this->deployerFileConfig['config']['login_pw'];
+    } else {
+      $login_pw = "false";
+    }
+    if($_SESSION['login_pw'] == $login_pw && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
       $this->userLogoutForm();
       return true;
     } else {
@@ -202,16 +210,10 @@ class Deployer extends Helper {
    * @return [type]      [description]
    */
   public function initSession($pw = false) {
-    $this->config['login_pw'] = $pw ? $pw : ($this->config['login_pw'] ? $this->config['login_pw'] : false);
-    if ($this->config['login_pw']) {
-      session_start();
-      $_SESSION['login_pw'] = md5($this->config['login_pw']);
-      $_SESSION['browser'] = $_SERVER['HTTP_USER_AGENT'];
-      $_SESSION['ip'] = $_SERVER['REMOTE_ADDR'];
-      return true;
-    } else {
-      return false;
-    }
+    $_SESSION['login_pw'] = $pw ? md5($pw) : false;
+    $_SESSION['browser'] = $_SESSION['browser'] ? $_SESSION['browser'] : $_SERVER['HTTP_USER_AGENT'];
+    $_SESSION['ip'] = $_SESSION['ip'] ? $_SESSION['ip'] : $_SERVER['REMOTE_ADDR'];
+    $this->initDeployerFileConfig();
   }
 
   /**

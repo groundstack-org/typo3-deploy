@@ -9,9 +9,6 @@ class Api extends Deployer {
   private $config;
 
   function __construct($config=false) {
-
-    // print_r($config);
-
     if($config && is_array($config)){
       $this->deployer = new Deployer($config);
       $this->config = $this->deployer->getConfig();
@@ -70,7 +67,6 @@ class Api extends Deployer {
 
       case 'login':
         $this->deployer->userSetPassword($this->config['user_pw']);
-        $this->deployer->initDeployerFileConfig();
         $this->deployer->initSession($this->config['user_pw']);
         $this->deployer->userLoginCheck();
         break;

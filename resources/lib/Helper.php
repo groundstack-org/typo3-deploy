@@ -180,7 +180,7 @@ class Helper {
    * @return [bool]        [description]
    */
   public function createFile($filename, $pathToFile = false, $fileContent = false) {
-    $pathToFile = $pathToFile ? dir($pathToFile) : $this->getDocumentRoot()."/";
+    $pathToFile = $pathToFile ? $pathToFile : $this->getDocumentRoot()."/";
     $fileContent = $fileContent ? $fileContent : " ";
 
     $filename = $this->escape_input($filename);
