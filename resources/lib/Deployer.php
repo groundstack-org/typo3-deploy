@@ -141,10 +141,10 @@ class Deployer extends Helper {
    * [userLogout description]
    * @return [type] [description]
    */
-  public function userLogout() {
+  public function userLoggedout() {
     session_destroy();
     echo "<div id='alert-logedout'>You were logedout!</div>";
-    echo "<script>setTimeout(function() { location.reload(); }, 4000);</script>";
+    echo "<script>setTimeout(function() { location.reload(); }, 2000);</script>";
     exit();
   }
 
@@ -170,11 +170,7 @@ class Deployer extends Helper {
    */
   public function initDeployerFileConfig() {
     $file = $this->documentRoot."/../typo3_config/deployer_config.php";
-    if(file_exists($file) == true) {
-      $this->deployerFileConfigPath = $file;
-    } else {
-      $this->deployerFileConfigPath = false;
-    }
+    $this->deployerFileConfigPath = file_exists($file) ? $file : false;
 
     if($this->deployerFileConfigPath) {
       $this->deployerFileConfig = include_once($this->deployerFileConfigPath);
@@ -190,12 +186,9 @@ class Deployer extends Helper {
    */
   public function userLoginCheck() {
     print_r("Session loginpw: ".$_SESSION['login_pw']);
-    if($this->initDeployerFileConfig()) {
-      $login_pw = $this->deployerFileConfig['config']['login_pw'];
-    } else {
-      $login_pw = "false";
-    }
-    if($_SESSION['login_pw'] == $login_pw && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
+    $login_pw = $this->initDeployerFileConfig() ? $this->deployerFileConfig['config']['login_pw'] : false;
+
+    if(isset($_SESSION['login_pw']) && !empty($_SESSION['blah']) && $_SESSION['login_pw'] == $login_pw && $_SESSION['browser'] == $_SERVER['HTTP_USER_AGENT'] && $_SESSION['ip'] == $_SERVER['REMOTE_ADDR']) {
       $this->userLogoutForm();
       return true;
     } else {

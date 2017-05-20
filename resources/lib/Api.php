@@ -72,7 +72,7 @@ class Api extends Deployer {
         break;
 
       case 'logout':
-        $this->deployer->userLogout();
+        $this->deployer->userLoggedout();
         break;
 
       default:
