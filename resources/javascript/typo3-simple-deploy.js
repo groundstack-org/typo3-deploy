@@ -217,20 +217,15 @@
 (function($) {
   var sidebar = $("#sidebar"), container = $("#content");
 
-  sidebar.find("a").on("click touchend", function(e) {
+  sidebar.children("ul").find('a').on("click touchend", function(e) {
     e.preventDefault();
-    var this = $(this);
-    if(!this.hasClass('active')) {
-      var url = this.attr("href");
-      container.load(url "#content", function(response, status, xhr) {
-        if(status == "error") {
-          alert("Ajax request failed for load url: "+url);
-        } else {
-          sidebar.find(".active").removeClass("active");
-          this.addClass('active');
-          container.html(response);
-          container = $("#content");
-        }
+    var a = $(this), active = sidebar.find(".active");
+    if(!a.parent("li").hasClass('active')) {
+      var url = a.data("target"), current = active.children("a").data("target");
+      container.find("."+current).fadeOut(400, function() {
+        container.find("."+url).fadeIn();
+        active.removeClass('active');
+        a.parent("li").addClass('active');
       });
     }
   });
