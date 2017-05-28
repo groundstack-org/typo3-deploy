@@ -215,26 +215,23 @@
 
 // Page change
 (function($) {
-  var sidebar = $("#sidebar");
-  var typo3 = $(".deploy-typo3"), theme = $(".deploy-theme"), readme = $(".deploy-readme");
-  theme.fadeOut(10);
-  readme.fadeOut(10);
-  $("a").on("click touchend", function() {
-    if($(this).hasClass("typo3")) {
-      theme.fadeOut(400, function() { typo3.fadeIn(400); });
-      readme.fadeOut(400, function() { typo3.fadeIn(400); });
-      sidebar.find(".active").removeClass("active");
-      sidebar.find(".typo3").parent("li").addClass("active");
-    } else if($(this).hasClass("theme")) {
-      typo3.fadeOut(400, function() { theme.fadeIn(400); });
-      readme.fadeOut(400, function() { theme.fadeIn(400); });
-      sidebar.find(".active").removeClass("active");
-      sidebar.find(".theme").parent("li").addClass("active");
-    } else if($(this).hasClass("readme")) {
-      typo3.fadeOut(400, function() { readme.fadeIn(400); });
-      theme.fadeOut(400, function() { readme.fadeIn(400); });
-      sidebar.find(".active").removeClass("active");
-      sidebar.find(".readme").parent("li").addClass("active");
+  var sidebar = $("#sidebar"), container = $("#content");
+
+  sidebar.find("a").on("click touchend", function(e) {
+    e.preventDefault();
+    var this = $(this);
+    if(!this.hasClass('active')) {
+      var url = this.attr("href");
+      container.load(url "#content", function(response, status, xhr) {
+        if(status == "error") {
+          alert("Ajax request failed for load url: "+url);
+        } else {
+          sidebar.find(".active").removeClass("active");
+          this.addClass('active');
+          container.html(response);
+          container = $("#content");
+        }
+      });
     }
   });
 })(jQuery);
