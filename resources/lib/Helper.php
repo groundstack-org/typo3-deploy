@@ -410,7 +410,7 @@ if (!defined('TYPO3_MODE')) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
-\$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+\$GLOBALS['TYPO3_CONF_VARS']['GFX']['processor_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
       ");
       echo "<span class='success'>File {$str} is created.</span>";
     }
@@ -419,37 +419,34 @@ if (!defined('TYPO3_MODE')) {
   /**
    * [setFilepermissions sets file permissions, uses php chmod();]
    * @param [string] $filepath   [path to file]
-   * @param [int+] $permission [file permission e. g. 2770]
+   * @param [int+] $permission [file permission e. g. 770]
    */
   public function setFilePermissions($filepath, $permission) {
     $permissionIndex = $this->permissionIndex;
     $filepath = $this->escape_input($filepath);
     $filepath = $filepath[0];
     $permission = (int)$permission;
+    $permission = str_pad($permission, 4, '0', STR_PAD_LEFT);
 
-    if (chmod($filepath, $permission)) {
-      if(fileperms($filepath) == $permission) {
-        echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
-        return true;
-      } else {
-        if($permissionIndex == 0) {
-          $tempPermissions = "0".substr($permission, 1, 3);
-          $this->setFilePermissions($filepath, (int)$tempPermissions);
-          $permissionIndex++;
+    if(file_exists($filepath)) {
+      if(chmod($filepath, octdec($permission))) {
+        $fileperms = substr(sprintf("%o",fileperms($filepath)),-4);
+        if($fileperms == $permission) {
+          echo "<span class='success'>File {$filepath} have now file permission: {$permission}.</span>";
+          return true;
         } else {
+          $filePermission = substr(sprintf("%o",fileperms($filepath)),-4);
           echo "<span class='error'>File permission for file: {$filepath} couldn't set. File have permission: {$filePermission}!</span>";
           return false;
         }
-      }
-    } else {
-      if (file_exists($filepath)) {
-        $filePermission = fileperms($filepath);
+      } else {
+        $filePermission = substr(sprintf("%o",fileperms($filepath)),-4);
         echo "<span class='error'>File permission for file: {$filepath} couldn't set. File have permission: {$filePermission}!</span>";
         return false;
-      } else {
-        echo "<span class='warning'>File dosen't exists: {$filepath}! Permission not set.</span>";
-        return false;
       }
+    } else {
+      echo "<span class='warning'>File dosen't exists: {$filepath}! Permission not set.</span>";
+      return false;
     }
   }
 }
