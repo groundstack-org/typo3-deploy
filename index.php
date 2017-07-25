@@ -82,7 +82,7 @@
 <!-- close-left-menu-stats-sidebar -->
 
 <div id="content">
-  
+
   <div class="ajax-content deploy-typo3">
     <div id="content-header">
       <div id="breadcrumb"> <a href="deploy.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>  <a href="#" class="current typo3">Typo3 install & change</a> </div>
@@ -266,7 +266,7 @@
         <div class="span6">
           <div class="widget-box" id="typo3-file-permission">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-              <h5>Trys to set default Typo3 file permissions. For change permissions to e.g. 2775 and it faild, the script trys to set 0755!</h5>
+              <h5>Trys to set default Typo3 file permissions. (2770 / 660)</h5>
             </div>
             <div class="widget-content">
               <div id="set-typo3-permissions" class="controls">
