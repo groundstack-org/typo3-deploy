@@ -1,4 +1,7 @@
 # English
+
+Warning it is BETA.
+
 ## Overview
 
 Typo3 PHP simple deployment tool to automatically download Typo3 and create symlinks / robots.txt / .htaccess / humans.txt.<br />
@@ -10,15 +13,16 @@ Your database access data and your installtool password are stored in the file t
 
 Your existing files won't be overwritten during the deployment process.<br />
 
-### Installation
+### Installation simple way
 
-1. Download the [**deploy.php**](https://raw.githubusercontent.com/Teisi/typo3-deploy/master/deploy.php) and upload it to your document root (e.g. httpdocs).<br />
-2. Start the deployment in your browser www.example.com/deploy.php.<br />
-3. **Delete** the deploy.php from your server after successful Installation.<br />
-4. Open your domain in your browser and install Typo3.<br />
-5. Have fun.<br />
+1. Download the [**getTypo3Deployer.php**](https://raw.githubusercontent.com/Teisi/typo3-deploy/master/getTypo3Deployer.php) and upload it to your document root (e.g. httpdocs).<br />
+2. Start the deployment installation in your browser www.example.com/getTypo3Deployer.php.<br />
+3. Have fun.<br />
 
-![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
+### Installation default way
+1. Download the [**deploy.php**](https://github.com/Teisi/typo3-deploy/archive/master.zip) and upload it to your document root (e.g. httpdocs).<br />
+2. Unzip it than you can open the deployment tool - open your browser 'www.yourDomain.de/typo3-deploy-master'. (You can change the folder name (typo3-deploy-master) to what you like e. g. 'deploy' than open your browser 'www.yourDomain.de/deploy/index.php'.)
+3. Have fun.<br />
 
 #### Dirs befor installation e. g.
 /etc/<br />
@@ -35,13 +39,15 @@ Your existing files won't be overwritten during the deployment process.<br />
 /typo3_sources/<br />
 
 #### Folders are created outside the document root:
-If you don't like this, create a folder e. g. "typo3" in your /httpdocs/ (e. g. /httpdocs/typo3/) and link your document root to this folder ("typo3"). Then put the deploy.php in this folder ("typo3").
+If you don't like this, create a folder e. g. "typo3" in your /httpdocs/ (e. g. /httpdocs/typo3/) and link your document root to this folder ("typo3"). Then follow the installation instruction.
 
 ## Issues
-- Language switch back after form send
+- Language switch not ready
 
 
 # Deutsch
+
+Warning it is BETA.
 
 ## Was macht es
 Typo3 PHP simple deployment tool lädt automatisch die ausgewählte Typo3 Version herunter. Außerdem legt es gleich default robots.txt - .htaccess - humans.txt an.<br />
@@ -51,15 +57,16 @@ Zudem wird die "FIRST_INSTALL" Datei erstellt, damit mit der Typo3 Installation 
 
 Deine bestehenden Dateien werden beim deployment Vorgang nicht gelöscht.<br />
 
-### Installation
+### Installation einfacher Weg
 
-1. Download [**deploy.php**](https://raw.githubusercontent.com/Teisi/typo3-deploy/master/deploy.php) und uploade diese in dein documentroot(z. B. httpdocs).<br />
-2. Rufe die deploy.php in deinem Browser auf z. B. www.example.com/deploy.php.<br />
-3. **Lösche** die deploy.php von deinem Server nach erfolgreichem deployment.<br />
-4. Rufe deine Domain im Browser auf und führe die Typo3 Installation durch z.B. www.example.com.<br />
-5. Have fun.<br />
+1. Download [**getTypo3Deployer.php**](https://raw.githubusercontent.com/Teisi/typo3-deploy/master/getTypo3Deployer.php) und uploade diese in deinen documentroot (e.g. httpdocs).<br />
+2. Start doe deployment Installation in deinem Browser www.example.com/getTypo3Deployer.php.<br />
+3. Have fun.<br />
 
-![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")
+### Installation default Weg
+1. Download [**deploy.php**](https://github.com/Teisi/typo3-deploy/archive/master.zip) und uploade es in deinen documentroot (e.g. httpdocs).<br />
+2. Nachdem du es entpackt hast, kannst du das Tool unter 'www.yourDomain.de/typo3-deploy-master' aufrufen. (Den Namen des Tools (typo3-deploy-master) kannst du ändern zu was du willst z. B. 'deploy' dann würde der Aufruf so aussehen 'www.yourDomain.de/deploy'.)
+3. Have fun.<br />
 
 #### Ordner die zum Beispiel vor dem deployment auf deinem Server liegen:
 /etc/<br />
@@ -76,7 +83,9 @@ Deine bestehenden Dateien werden beim deployment Vorgang nicht gelöscht.<br />
 /typo3_sources/<br />
 
 #### Ordner werden default mässig ausserhalb des documentroot angelegt:
-Wenn du dies nicht willst, erstelle in deinem documentroot einen neuen leeren Ordner z. B. "typo3" (z. B. /httpdocs/typo3/) und setze z. B. in Plesk den documentroot auf diesen erstellten Ordner (hier: "typo3"). Lege dann die Datei deploy.php in diesem ab und rufe sie auf bzw. folge oben genannte Schritte.
+Wenn du dies nicht willst, erstelle in deinem documentroot einen neuen leeren Ordner z. B. "typo3" (z. B. /httpdocs/typo3/) und setze z. B. in Plesk den documentroot auf diesen erstellten Ordner (hier: "typo3"). Dann folge der Installationsanleitung.
 
 ## bekannte Fehler
-- Sprache wird auf englisch zurückgestellt nach dem absenden des Formulars
+- Sprache ändern fehlt
+
+![example picture of the deploy tool](resources/images/typo3-simple-deploy.jpg?raw=true "Title")

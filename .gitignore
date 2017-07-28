@@ -17,5 +17,6 @@
 # If not comment out the following entries.
 /typo3/typo3/
 /typo3_src/
-/index.php
+!/index.php
 /uploads/
+/.project
