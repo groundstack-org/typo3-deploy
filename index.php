@@ -92,8 +92,15 @@
       <div id="breadcrumb"> <a href="deploy.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>  <a href="#" class="current typo3">Typo3 install & change</a> </div>
       <h1>Typo3 deployer</h1>
       <div class="btn-wrapper">
-        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3"><button id="goToBe" class="btn btn-success">Go to Typo3 Backend</button></a>
-        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3/install"><button id="goToBeInstall" class="btn btn-success">Go to Typo3 Install-Tool</button></a>
+        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3" target="_blank"><button id="goToBe" class="btn btn-success">Go to Typo3 Backend</button></a>
+        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3/install" target="_blank"><button id="goToBeInstall" class="btn btn-success">Go to Typo3 Install-Tool</button></a>
+        <form id="form-create-installfile" class="form-horizontal" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
+          <input type="hidden" name="formtype" value="ajaxpost" />
+          <input type="hidden" name="ajax_function" value="createinstallfile" />
+          <div class="form-actions">
+            <button type="submit" id="createInstallFile" class="btn" name="sent" value="Senden" data-translate="">Create file 'ENABLE_INSTALL_TOOL'</button>
+          </div>
+        </form>
       </div>
     </div>
     <div class="container-fluid">

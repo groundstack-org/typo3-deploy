@@ -136,6 +136,14 @@ class Helper {
   }
 
   /**
+   * create the empty file: ENABLE_INSTALL_TOOL
+   * @return (bool)
+   */
+  public function createInstallToolFile() {
+    return $this->createFile("ENABLE_INSTALL_TOOL", $this->getDocumentRoot()."/typo3conf/");
+  }
+
+  /**
    * creates a symlink
    * @param (string) $filename - name of the symlink
    * @param (string) $target - path to the file where the symlink links to
