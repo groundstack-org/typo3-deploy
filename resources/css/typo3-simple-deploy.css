@@ -8,9 +8,15 @@ body { height: auto; position: relative; }
 
 .btn-wrapper { margin-left: 16px; }
 .btn-wrapper button { margin: 4px; }
+#form-create-installfile .form-actions { background: none; font-size: 100%; margin: 0; padding: 0; }
+#form-create-installfile .info { background-color: #fff; padding: 10px; }
+#form-create-installfile .info > span { width: calc(100% - 20px); }
 @media screen and (min-width: 950px) {
   .btn-wrapper { position: absolute; top: -1px; right: 20px; }
+  #form-create-installfile .form-actions button { float: right; }
+  #form-create-installfile .info { box-shadow: 1px 3px 7px 1px; max-width: 280px; position: absolute; top: 100%; right: 0; }
 }
+
 
 
 #list-typo3-sources ul li { list-style: none; }

@@ -138,6 +138,18 @@
         });
       });
   });
+
+  $("body").on("submit", "#form-create-installfile", function(e) {
+    e.preventDefault();
+    var $this = $(this), data = $this.serializeArray();
+    var tmpData = JSON.stringify(assocJSON(data));
+    $.post('api/index.php', tmpData, function(returnedData) {
+      $("#form-create-installfile").prepend("<div class='info'>"+returnedData+"</div>").fadeIn();
+      setTimeout(function() {
+        $("#form-create-installfile .info").fadeOut();
+      }, 3000);
+    });
+  })
 })(jQuery);
 
 

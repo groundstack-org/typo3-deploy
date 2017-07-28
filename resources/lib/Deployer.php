@@ -585,6 +585,10 @@ if (file_exists(\$databaseCredentialsFile)) {
           return $this->helper->setTypo3FilePermissions();
           break;
 
+        case 'createinstallfile':
+          return $this->helper->createInstallToolFile();
+          break;
+
         default:
           echo "<span class='error'>No specifyed ajax_function. Available ajax_function are: getTypo3Sources, getTypo3TempDir, setTypo3FilePermissions!</span>";
           break;
