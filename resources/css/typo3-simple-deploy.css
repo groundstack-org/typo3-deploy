@@ -6,6 +6,11 @@ body { height: auto; position: relative; }
 .warning { background-color: orange; color: #000; }
 .error { background-color: red; color: #000; }
 
+@media screen and (min-width: 1333px) {
+  .no-touch #header h1 { position: fixed; top: 0; }
+  .no-touch #sidebar { position: fixed; }
+}
+
 .btn-wrapper { margin-left: 16px; }
 .btn-wrapper button { margin: 4px; }
 #form-create-installfile .form-actions { background: none; font-size: 100%; margin: 0; padding: 0; }
