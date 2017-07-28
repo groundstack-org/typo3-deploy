@@ -8,7 +8,7 @@
   //
   // total_hours_wasted_here = 32
   // session_start();
-  error_reporting(E_ALL);
+  // error_reporting(E_ALL);
   require_once("resources/lib/Helper.php");
   require_once("resources/lib/Deployer.php");
 
@@ -91,6 +91,10 @@
     <div id="content-header">
       <div id="breadcrumb"> <a href="deploy.php" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Home</a>  <a href="#" class="current typo3">Typo3 install & change</a> </div>
       <h1>Typo3 deployer</h1>
+      <div class="btn-wrapper">
+        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3"><button id="goToBe" class="btn btn-success">Go to Typo3 Backend</button></a>
+        <a href="http://<?php echo $_SERVER["HTTP_HOST"]; ?>/typo3/install"><button id="goToBeInstall" class="btn btn-success">Go to Typo3 Install-Tool</button></a>
+      </div>
     </div>
     <div class="container-fluid">
       <hr>
@@ -316,8 +320,8 @@
 
           1. Download the <a href="https://github.com/Teisi/typo3-deploy/archive/master.zip" title="from github">deployment</a> and upload it to your document root (e.g. httpdocs).<br />
           2. Start the deployment in your browser www.example.com/deploy.php.<br />
-          3. **Delete** the deploy.php from your server after successful Installation.<br />
-          4. Open your domain in your browser and install Typo3.<br />
+          3. **Delete** the deploy.php from your server after successful Installation. (Security)<br />
+          4. Open your domain in your browser www.example.com and install Typo3.<br />
           5. Have fun.<br />
 
           <h5>Dirs befor installation e. g.</h5>
@@ -339,6 +343,7 @@
 
           <h3>Issues</h3>
           - Language switch back after form send
+          - no Login system
 
 
           <h2>Deutsch</h2>
@@ -355,7 +360,7 @@
 
           1. Download <a href="https://github.com/Teisi/typo3-deploy/archive/master.zip" title="from github">deployment</a> und uploade diese in dein documentroot(z. B. httpdocs).<br />
           2. Rufe die deploy.php in deinem Browser auf z. B. www.example.com/deploy.php.<br />
-          3. **Lösche** die deploy.php von deinem Server nach erfolgreichem deployment.<br />
+          3. **Lösche** die deploy.php von deinem Server nach erfolgreichem deployment. (Security!)<br />
           4. Rufe deine Domain im Browser auf und führe die Typo3 Installation durch z.B. www.example.com.<br />
           5. Have fun.<br />
 
@@ -373,13 +378,14 @@
           /typo3_config/<br />
           /typo3_sources/<br />
 
-          <h5>Ordner werden default mässig ausserhalb des documentroot angelegt:</h5>
+          <h5>Ordner werden default mäßig ausserhalb des documentroot angelegt:</h5>
           <p>
             Wenn du dies nicht willst, erstelle in deinem documentroot einen neuen leeren Ordner z. B. "typo3" (z. B. /httpdocs/typo3/) und setze z. B. in Plesk den documentroot auf diesen erstellten Ordner (hier: "typo3"). Lege dann die Datei deploy.php in diesem ab und rufe sie auf bzw. folge oben genannte Schritte.
           </p>
 
           <h3>bekannte Fehler</h3>
           - Sprache wird auf englisch zurückgestellt nach dem absenden des Formulars
+          - kein Login System
         </div>
       </div>
     </div>

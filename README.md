@@ -1,4 +1,7 @@
 # English
+
+Warning it is BETA.
+
 ## Overview
 
 Typo3 PHP simple deployment tool to automatically download Typo3 and create symlinks / robots.txt / .htaccess / humans.txt.<br />
@@ -43,6 +46,8 @@ If you don't like this, create a folder e. g. "typo3" in your /httpdocs/ (e. g. 
 
 
 # Deutsch
+
+Warning it is BETA.
 
 ## Was macht es
 Typo3 PHP simple deployment tool lädt automatisch die ausgewählte Typo3 Version herunter. Außerdem legt es gleich default robots.txt - .htaccess - humans.txt an.<br />

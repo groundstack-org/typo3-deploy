@@ -6,10 +6,18 @@ body { height: auto; position: relative; }
 .warning { background-color: orange; color: #000; }
 .error { background-color: red; color: #000; }
 
+.btn-wrapper { margin-left: 16px; }
+.btn-wrapper button { margin: 4px; }
+@media screen and (min-width: 950px) {
+  .btn-wrapper { position: absolute; top: -1px; right: 20px; }
+}
+
+
 #list-typo3-sources ul li { list-style: none; }
 
 #form-delete-typo3source .select2-container { margin-bottom: 10px; margin-left: 20px; margin-top: 8px; }
 #form-delete-typo3source > p { margin-bottom: 10px; margin-left: 20px; }
+#form-delete-typo3source select { margin-left: 20px; min-width: 280px; width: 80%; }
 
 /* Checkbox */
 .control { cursor: pointer; display: block; margin-bottom: 5px; padding-left: 30px; position: relative; }
