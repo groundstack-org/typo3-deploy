@@ -165,7 +165,7 @@
         "_send": "Send",
         "_t3functiondelete": "Here you can specify and delete the Typo3 version you no longer need:",
         "_t3functiondelete_existsversions": "Typo3 versions which exists in '../typo3_sources/':",
-        "_senddelete": "Delete Typo3 source"
+        "_senddelete": "Delete or zips and delete source(s)"
 
     },
     "german": {
@@ -187,7 +187,7 @@
         "_send": "Absenden",
         "_t3functiondelete": "Hier kannst du die Typo3 Version(en) löschen die du nicht mehr benötigst:",
         "_t3functiondelete_existsversions": "Typo3 Versionen die in '../typo3_sources/' liegen:",
-        "_senddelete": "Lösche diesen Typo3 Source"
+        "_senddelete": "Lösche oder zippe und lösche dann den Typo3 Source"
     }
 }
 

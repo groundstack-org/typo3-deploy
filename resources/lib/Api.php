@@ -57,6 +57,10 @@ class Api extends Deployer {
         $this->deployer->deleteTypo3Temp();
         break;
 
+      case 't3sourcezip':
+        $this->deployer->zipfolder();
+        break;
+
       case 'ajaxpost':
         $this->deployer->handleAjax();
         break;

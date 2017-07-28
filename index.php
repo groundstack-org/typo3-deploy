@@ -6,8 +6,8 @@
   // please increment the following counter as a warning
   // to the next guy:
   //
-  // total_hours_wasted_here = 12
-  session_start();
+  // total_hours_wasted_here = 32
+  // session_start();
   error_reporting(E_ALL);
   require_once("resources/lib/Helper.php");
   require_once("resources/lib/Deployer.php");
@@ -40,6 +40,10 @@
   <link rel="stylesheet" href="resources/css/bootstrap-wysihtml5.css" />
   <link rel="stylesheet" href="resources/css/typo3-simple-deploy.css" />
   <link href="resources/css/font-awesome.css" rel="stylesheet" />
+  <script>
+    document.documentElement.className += (("ontouchstart" in document.documentElement) ? ' touch' : ' no-touch');
+    var root = document.documentElement;root.className += ' js';
+  </script>
 </head>
 <body>
 
@@ -54,12 +58,12 @@
 <!-- close-Header-part -->
 
 <!-- top-Header-menu -->
-<div id="user-nav" class="navbar navbar-inverse">
+<!-- <div id="user-nav" class="navbar navbar-inverse">
   <ul class="nav">
     <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
       <ul class="dropdown-menu">
         <!-- <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li> -->
-        <li id="form-login-out">
+        <!-- <li id="form-login-out">
           <?php $deployer->userLoginCheck(); ?>
         </li>
       </ul>
@@ -67,7 +71,7 @@
 
     <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
   </ul>
-</div>
+</div> -->
 
 <!-- sidebar-menu -->
 
@@ -93,6 +97,7 @@
       <div class="row-fluid">
         <div class="span12">
           <h4>PHP config:</h4>
+          <h5>After the typo3 installation you should check in the install tool the point system environment.</h5>
           <?php
             $maxExecutionTime = ini_get('max_execution_time');
             if ($maxExecutionTime < 240) {
@@ -121,7 +126,7 @@
           <!-- form to delete deployment script -->
           <div class="widget-box">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-              <h5>Delete deployment after success!</h5>
+              <h5 style="color: RED;">Delete deployment after success! (SECURITY)</h5>
             </div>
             <div id="delete-deployment" class="widget-content nopadding">
               <form id="form-delete-deployment" class="form-horizontal" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
@@ -266,7 +271,7 @@
         <div class="span6">
           <div class="widget-box" id="typo3-file-permission">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-              <h5>Trys to set default Typo3 file permissions. (2770 / 660)</h5>
+              <h5>Trys to set default Typo3 file permissions (770 and 660).</h5>
             </div>
             <div class="widget-content">
               <div id="set-typo3-permissions" class="controls">

@@ -28,6 +28,8 @@ class Deployer extends Helper {
   private $index;
   private $deployerFileConfig;
   private $deployerFileConfigPath;
+  private $src;
+  private $folderName;
 
   function __construct($config = false) {
     session_start();
@@ -85,8 +87,11 @@ class Deployer extends Helper {
       case 'logout':
         break;
 
+      case 't3sourcezip':
+        break;
+
       default:
-        echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete, deletetypo3temp, ajaxpost!";
+        echo "No specifyed form. Available forms are: t3install, deletedeployment, t3sourcedelete, t3sourcezip, deletetypo3temp, ajaxpost!";
         break;
     }
 
@@ -535,6 +540,36 @@ if (file_exists(\$databaseCredentialsFile)) {
     }
   }
 
+  /**
+   * [ zipfolder: zip a typo3_source dir ]
+   */
+  public function zipfolder() {
+    if($this->config['formtype'] == 't3sourcezip') {
+      echo "<div id='zipfolder' class='result'>";
+
+      $this->index = 0;
+      for($i=0; $i <= $this->config['t3sourcesanz']; $i++) {
+        if($this->config['typo3Source_'.$this->index]) {
+          if($this->helper->zipdir($this->documentRoot."../typo3_sources/".$this->config['typo3Source_'.$this->index], $this->documentRoot."../typo3_sources/".$this->config['typo3Source_'.$this->index].".zip")) {
+            echo "<span class='successful'>Successfully zipped ".$this->config['typo3Source_'.$this->index]."</span>";
+            if($this->helper->deleteDir($this->documentRoot."/".$this->t3_src_dir_name."/".$this->config['typo3Source_'.$this->index])) {
+              echo "<span class='successful'>Successfully deleted ".$this->config['typo3Source_'.$this->index]."</span>";
+            } else {
+              echo "<span class='error'>Can't delete ".$this->config['typo3Source_'.$this->index]."</span>";
+            }
+          } else {
+            echo "<span class='error'>Can't zip ".$this->config['typo3Source_'.$this->index]."</span>";
+          }
+        }
+        $this->index = $this->index + 1;
+      }
+      echo "</div>";
+    }
+  }
+
+  /**
+   * [ handle ajax requests ]
+   */
   public function handleAjax() {
     if($this->config['formtype'] == 'ajaxpost') {
       switch ($this->config['ajax_function']) {

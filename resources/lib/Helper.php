@@ -46,6 +46,7 @@ class Helper {
     $src = $src[0];
 
     $fileType = filetype($src);
+
     switch ($fileType) {
       case 'dir':
         $this->deleteDirs($src);
@@ -57,10 +58,21 @@ class Helper {
           return false;
         }
         break;
+      case 'dir':
+        break;
       default:
         echo "<span class='error'>File: {$src} is filetype {$filetype}</span>";
         if(file_exists($src)) {
-          echo "<span class='error'>But file exists!</span>";
+          $srcSub = substr($src, -3);
+          if ($srcSub == "zip") {
+            if($this->deleteFile($src)) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            echo "<span class='error'>But file exists!</span>";
+          }
         } else {
           echo "<span class='warning'>File not deleted, file not exists!</span>";
         }
@@ -310,7 +322,6 @@ class Helper {
 
       echo "<form id='form-delete-typo3source' class='form-horizontal' method='post' action='#'>";
       echo "<input type='hidden' name='t3_version' value='' />";
-      echo "<input type='hidden' name='formtype' value='t3sourcedelete' />";
 
       echo "<ul id='dirlist'>";
 
@@ -327,8 +338,13 @@ class Helper {
 
       echo "</ul>";
       echo "<input type='hidden' name='t3sourcesanz' value='{$i}' id='t3sourcesanz' />";
+      echo "<select id='' name='formtype'>
+        <option value='t3sourcezip' selected>Zip selected Typo3 source and delete this Typo3 source!</option>
+        <option value='t3sourcedelete'>Delete selected Typo3 sources!</option>
+      </select>";
+      echo "<p>(WARNING: this can take a while!)</p>";
       echo "<div class='form-actions'>";
-      echo "<button id='submitsourcedelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete source(s)</button>";
+      echo "<button id='submitsourcedelete' class='btn btn-success' type='submit' name='sendt3versiondelete' value='Senden' data-translate='_senddelete'>Delete or zips and delete source(s)</button>";
       echo "</div></form>";
     } else {
       echo "<span class='error'>No folder found '{$listdir}'</span>";
@@ -448,5 +464,55 @@ if (!defined('TYPO3_MODE')) {
       echo "<span class='warning'>File dosen't exists: {$filepath}! Permission not set.</span>";
       return false;
     }
+  }
+
+  /**
+   * [Recursively Backup Files & Folders to ZIP-File]
+   * @param [string] $source   [path to folder]
+   * @param [string] $destination [path to folder where zip is stored]
+   * MIT-License - Copyright (c) 2012-2017 Marvin Menzerath
+   */
+  public function zipDir($source = false, $destination = false) {
+    // $source = $source ? dir($source) : $this->getDocumentRoot()."/../typo3_sources/";
+    // $source = (string)$source;
+    $source = $this->escape_input($source);
+    $source = $source[0];
+    $destination = $this->escape_input($destination);
+    $destination = $destination[0];
+
+    // Make sure the script can handle large folders/files
+    ini_set('max_execution_time', 600);
+    ini_set('memory_limit','1024M');
+
+  	if (extension_loaded('zip')) {
+  		if (file_exists($source)) {
+  			$zip = new ZipArchive();
+  			if ($zip->open($destination, ZIPARCHIVE::CREATE)) {
+  				$source = realpath($source);
+  				if (is_dir($source)) {
+  					$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
+  					foreach ($files as $file) {
+  						$file = realpath($file);
+  						if (is_dir($file)) {
+  							$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
+  						} else if (is_file($file)) {
+  							$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+  						}
+  					}
+  				} else if (is_file($source)) {
+  					$zip->addFromString(basename($source), file_get_contents($source));
+  				}
+  			}
+        $zip->close();
+        echo "<span class='success'>File {$source} is zipped to path {$destination}.</span>";
+  			return true;
+  		} else {
+        echo "<span class='error'>File {$source} doesen't exist!</span>";
+  		  return false;
+  		}
+  	} else {
+      echo "<span class='error'>PHP zip extension not loaded!</span>";
+  	  return false;
+  	}
   }
 }
