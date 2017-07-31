@@ -227,7 +227,7 @@ class Helper {
    * @param (string) $pathToSafeFile - optional - path where to safe the file, with ending slash
    * @return (bool)
    */
-  public function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = false) {
+  public function downloadExternalFile($pathToExternalFile, $filename, $outputFilename = false, $pathToSafeFile = false) {
     if(!$pathToSafeFile){
       if($this->createDir("typo3_sources", $this->getDocumentRoot()."/../")) {
         $pathToSafeFile = $this->getDocumentRoot()."/../typo3_sources/";
@@ -236,18 +236,23 @@ class Helper {
       $pathToSafeFile = $pathToSafeFile;
     }
 
+    $outputFilename ? $outputFilename : $filename;
+
     $pathToExternalFile = $this->escape_input($pathToExternalFile);
     $pathToExternalFile = $pathToExternalFile[0];
     $filename = $this->escape_input($filename);
     $filename = $filename[0];
+    $outputFilename = $this->escape_input($outputFilename);
+    $outputFilename = $outputFilename[0];
     $pathToSafeFile = $this->escape_input($pathToSafeFile);
     $pathToSafeFile = $pathToSafeFile[0];
 
-    if (file_exists($pathToSafeFile.$filename)) {
+    $newfname = $pathToSafeFile.$outputFilename;
+
+    if (file_exists($newfname)) {
       echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
       return true;
     } else {
-      $newfname = $pathToSafeFile.$filename;
       $file = fopen($pathToExternalFile, 'rb');
       if($file) {
           $newf = fopen($newfname, 'wb');
@@ -263,7 +268,7 @@ class Helper {
       if ($newf) {
         fclose($newf);
       }
-      if(file_exists($pathToSafeFile.$filename)) {
+      if(file_exists($newfname)) {
         echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
         return true;
       } else {
