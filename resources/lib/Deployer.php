@@ -40,7 +40,7 @@ class Deployer extends Helper {
 
     $this->t3_src_dir_name = "../typo3_sources";
     $this->t3_config_date = date("Ymd_His");
-    $this->t3_path_to_source_file = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20";
+    $this->t3_path_to_source_file = "http://get.typo3.org/";
 
     if($config && is_array($config)){
       $this->config = $this->helper->escape_input($config);
@@ -63,7 +63,6 @@ class Deployer extends Helper {
     switch ($config['formtype']) {
       case 't3install':
         $this->t3_zip_file = "{$this->t3_version_dir}.tar.gz";
-        $this->typo3_source = "https://netcologne.dl.sourceforge.net/project/typo3/TYPO3%20Source%20and%20Dummy/TYPO3%20{$this->t3_version}/{$this->t3_zip_file}";
         break;
 
       case 'deletedeployment':
@@ -358,7 +357,7 @@ if (file_exists(\$databaseCredentialsFile)) {
       $documentRoot = $this->getDocumentRoot();
 
       echo "<div id='downloadextract' class='result'>";
-      if($this->helper->downloadExternalFile($this->typo3_source, $this->t3_zip_file)) {
+      if($this->helper->downloadExternalFile($this->t3_path_to_source_file.$this->t3_version, $this->t3_version, "typo3_src-".$this->t3_version.".tar.gz")) {
         $pathToZipFile = $documentRoot."/".$this->t3_src_dir_name."/".$this->t3_version_dir;
 
         if(file_exists($pathToZipFile)) {
