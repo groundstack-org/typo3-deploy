@@ -383,8 +383,7 @@ class Helper {
       echo "<span class='exists'>File: {$str} already exists.</span>";
       return false;
     } else {
-      file_put_contents((string)$str, "
-<?php
+      file_put_contents((string)$str, "<?php
 if (!defined('TYPO3_MODE')) {
   die('Access denied.');
 }
@@ -397,7 +396,7 @@ if (!defined('TYPO3_MODE')) {
 
 \$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
 
-\$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+// \$GLOBALS['TYPO3_CONF_VARS']['GFX']['im_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
       ");
       echo "<span class='success'>File {$str} is created.</span>";
     }
@@ -422,25 +421,38 @@ if (!defined('TYPO3_MODE')) {
       echo "<span class='exists'>File: {$str} already exists.</span>";
       return false;
     } else {
-      file_put_contents($str, "
-<?php
+      file_put_contents($str, "<?php
 if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['charset'] = 'utf8';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['driver'] = 'mysqli';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['dbname'] = '{$t3_db_name}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['host'] = '{$t3_db_host}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['password'] = '{$t3_db_password}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['user'] = '{$t3_db_user}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['unix_socket'] = '{$t3_db_socket}';
-\$GLOBALS['TYPO3_CONF_VARS']['DB']['Connections']['Default']['port'] = 3306;
+\$customChanges = array(
+  'DB' => array(
+    'Connections' => array(
+      'Default' => array(
+        'charset' = 'utf8',
+        'driver' = 'mysqli',
+        'dbname' = {$t3_db_name}'',
+        'host' = '{$t3_db_host}',
+        'password' = '{$t3_db_password}',
+        'user' = '{$t3_db_user}',
+        'unix_socket' = '{$t3_db_socket}',
+        'port' = '3306'
+      )
+    )
+  ),
+  'BE' => array(
+    'installToolPassword' = '{$t3_install_tool}'
+  ),
+  // 'GFX' => array(
+  //   'im_path' = '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+  //   'processor_path' = '' // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+  // )
+);
 
-\$GLOBALS['TYPO3_CONF_VARS']['BE']['installToolPassword'] = '{$t3_install_tool}';
+\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive($GLOBALS['TYPO3_CONF_VARS'], (array)$customChanges);
 
-\$GLOBALS['TYPO3_CONF_VARS']['GFX']['processor_path'] = ''; // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
-      ");
+");
       echo "<span class='success'>File {$str} is created.</span>";
     }
   }
