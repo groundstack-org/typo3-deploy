@@ -1,16 +1,39 @@
-RewriteEngine On
-# RewriteCond %{HTTPS} off
-# RewriteRule (.*) https://%{HTTP_HOST}/$1 [R=301,L]
+## disable the server signature
+ServerSignature Off
 
+## preserve bandwidth for PHP enabled servers
+<ifmodule mod_php4.c>
+  php_value zlib.output_compression 16386
+</ifmodule>
+
+RewriteEngine On
+## require SSL
+# SSLOptions +StrictRequire
+# SSLRequireSSL
+# SSLRequire %{HTTP_HOST} eq "domain.tld"
+# ErrorDocument 403 https://domain.tld
+
+## require SSL without mod_ssl:
+# RewriteCond %{HTTPS} !=on [NC]
+# RewriteRule ^.*$ https://%{SERVER_NAME}%{REQUEST_URI} [R,L]
+## OR
 # RewriteCond %{HTTP_HOST} ^(www\.)?YOUR_DOMAIN\.de$ [NC]
 # RewriteCond %{HTTPS} !on [NC]
 # RewriteRule ^(.*)$ https://www.YOUR_DOMAIN.de/$1 [R=301,L]
 
-# With HSTS you can tell browsers when users visit your site to only request from the HTTPS version of the site, no interactions over HTTP.
-# Gilt dann für alle Webseiten die innerhalb einer Typo3 Installation liegen!
+## With HSTS you can tell browsers when users visit your site to only request from the HTTPS version of the site, no interactions over HTTP.
+## Gilt dann für alle Webseiten die innerhalb einer Typo3 Installation liegen!
 # <IfModule mod_headers.c>
 #   Header set Strict-Transport-Security "max-age=15768000; includeSubDomains; preload"
 # </IfModule>
+
+RewriteRule .? - [E=TYPO3_CONTEXT:Production]
+
+RewriteCond %{HTTP_HOST} ^dev.YOUR_DOMAIN.de$
+RewriteRule .? - [E=TYPO3_CONTEXT:Production/Staging]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?YOUR_DOMAIN\.dev$ [NC]
+RewriteRule (.*) $1 [E=TYPO3_CONTEXT:Development]
 
 #####
 #
@@ -60,8 +83,6 @@ AddType image/svg+xml svgz
   AddType "text/css" .gzip
 </FilesMatch>
 AddEncoding gzip .gzip
-
-AddType text/cache-manifest .appcache
 
 # gzip Compression if availiable
 <IfModule mod_gzip.c>
@@ -210,7 +231,7 @@ FileETag None
 # | Add your own rules here.
 # ----------------------------------------------------------------------
 
-Redirect /sitemap.txt http://www.YOUR_DOMAIN.de/sitemap.xml
+Redirect 301 /sitemap.txt /sitemap.xml
 
 # ----------------------------------------------------------------------
 # | Komprimierung und Caching                                                    |
@@ -465,8 +486,28 @@ AddDefaultCharset UTF-8
 #   Wichtige Dateien gegen den Zugriff von außen blocken
 # ----------------------------------------------------------------------
 
+# Kein Zugriff auf TypoScript Dateien
+<FilesMatch "\.ts">
+  deny from all
+</FilesMatch>
+
+<Files AdditionalConfiguration.php>
+  Order deny,allow
+  Deny from all
+</Files>
+
+<Files LocalConfiguration.php>
+  Order deny,allow
+  Deny from all
+</Files>
+
 # Kein Zugriff auf die readme.html
-<files readme.html>
+<Files readme.html>
+  Order Allow,Deny
+  Deny from all
+  Satisfy all
+</Files>
+<Files readme.md>
   Order Allow,Deny
   Deny from all
   Satisfy all
@@ -480,10 +521,10 @@ AddDefaultCharset UTF-8
 </Files>
 
 # Kein Zugriff auf das Error-Log
-<files error_log>
+<Files error_log>
   Order allow,deny
   Deny from all
-</files>
+</Files>
 
 #Zugriff auf .htaccess und .htpasswd verbieten. Wenn keine .htpasswd benutzt wird, kann der Code dafür entfernt werden.
 <FilesMatch "(\.htaccess|\.htpasswd)">
@@ -514,3 +555,7 @@ AddDefaultCharset UTF-8
 #   Order Deny,Allow
 #   Deny from all
 # </Files>
+
+###############
+# Error Docs
+ErrorDocument 403 "<h1>403</h1><p>Als Benutzer haben Sie hier keinen Zugriff.<br />You don't have permission to access this file on this server.</p>"

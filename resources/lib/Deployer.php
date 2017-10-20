@@ -271,6 +271,7 @@ class Deployer extends Helper {
       if($this->createDir("typo3conf")) {
         $pathToTypo3conf = $documentRoot."/typo3conf";
         $currentDateTime = $this->t3_config_date;
+        $dbName = $this->config['t3_db_name'];
 
         echo "<span class='successful'>Dir 'typo3conf' successfully created.</span>";
 
@@ -278,20 +279,114 @@ class Deployer extends Helper {
           if(file_put_contents($pathToTypo3conf."/AdditionalConfiguration.php", "
 <?php
 if (!defined('TYPO3_MODE')) {
-	die('Access denied.');
+  die('Access denied.');
 }
-\$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_db_{$currentDateTime}.php';
-if (file_exists(\$databaseCredentialsFile)) {
-    require_once (\$databaseCredentialsFile);
+/*
+  !IMPORTANT!
+  The file "\$databaseCredentialsFile" is not versioned and must be created and changed!
+  For security reasons please create the database accesses outside the document roots!
+
+  Die Datei "\$databaseCredentialsFile" wird nicht mit Versioniert und muss extra angelegt und geändert werden!
+  aus Sicherheitsgründen bitte die Datenbank zugänge außerhalb des document roots anlegen!
+*/
+
+// Production / Live:
+if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
+  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-production.php';
 }
-          ") ) {
+
+// Staging e. g. test server
+if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->__toString() === 'Production/Staging') {
+  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-production_staging.php';
+}
+
+// Developement e. g. local
+if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopment()) {
+  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-developement.php';
+}
+
+if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredentialsFile); }
+
+// Production / Live:
+\$customChanges = array(
+  'BE' => array(
+    'compressionLevel' => '0',
+    'lockSSL' => 0, // if https is on set this to 1
+    'versionNumberInFilename' => 0,
+  ),
+  'FE' => array(
+    'compressionLevel' => '0',
+    'noPHPscriptInclude' => '1',
+    'pageNotFound_handling' => '404.html',
+    'pageUnavailable_handling' => '503.html',
+    'disableNoCacheParameter' => 1
+  ),
+  'EXT' => array(
+    'extConf' => array(
+      // 'realurl' => serialize(array(
+  		// 	'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+  		// 	'enableAutoConf' => 1,
+  		// 	'enableDevLog' => 0,
+  		// 	'enableChashUrlDebug' => 0
+			// ))
+    )
+  ),
+  'SYS' => array(
+    'UTF8filesystem' => 1,
+    'clearCacheSystem' => 1,
+    'enableDeprecationLog' => 0,
+    'phpTimeZone' => 'Europe/Berlin',
+    'systemLocale' => 'de_DE.UTF-8'
+  )
+);
+
+\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customChanges);
+
+
+// Developement:
+if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopment()) {
+
+  \$customDevelopmentChanges = array(
+    'BE' => array(
+      'compressionLevel' => '0',
+      'lockSSL' => 0, // if https is on set this to 1
+      'versionNumberInFilename' => 0,
+    ),
+    'FE' => array(
+      'compressionLevel' => '0',
+      'debug' => 1,
+      'noPHPscriptInclude' => 1
+    ),
+    'EXT' => array(
+      'extConf' => array(
+        // 'realurl' => serialize(array(
+    		// 	'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+    		// 	'enableAutoConf' => 0,
+    		// 	'enableDevLog' => 1,
+    		// 	'enableChashUrlDebug' => 1
+  			// ))
+      )
+    ),
+    'SYS' => array(
+      'displayErrors' => 1,
+      'sqlDebug' => 1,
+      'systemLog' => 'error_log',
+      'systemLogLevel' => '2',
+      'enableDeprecationLog' => 'file'
+    )
+  );
+
+  \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customDevelopmentChanges);
+}
+
+") ) {
             echo "<span class='successful'>File 'AdditionalConfiguration.php' successfully created.</span>";
 
             if($this->helper->createDir('typo3_config', $documentRoot.'/../')) {
               echo "<span class='successful'>Dir 'typo3_config' successfully created.</span>";
               $typo3configPath = $documentRoot.'/../typo3_config';
 
-              if(!file_exists($typo3configPath."/typo3_db_{$currentDateTime}.php")) {
+              if(!file_exists($typo3configPath."/typo3_{$this->config['t3_db_name']}-production.php")) {
                 $v = explode(".",$this->t3_version);
                 switch ($v[0]) {
                   case 6:

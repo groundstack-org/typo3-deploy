@@ -375,7 +375,7 @@ class Helper {
    * @param [datetime] $currentDateTime [description]
    */
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
-    $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
+    $str = $this->getDocumentRoot()."/../typo3_config/typo3_db-production.php";
 
     $t3_install_tool = md5($t3_install_tool);
 
@@ -413,7 +413,7 @@ if (!defined('TYPO3_MODE')) {
    * @param [datetime] $currentDateTime [description]
    */
   public function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
-    $str = $this->getDocumentRoot()."/../typo3_config/typo3_db_{$currentDateTime}.php";
+    $str = $this->getDocumentRoot()."/../typo3_config/typo3_{$t3_db_name}-production.php";
 
     $t3_install_tool = md5($t3_install_tool);
 
@@ -450,7 +450,7 @@ if (!defined('TYPO3_MODE')) {
   // )
 );
 
-\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive($GLOBALS['TYPO3_CONF_VARS'], (array)$customChanges);
+\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)$customChanges);
 
 ");
       echo "<span class='success'>File {$str} is created.</span>";
