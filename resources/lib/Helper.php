@@ -442,7 +442,7 @@ if (!defined('TYPO3_MODE')) {
     )
   ),
   'BE' => array(
-    'installToolPassword' = '{$t3_install_tool}'
+    'installToolPassword' => '{$t3_install_tool}'
   ),
   // 'GFX' => array(
   //   'im_path' = '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
