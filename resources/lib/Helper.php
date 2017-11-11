@@ -430,14 +430,14 @@ if (!defined('TYPO3_MODE')) {
   'DB' => array(
     'Connections' => array(
       'Default' => array(
-        'charset' = 'utf8',
-        'driver' = 'mysqli',
-        'dbname' = {$t3_db_name}'',
-        'host' = '{$t3_db_host}',
-        'password' = '{$t3_db_password}',
-        'user' = '{$t3_db_user}',
-        'unix_socket' = '{$t3_db_socket}',
-        'port' = '3306'
+        'charset' => 'utf8',
+        'driver' => 'mysqli',
+        'dbname' => {$t3_db_name}'',
+        'host' => '{$t3_db_host}',
+        'password' => '{$t3_db_password}',
+        'user' => '{$t3_db_user}',
+        'unix_socket' => '{$t3_db_socket}',
+        'port' => '3306'
       )
     )
   ),
@@ -450,7 +450,7 @@ if (!defined('TYPO3_MODE')) {
   // )
 );
 
-\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)$customChanges);
+\$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customChanges);
 
 ");
       echo "<span class='success'>File {$str} is created.</span>";
