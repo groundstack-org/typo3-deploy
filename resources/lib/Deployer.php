@@ -536,36 +536,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
     if($this->config['formtype'] == 'deletetypo3temp') {
       if(file_exists($this->documentRoot."/typo3temp/")) {
         if($this->helper->deleteDir($this->documentRoot."/typo3temp/")) {
-          $this->helper->createDir("typo3temp");
-          file_put_contents($this->getDocumentRoot()."/typo3temp/index.html", " ");
-          $this->helper->createDir("typo3temp/assets");
-          $this->helper->createDir("typo3temp/assets/compressed");
-          $this->helper->createDir("typo3temp/assets/css");
-          $this->helper->createDir("typo3temp/assets/js");
-          $this->helper->createDir("typo3temp/assets/images");
-          $this->helper->createDir("typo3temp/assets/images/_processed_");
-          $this->helper->createDir("typo3temp/var");
-          $this->helper->createDir("typo3temp/var/charset");
-          $this->helper->createDir("typo3temp/var/Cache");
-          $this->helper->createDir("typo3temp/var/locks");
-          $this->helper->createFile("typo3temp/var/.htaccess", $fileContent = false);
-          file_put_contents($this->getDocumentRoot()."/typo3temp/var/.htaccess", "
-  # This file restricts access to the typo3temp/var/ directory. It is
-  # meant to protect temporary files which could contain sensible
-  # information. Please do not touch.
-
-  # Apache < 2.3
-  <IfModule !mod_authz_core.c>
-  	Order allow,deny
-  	Deny from all
-  	Satisfy All
-  </IfModule>
-
-  # Apache ≥ 2.3
-  <IfModule mod_authz_core.c>
-  	Require all denied
-  </IfModule>");
-          echo "<span class='successful'>Typo3temp folder successfully deleted!</span>";
+          echo "<span class='successful'>All in typo3temp folder successfully deleted!</span>";
           return true;
         } else {
           echo "<span class='error'>Typo3temp folder could not be deleted!</span>";

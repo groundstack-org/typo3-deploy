@@ -263,7 +263,7 @@
         <div class="span6">
           <div class="widget-box" id="typo3-delete-temp">
             <div class="widget-title"> <span class="icon"> <i class="icon-align-justify"></i> </span>
-              <h5>Delets all files and folders in '/typo3temp/'! Then trys to recreate nessasary tmp files and folders.</h5>
+              <h5>Delets all files and folders in '/typo3temp/'!</h5>
             </div>
             <div class="widget-content">
               <div id="delete-typo3temp" class="controls">
