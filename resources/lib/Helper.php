@@ -432,7 +432,7 @@ if (!defined('TYPO3_MODE')) {
       'Default' => array(
         'charset' => 'utf8',
         'driver' => 'mysqli',
-        'dbname' => {$t3_db_name}'',
+        'dbname' => '{$t3_db_name}',
         'host' => '{$t3_db_host}',
         'password' => '{$t3_db_password}',
         'user' => '{$t3_db_user}',
