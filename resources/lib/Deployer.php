@@ -601,7 +601,9 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
     );
 
     foreach ($typo3Files as $key => $value) {
-      $this->helper->setFilePermissions($key, $value);
+      // dont work well
+      // $this->helper->setFilePermissions($key, $value);
+      $this->helper->testFilePermissions($key, $value);
     }
   }
 

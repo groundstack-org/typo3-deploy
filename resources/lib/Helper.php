@@ -58,23 +58,27 @@ class Helper {
           return false;
         }
         break;
-      case 'dir':
-        break;
       default:
-        echo "<span class='error'>File: {$src} is filetype {$filetype}</span>";
         if(file_exists($src)) {
-          $srcSub = substr($src, -3);
-          if ($srcSub == "zip") {
+          echo "<span class='warning'>File: {$src} is filetype {$filetype} or something like zip / gz, try to delete it...</span>";
+          $srcSub = strtolower(pathinfo($src, PATHINFO_EXTENSION));
+          if ($srcSub === "zip") {
+            if($this->deleteFile($src)) {
+              return true;
+            } else {
+              return false;
+            }
+          } elseif ($srcSub === "gz") {
             if($this->deleteFile($src)) {
               return true;
             } else {
               return false;
             }
           } else {
-            echo "<span class='error'>But file exists!</span>";
+            echo "<span class='error'>File still exists!</span>";
           }
         } else {
-          echo "<span class='warning'>File not deleted, file not exists!</span>";
+          echo "<span class='warning'>File not deleted, file not exists or not found!</span>";
         }
         return false;
         break;
@@ -488,6 +492,29 @@ if (!defined('TYPO3_MODE')) {
     } else {
       echo "<span class='warning'>File dosen't exists: {$filepath}! Permission not set.</span>";
       return false;
+    }
+  }
+
+  /**
+   * [testFilePermissions tests file permissions;]
+   * @param [string] $filepath   [path to file]
+   * @param [int+] $permission [file permission e. g. 770]
+   */
+  public function testFilePermissions($filepath, $permission) {
+    $permissionIndex = $this->permissionIndex;
+    $filepath = $this->escape_input($filepath);
+    $filepath = $filepath[0];
+    $permission = (int)$permission;
+    $permission = str_pad($permission, 4, '0', STR_PAD_LEFT);
+
+    if(file_exists($filepath)) {
+      clearstatcache();
+      $currentPermission = substr(sprintf('%o', fileperms($filepath)), -4);
+      if($currentPermission === $permission) {
+        echo "<span class='success'>File permission of {$filepath} looks good.</span>";
+      } else {
+        echo "<span class='warning'>File permission of {$filepath} looks not good! Please check it. Current permission: {$currentPermission} should be {$permission}.</span>";
+      }
     }
   }
 
