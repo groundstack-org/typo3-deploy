@@ -290,21 +290,8 @@ if (!defined('TYPO3_MODE')) {
   aus Sicherheitsgründen bitte die Datenbank zugänge außerhalb des document roots anlegen!
 */
 
-// Production / Live:
-if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isProduction()) {
-  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-production.php';
-}
 
-// Staging e. g. test server
-if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->__toString() === 'Production/Staging') {
-  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-production_staging.php';
-}
-
-// Developement e. g. local
-if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopment()) {
-  \$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}-developement.php';
-}
-
+\$databaseCredentialsFile = PATH_site . './../typo3_config/typo3_{$dbName}.php';
 if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredentialsFile); }
 
 // Production / Live:
@@ -386,7 +373,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
               echo "<span class='successful'>Dir 'typo3_config' successfully created.</span>";
               $typo3configPath = $documentRoot.'/../typo3_config';
 
-              if(!file_exists($typo3configPath."/typo3_{$this->config['t3_db_name']}-production.php")) {
+              if(!file_exists($typo3configPath."/typo3_{$this->config['t3_db_name']}.php")) {
                 $v = explode(".",$this->t3_version);
                 switch ($v[0]) {
                   case 6:

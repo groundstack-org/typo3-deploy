@@ -379,7 +379,7 @@ class Helper {
    * @param [datetime] $currentDateTime [description]
    */
   public function addDbVersion7($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
-    $str = $this->getDocumentRoot()."/../typo3_config/typo3_db-production.php";
+    $str = $this->getDocumentRoot()."/../typo3_config/typo3_db.php";
 
     $t3_install_tool = md5($t3_install_tool);
 
@@ -417,7 +417,7 @@ if (!defined('TYPO3_MODE')) {
    * @param [datetime] $currentDateTime [description]
    */
   public function addDbVersion8($t3_db_name, $t3_db_host, $t3_db_password, $t3_db_user, $t3_db_socket, $t3_install_tool, $currentDateTime) {
-    $str = $this->getDocumentRoot()."/../typo3_config/typo3_{$t3_db_name}-production.php";
+    $str = $this->getDocumentRoot()."/../typo3_config/typo3_{$t3_db_name}.php";
 
     $t3_install_tool = md5($t3_install_tool);
 
