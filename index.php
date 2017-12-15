@@ -1,25 +1,40 @@
 <?php
-  // Dear maintainer:
-  //
-  // Once you are done trying to 'optimize' this routine,
-  // and have realized what a terrible mistake that was,
-  // please increment the following counter as a warning
-  // to the next guy:
-  //
-  // total_hours_wasted_here = 32
-  // session_start();
-  // error_reporting(E_ALL);
-  require_once("resources/lib/Helper.php");
-  require_once("resources/lib/Deployer.php");
+/**
+ * Typo3 simple deployer
+ * 
+ * @package: Typo3 simple deployer
+ * @Author:  Christian Hackl 
+ * @Date:    2017-12-15 12:29:03 
+ * @link:    http://www.hauer-heinrich.de 
+ * @license: MIT License
+ * @Last     Modified by: Christian Hackl
+ * @Last     Modified time: 2017-12-15 13:27:58
+ */
 
-  $deployer = new Deployer($_POST);
+    /** 
+     * Dear maintainer:
+     * Once you are done trying to 'optimize' this routine,
+     * and have realized what a terrible mistake that was,
+     * please increment the following counter as a warning
+     * to the next guy:
+     * 
+     * total_hours_wasted_here = 42
+     */
+   
+    // session_start();
+    // error_reporting(E_ALL);
 
-  // if(file_exists("getTypo3Deployer.php")) {
-  //   unlink("getTypo3Deployer.php");
-  // }
-  // if(file_exists("_config.yml")) {
-  //   unlink("_config.yml");
-  // }
+    require_once "resources/lib/Helper.php";
+    require_once "resources/lib/Deployer.php";
+
+    $deployer = new Deployer($_POST);
+
+    // if(file_exists("getTypo3Deployer.php")) {
+    //   unlink("getTypo3Deployer.php");
+    // }
+    // if(file_exists("_config.yml")) {
+    //   unlink("_config.yml");
+    // }
 ?>
 
 <!DOCTYPE html>
@@ -53,34 +68,35 @@
 
 <!-- Header-part -->
 <div id="header">
-  <h1><a href="http://groundstack.de">Typo3 simple deployer</a></h1>
+    <h1><a href="http://groundstack.de">Typo3 simple deployer</a></h1>
 </div>
 <!-- close-Header-part -->
 
 <!-- top-Header-menu -->
 <!-- <div id="user-nav" class="navbar navbar-inverse">
-  <ul class="nav">
-    <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
-      <ul class="dropdown-menu">
-        <!-- <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li> -->
-        <!-- <li id="form-login-out">
-          <?php $deployer->userLoginCheck(); ?>
+    <ul class="nav">
+        <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i>  <span class="text">Welcome User</span><b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <!-- <li><a href="login.html"><i class="icon-key"></i> Log Out</a></li> -->
+                <!-- <li id="form-login-out">
+                    <?php $deployer->userLoginCheck(); ?>
+                </li>
+            </ul>
         </li>
-      </ul>
-    </li>
 
-    <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
-  </ul>
+        <li class=""><a title="" href="login.html"><i class="icon icon-share-alt"></i> <span class="text">Logout</span></a></li>
+    </ul>
 </div> -->
 
 <!-- sidebar-menu -->
 
-<div id="sidebar"> <a href="#" class="visible-phone"><i class="icon icon-list"></i>Forms</a>
-  <ul>
-    <li class="active"><a href="#" data-target="deploy-typo3" class="typo3"><i class="icon icon-home"></i> <span>Typo3 install & change</span></a> </li>
-    <li class="" style="display: none;"><a href="#" class="theme"><i class="icon icon-list"></i> <span>Themes</span></a> </li>
-    <li class=""><a href="#" data-target="deploy-readme" class="readme"><i class="icon icon-file"></i> <span>Readme</span></a> </li>
-  </ul>
+<div id="sidebar">
+    <a href="#" class="visible-phone"><i class="icon icon-list"></i>Forms</a>
+    <ul>
+        <li class="active"><a href="#" data-target="deploy-typo3" class="typo3"><i class="icon icon-home"></i> <span>Typo3 install & change</span></a> </li>
+        <li class="" style="display: none;"><a href="#" class="theme"><i class="icon icon-list"></i> <span>Themes</span></a> </li>
+        <li class=""><a href="#" data-target="deploy-readme" class="readme"><i class="icon icon-file"></i> <span>Readme</span></a> </li>
+    </ul>
 </div>
 
 <!-- close-left-menu-stats-sidebar -->
@@ -109,26 +125,26 @@
         <div class="span12">
           <h4>PHP config:</h4>
           <h5>After the typo3 installation you should check in the install tool the point system environment.</h5>
-          <?php
+            <?php
             $maxExecutionTime = ini_get('max_execution_time');
             if ($maxExecutionTime < 240) {
-              echo "<p class='warning'>max_execution_time = {$maxExecutionTime} <span>(should be 240!)</span></p>";
+                echo "<p class='warning'>max_execution_time = {$maxExecutionTime} <span>(should be 240!)</span></p>";
             } else {
-              echo "<p class='success'>max_execution_time = {$maxExecutionTime}</p>";
+                echo "<p class='success'>max_execution_time = {$maxExecutionTime}</p>";
             }
             $memory_limit = ini_get('memory_limit');
             if ($memory_limit < 128) {
-              echo "<p class='warning'>memory_limit = {$memory_limit} <span>(should be 128!)</span></p>";
+                echo "<p class='warning'>memory_limit = {$memory_limit} <span>(should be 128!)</span></p>";
             } else {
-              echo "<p class='success'>memory_limit = {$memory_limit}</p>";
+                echo "<p class='success'>memory_limit = {$memory_limit}</p>";
             }
             $max_input_vars = ini_get('max_input_vars');
             if ($max_input_vars < 1500) {
-              echo "<p class='warning'>max_input_vars = {$max_input_vars} <span>(should be 1500!)</span></p>";
+                echo "<p class='warning'>max_input_vars = {$max_input_vars} <span>(should be 1500!)</span></p>";
             } else {
-              echo "<p class='success'>max_input_vars = {$max_input_vars}</p>";
+                echo "<p class='success'>max_input_vars = {$max_input_vars}</p>";
             }
-          ?>
+            ?>
         </div>
       </div>
       <div class="row-fluid">
@@ -241,9 +257,9 @@
             </div>
             <div class="widget-content">
               <div id="list-typo3-sources" class="controls ajaxpost" data-ajax='{ "formtype":"ajaxpost", "ajax_function":"getTypo3Sources" }'>
-                  <?php
-                    $deployer->helper->getDirList();
-                  ?>
+                    <?php
+                      $deployer->helper->getDirList();  
+                    ?>
               </div>
             </div>
           </div>
@@ -401,193 +417,193 @@
 </div>
 
 <div class="socket" id="loader">
-	<div class="gel center-gel">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c1 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c2 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c3 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c4 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c5 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c6 r1">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
+    <div class="gel center-gel">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c1 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c2 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c3 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c4 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c5 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c6 r1">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
 
-	<div class="gel c7 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
+    <div class="gel c7 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
 
-	<div class="gel c8 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c9 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c10 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c11 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c12 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c13 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c14 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c15 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c16 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c17 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c18 r2">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c19 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c20 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c21 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c22 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c23 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c24 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c25 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c26 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c28 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c29 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c30 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c31 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c32 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c33 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c34 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c35 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c36 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
-	<div class="gel c37 r3">
-		<div class="hex-brick h1"></div>
-		<div class="hex-brick h2"></div>
-		<div class="hex-brick h3"></div>
-	</div>
+    <div class="gel c8 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c9 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c10 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c11 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c12 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c13 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c14 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c15 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c16 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c17 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c18 r2">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c19 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c20 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c21 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c22 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c23 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c24 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c25 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c26 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c28 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c29 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c30 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c31 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c32 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c33 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c34 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c35 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c36 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
+    <div class="gel c37 r3">
+        <div class="hex-brick h1"></div>
+        <div class="hex-brick h2"></div>
+        <div class="hex-brick h3"></div>
+    </div>
 
 </div>
 
@@ -610,7 +626,7 @@
 <script src="resources/javascript/pGenerator.min.js"></script>
 <script src="resources/javascript/typo3-simple-deploy.js"></script>
 <script>
-	$('.textarea_editor').wysihtml5();
+    $('.textarea_editor').wysihtml5();
 </script>
 </body>
 </html>
