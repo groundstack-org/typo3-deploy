@@ -12,7 +12,8 @@
     }
 
     label_info_version.text("Please wait");
-    $.post('api/index.php', '{ "formtype":"ajaxpost", "ajax_function":"getTypo3Json }', function(returnedData) {
+    $.post('api/index.php', '{ "formtype":"ajaxpost", "ajax_function":"getTypo3Json" }', function(returnedData) {
+        console.log(returnedData);
         returnedData = JSON.parse(returnedData);
         var items = [];
         $.each(returnedData, function(key, val) {

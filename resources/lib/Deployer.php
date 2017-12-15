@@ -637,7 +637,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
      * [ handle ajax requests ]
      */
     public function handleAjax() {
-        if ($this->config['formtype'] == 'ajaxpost') {
+        if ($this->config['formtype'] === 'ajaxpost') {
             switch ($this->config['ajax_function']) {
             case 'getTypo3Sources':
                 return $this->helper->getDirList();
@@ -655,7 +655,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
                 return $this->helper->createInstallToolFile();
                 break;
 
-            case 'gettypo3json':
+            case 'getTypo3Json':
                 return $this->helper->getTypo3Json();
                 break;
 

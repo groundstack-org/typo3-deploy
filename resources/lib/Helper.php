@@ -584,6 +584,11 @@ if (!defined('TYPO3_MODE')) {
      */
     public function getTypo3Json() {
         $json = file_get_contents('https://get.typo3.org/json');
-        echo $data;
+        if($json) {
+            echo $json;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
