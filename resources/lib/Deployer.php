@@ -423,6 +423,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
                 echo "<span class='successful'>File '.htaccess' successfully created.</span>";
                 $filepath = $this->documentRoot."/.htaccess";
                 $this->helper->strReplaceInFile($filepath, "YOUR_DOMAIN", $this->documentDomain);
+                $this->helper->strReplaceInFile($filepath, "TLD", "de");
             } else {
                 echo "<span class='warning'>File '.htaccess' could not be created!</span>";
             }

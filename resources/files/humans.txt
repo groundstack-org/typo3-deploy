@@ -1,19 +1,19 @@
 /* TEAM */
-	Chef:
-	Contact: www.example.de
-	From: Passau, Bavaria, Germany
+    Chef:
+    Contact: www.example.de
+    From: Passau, Bavaria, Germany
 
-	Web designer:
-	Contact: www.example.de
-	From: Bavaria, Germany
+    Web designer:
+    Contact: www.example.de
+    From: Bavaria, Germany
 
-	Developer: NAME
-	Contact: www.example.de
-	Facebook: FACEBOOK_LINK
-	From: Passau, Bavaria, Germany
+    Developer: NAME
+    Contact: www.example.de
+    Facebook: FACEBOOK_LINK
+    From: Passau, Bavaria, Germany
 
 /* SITE */
-	Last update: 2017/02/04
-	Language: Deutsch / English
-	Standards: HTML5, CSS3
-	Software: Editor Atom, FileZilla, FireBug
+    Last update: 2017/02/04
+    Language: Deutsch / English
+    Standards: HTML5, CSS3
+    Software: Editor Atom, FileZilla, FireBug
