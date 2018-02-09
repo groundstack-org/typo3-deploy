@@ -29,10 +29,10 @@ RewriteEngine On
 
 RewriteRule .? - [E=TYPO3_CONTEXT:Production]
 
-RewriteCond %{HTTP_HOST} ^dev.YOUR_DOMAIN.de$
-RewriteRule .? - [E=TYPO3_CONTEXT:Production/Staging]
+RewriteCond %{HTTP_HOST} ^(www\.)?preview.YOUR_DOMAIN.de$
+RewriteRule .? - [E=TYPO3_CONTEXT:Development/Stage]
 
-RewriteCond %{HTTP_HOST} ^(www\.)?YOUR_DOMAIN\.dev$ [NC]
+RewriteCond %{HTTP_HOST} ^(www\.)?YOUR_DOMAIN\.localhost$ [NC]
 RewriteRule (.*) $1 [E=TYPO3_CONTEXT:Development]
 
 #####

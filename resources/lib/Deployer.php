@@ -37,6 +37,7 @@ class Deployer extends Helper {
     private $t3_function;
     private $t3_path_to_source_file;
     private $documentRoot;
+    private $documentDomain;
     private $index;
     private $deployerFileConfig;
     private $deployerFileConfigPath;
@@ -49,6 +50,7 @@ class Deployer extends Helper {
 
         $this->helper = new Helper();
         $this->documentRoot = $this->helper->getDocumentRoot();
+        $this->documentDomain = $this->helper->getDocumentDomain();
 
         $this->t3_src_dir_name = "../typo3_sources";
         $this->t3_config_date = date("Ymd_His");
@@ -416,8 +418,11 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
                 echo "<span class='warning'>File 'robots.txt' could not be created!</span>";
             }
 
+
             if (copy($this->config['deploymentfolder']."/resources/files/.htaccess", $documentRoot."/.htaccess")) {
                 echo "<span class='successful'>File '.htaccess' successfully created.</span>";
+                $filepath = $this->documentRoot."/.htaccess";
+                $this->helper->strReplaceInFile($filepath, "YOUR_DOMAIN", $this->documentDomain);
             } else {
                 echo "<span class='warning'>File '.htaccess' could not be created!</span>";
             }
