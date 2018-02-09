@@ -46,10 +46,10 @@ function downloadExternalFile($pathToExternalFile, $filename, $pathToSafeFile = 
     } else {
         $newfname = $pathToSafeFile.$filename;
         $file = fopen($pathToExternalFile, 'rb');
-        if($file) {
+        if ($file) {
             $newf = fopen($newfname, 'wb');
-            if($newf) {
-                while(!feof($file)) {
+            if ($newf) {
+                while (!feof($file)) {
                     fwrite($newf, fread($file, 1024 * 8), 1024 * 8);
                 }
             }
@@ -75,7 +75,7 @@ function extractZipFile($pathToZipFile, $pathToExtract = false) {
     $pathToExtract = $pathToExtract ? $pathToExtract : getDocumentRoot()."/";
 
     if (file_exists($pathToZipFile)) {
-    $zip = new ZipArchive;
+        $zip = new ZipArchive;
         if ($zip->open($pathToZipFile) === TRUE) {
             $zip->extractTo($pathToExtract);
             $zip->close();
