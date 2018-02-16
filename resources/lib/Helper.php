@@ -31,6 +31,19 @@ class Helper {
         return $_SERVER["DOCUMENT_ROOT"];
     }
 
+    /**
+     * 
+     * return the document domain name
+     * @return (string) document domain name
+     */
+    public function getDocumentDomain() {
+        $domain = $_SERVER['HTTP_HOST'];
+        if (!isset($domain)) {
+            $domain = $_SERVER['SERVER_NAME'];
+        }
+        return $domain;
+    }
+
     private function deleteDirs($src) {
         $dir = opendir($src);
         while ( false !== ( $file = readdir($dir)) ) {
@@ -469,6 +482,34 @@ if (!defined('TYPO3_MODE')) {
 
 ");
             echo "<span class='success'>File {$str} is created.</span>";
+        }
+    }
+
+    /**
+     * [strReplaceInFile replaces a string in a file;]
+     * @param [string] $filepath    [path to file]
+     * @param [string] $str_search  [string to be replaced]
+     * @param [string] $str_replace [the new string]
+     */
+    public function strReplaceInFile($filepath, $str_search, $str_replace) {
+        if (isset($str_search) && isset($str_replace) && isset($filepath) && file_exists($filepath)) {
+            $content = file_get_contents($filepath);
+            $content = str_replace($str_search, $str_replace, $content);
+            file_put_contents($filepath, $content);
+            echo "<span class='success'>String is replaced!</span>";
+            return true;
+        } elseif (!isset($filepath)) {
+            echo "<span class='error'>\$filepath not set ({$filepath})!</span>";
+            return false;
+        } elseif (!isset($str_search)) {
+            echo "<span class='error'>\$str_search not set ({$filepath})!</span>";
+            return false;
+        } elseif (!isset($str_replace)) {
+            echo "<span class='error'>\$str_replace not set ({$filepath})!</span>";
+            return false;
+        } else {
+            echo "<span class='error'>Something went wrong at 'strReplaceInFile()'!</span>";
+            return false;
         }
     }
 

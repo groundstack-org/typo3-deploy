@@ -124,7 +124,7 @@
       <div class="row-fluid">
         <div class="span12">
           <h4>PHP config:</h4>
-          <h5>After the typo3 installation you should check in the install tool the point system environment.</h5>
+          <h5>After the typo3 installation you should check in the install tool the point system environment.<br />This test shows only the most commonly misplaced values.</h5>
             <?php
             $maxExecutionTime = ini_get('max_execution_time');
             if ($maxExecutionTime < 240) {
