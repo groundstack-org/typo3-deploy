@@ -428,8 +428,10 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
                 echo "<span class='warning'>File 'humans.txt' could not be created!</span>";
             }
 
-            if (!file_exists($documentRoot."/FIRST_INSTALL")) {
-                if (file_put_contents($documentRoot."/FIRST_INSTALL", "") != false) {
+            $firstInstallPath = $documentRoot."/FIRST_INSTALL";
+            if (!file_exists($fistInstallPath)) {
+                file_put_contents($documentRoot."/FIRST_INSTALL", "");
+                if (file_exists(fistInstallPath)) {
                     echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
                     echo "<span class='successful'>File 'FIRST_INSTALL' successfully created.</span>";
                     echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
