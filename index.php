@@ -144,6 +144,10 @@
             } else {
                 echo "<p class='success'>max_input_vars = {$max_input_vars}</p>";
             }
+
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                echo "<p class='warning'>Warning: it seems like this script is running under windows. Symlinks may not work! More info: <a href='https://wiki.typo3.org/Symlinks_on_Windows' title='create symlinks on windows'>Create symlinks on windows.</a></span></p>";
+            }
             ?>
         </div>
       </div>

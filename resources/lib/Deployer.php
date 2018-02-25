@@ -325,11 +325,11 @@ if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredential
   'EXT' => array(
     'extConf' => array(
       // 'realurl' => serialize(array(
-  		// 	'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-  		// 	'enableAutoConf' => 1,
-  		// 	'enableDevLog' => 0,
-  		// 	'enableChashUrlDebug' => 0
-			// ))
+      //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+      //     'enableAutoConf' => 1,
+      //     'enableDevLog' => 0,
+      //     'enableChashUrlDebug' => 0
+      // ))
     )
   ),
   'SYS' => array(
@@ -361,11 +361,11 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
     'EXT' => array(
       'extConf' => array(
         // 'realurl' => serialize(array(
-    		// 	'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-    		// 	'enableAutoConf' => 0,
-    		// 	'enableDevLog' => 1,
-    		// 	'enableChashUrlDebug' => 1
-  			// ))
+        //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+        //     'enableAutoConf' => 0,
+        //     'enableDevLog' => 1,
+        //     'enableChashUrlDebug' => 1
+        // ))
       )
     ),
     'SYS' => array(
@@ -411,13 +411,16 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             } else {
                 echo "<span class='error'>Dir 'typo3conf' could not be created!</span>";
             }
-
+            if(file_exists($this->config['deploymentfolder']."/resources/files/robots.txt")) {
+                var_dump("file i.o.");
+            } else {
+                var_dump("file not i. o.");
+            }
             if (copy($this->config['deploymentfolder']."/resources/files/robots.txt", $documentRoot."/robots.txt")) {
                 echo "<span class='successful'>File 'robots.txt' successfully created.</span>";
             } else {
                 echo "<span class='warning'>File 'robots.txt' could not be created!</span>";
             }
-
 
             if (copy($this->config['deploymentfolder']."/resources/files/.htaccess", $documentRoot."/.htaccess")) {
                 echo "<span class='successful'>File '.htaccess' successfully created.</span>";
@@ -435,9 +438,9 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             }
 
             $firstInstallPath = $documentRoot."/FIRST_INSTALL";
-            if (!file_exists($fistInstallPath)) {
+            if (!file_exists($firstInstallPath)) {
                 file_put_contents($documentRoot."/FIRST_INSTALL", "");
-                if (file_exists(fistInstallPath)) {
+                if (file_exists($firstInstallPath)) {
                     echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
                     echo "<span class='successful'>File 'FIRST_INSTALL' successfully created.</span>";
                     echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";

@@ -183,12 +183,19 @@ class Helper {
         $target = $this->escape_input($target);
         $target = $target[0];
 
-        if ($this->deleteLink($filename) && symlink($target, $filename)) {
-            echo "<span class='successful'>Link: {$filename} successfully created.</span>";
-            return true;
-        } else {
-            echo "<span class='error'>Link: {$filename} not created!</span>";
+        // if windows dont create symlinks - show info message
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            echo "<span class='warning'>Link: {$filename} not created! (windows?)</span>";
+            echo "<span class='warning'>Please create that symlink manually: {$filename}!</span>";
             return false;
+        } else {
+            if ($this->deleteLink($filename) && symlink($target, $filename)) {
+                echo "<span class='successful'>Link: {$filename} successfully created.</span>";
+                return true;
+            } else {
+                echo "<span class='error'>Link: {$filename} not created!</span>";
+                return false;
+            }
         }
     }
 
@@ -318,10 +325,11 @@ class Helper {
         $pathToExtract = $this->escape_input($pathToExtract);
         $pathToExtract = $pathToExtract[0];
 
-        $pathToExtract = $pathToExtract ? $pathToExtract : $this->getDocumentRoot()."/../typo3_sources/";
+        $pathToExtract = $pathToExtract ? $pathToExtract : $this->getDocumentRoot()."../typo3_sources/";
 
         if (file_exists($pathToZipFile)) {
             $phar = new PharData($pathToZipFile);
+            
             if ($phar->extractTo($pathToExtract)) {
                 echo "<span class='successful'>ZipFile: {$pathToZipFile} successfully extracted!</span>";
                 return true;
