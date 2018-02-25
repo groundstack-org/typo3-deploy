@@ -240,3 +240,12 @@
         }
     });
 })(jQuery);
+
+// Accordion
+(function($) {
+    $(document).on("click", ".acc-btn", function(e) {
+        e.preventDefault();
+        $this = $(this), parent = $this.parent(".acc");
+        parent.toggleClass("active");
+    })
+})(jQuery);

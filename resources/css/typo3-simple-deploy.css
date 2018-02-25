@@ -79,6 +79,9 @@ body { height: auto; position: relative; }
 
 .js .deploy-readme { display: none; }
 
+.js .acc-content { display: none; }
+.js .acc.active .acc-content { display: block; }
+
 /* css loader animation from: http://codepen.io/endodoug/pen/ecBkL */
 .socket{ background-color: rgba(0,0,0,0.7); display: none; width: 100%; height: 100%; position: fixed; left: 0; top: 0; }
 .hex-brick{ background: #ABF8FF; width: 30px; height: 17px; position: absolute; top: 5px;

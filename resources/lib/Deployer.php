@@ -411,11 +411,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             } else {
                 echo "<span class='error'>Dir 'typo3conf' could not be created!</span>";
             }
-            if(file_exists($this->config['deploymentfolder']."/resources/files/robots.txt")) {
-                var_dump("file i.o.");
-            } else {
-                var_dump("file not i. o.");
-            }
+            
             if (copy($this->config['deploymentfolder']."/resources/files/robots.txt", $documentRoot."/robots.txt")) {
                 echo "<span class='successful'>File 'robots.txt' successfully created.</span>";
             } else {
@@ -424,9 +420,15 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
 
             if (copy($this->config['deploymentfolder']."/resources/files/.htaccess", $documentRoot."/.htaccess")) {
                 echo "<span class='successful'>File '.htaccess' successfully created.</span>";
-                $filepath = $this->documentRoot."/.htaccess";
-                $this->helper->strReplaceInFile($filepath, "YOUR_DOMAIN", $this->documentDomain);
-                $this->helper->strReplaceInFile($filepath, "TLD", "de");
+                $filepath = $this->documentRoot.".htaccess";
+                if($this->config['t3_install_tool'] !== '') {
+                    $this->helper->strReplaceInFile($filepath, "YOUR_DOMAIN", $this->config['t3_install_domain']);
+                    if($this->config['t3_install_domain_tld'] !== '') {
+                        $this->helper->strReplaceInFile($filepath, "TLD", $this->config['t3_install_domain_tld']);
+                    }
+                } else {
+                    echo "<span class='warning'>Your domain is not set, please change it manually. (e. g. in .htaccess)</span>";
+                }
             } else {
                 echo "<span class='warning'>File '.htaccess' could not be created!</span>";
             }
@@ -439,7 +441,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
 
             $firstInstallPath = $documentRoot."/FIRST_INSTALL";
             if (!file_exists($firstInstallPath)) {
-                file_put_contents($documentRoot."/FIRST_INSTALL", "");
+                file_put_contents($firstInstallPath, "");
                 if (file_exists($firstInstallPath)) {
                     echo "<span class='warning'>Security risk! If typo3 is not installed after this, please delete 'FIRST_INSTALL'!</span>";
                     echo "<span class='successful'>File 'FIRST_INSTALL' successfully created.</span>";

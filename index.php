@@ -162,7 +162,7 @@
             <div id="delete-deployment" class="widget-content nopadding">
               <form id="form-delete-deployment" class="form-horizontal" method="post" action="<?php echo htmlentities(urlencode($_SERVER['PHP_SELF'])); ?>">
                 <input type="hidden" name="formtype" value="deletedeployment" />
-                <?php echo "<input type='hidden' name='deploymentfolder' value='".__DIR__."' />"; ?>
+                <?php echo "<input type='hidden' name='deploymentfolder' value='".str_replace('\\', '/', __DIR__)."' />"; ?>
                 <div class="form-actions">
                   <button type="submit" class="btn btn-danger" name="sent" value="Senden" data-translate="_send">Delete!</button>
                 </div>
@@ -178,7 +178,7 @@
             <div class="widget-content nopadding">
               <form id="form-install-typo3" action="#" method="post" class="form-horizontal ajax_form">
                 <input type="hidden" name="formtype" value="t3install" />
-                <?php echo "<input type='hidden' name='deploymentfolder' value='".__DIR__."' />"; ?>
+                <?php echo "<input type='hidden' name='deploymentfolder' value='".str_replace('\\', '/', __DIR__)."' />"; ?>
 
                 <div id="t3version" class="control-group">
                   <label for="t3_version" class="control-label">
@@ -245,6 +245,30 @@
                     <div class="left" id="install-tool-pw-element"></div>
                     <span class="help-block" data-translate="_installtoolstoredin">Install Tool password is stored in 'typo3_config/typo3_db.php'.</span>
                   </div>
+                </div>
+                <div class="control-group display">
+                    <div class="acc">
+                        <a href="#" class="btn btn-info acc-btn" id="install-optional" data-translate="_optional">Optional</a>
+
+                        <div class="acc-content">
+                            <div class="control-group display">
+                                <label class="control-label" for="install-domain" data-translate="_installdomain">Your domain name</label>
+                                <div class="controls">
+                                    <input id="install-domain" class="input-big span8" type="text" name="t3_install_domain" value="">
+                                    <span class="help-block" data-translate="_installdomainhint">without www. or TLD (e. g. .de or .com)!</span>
+                                    <span class="help-block" data-translate="_installdomaininfo">Is set in e. g. htaccess file.</span>
+                                </div>
+                            </div>
+                            <div class="control-group display">
+                                <label class="control-label" for="install-domain-tld" data-translate="_installdomaintld">Your TLD</label>
+                                <div class="controls">
+                                    <input id="install-domain-tld" class="input-big span8" type="text" name="t3_install_domain_tld" value="">
+                                    <span class="help-block" data-translate="_installdomaintldhint">(e. g. .de or .com)</span>
+                                    <span class="help-block" data-translate="_installdomaintldinfo">Is set in e. g. htaccess file.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-actions">
                   <button id="submitinstall" class="btn btn-success" type="submit" name="sendt3install" value="Senden" data-translate="_send">Send</button>

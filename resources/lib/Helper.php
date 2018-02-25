@@ -504,7 +504,7 @@ if (!defined('TYPO3_MODE')) {
             $content = file_get_contents($filepath);
             $content = str_replace($str_search, $str_replace, $content);
             file_put_contents($filepath, $content);
-            echo "<span class='success'>String is replaced!</span>";
+            echo "<span class='success'>String {$str_search} is replaced with {$str_replace} in file {$filepath}!</span>";
             return true;
         } elseif (!isset($filepath)) {
             echo "<span class='error'>\$filepath not set ({$filepath})!</span>";
