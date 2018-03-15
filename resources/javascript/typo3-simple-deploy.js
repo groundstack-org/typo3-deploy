@@ -1,48 +1,50 @@
 // magic do not touch
 (function($) {
-    var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
-    $.fn.reverse = [].reverse;
-    function validate(s) {
-        var rgx = /^[0-9]*\.?[0-9]*\.?[0-9]*$/;
-        if(s.match(rgx)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    label_info_version.text("Please wait");
-    $.post('api/index.php', '{ "formtype":"ajaxpost", "ajax_function":"getTypo3Json" }', function(returnedData) {
-        console.log(returnedData);
-        returnedData = JSON.parse(returnedData);
-        var items = [];
-        $.each(returnedData, function(key, val) {
-            i++;
-            $.each(val.releases, function(k, v) {
-                var s = v.version.toString();
-                if(validate(s)) {
-                items.push(v.version);
-                }
-            });
-            if(i > 3) {
+    $(function() {
+        var i = 0, label_info_version = $(".choose-version input"), label_info_version_init_text = label_info_version.text();
+        $.fn.reverse = [].reverse;
+        function validate(s) {
+            var rgx = /^[0-9]*\.?[0-9]*\.?[0-9]*$/;
+            if(s.match(rgx)) {
+                return true;
+            } else {
                 return false;
             }
-        });
-        items.sort().reverse();
+        }
 
-        var selectT3Version = $("#t3_version");
-        selectT3Version.html("");
-        $.each(items, function(i, el) {
-            if (i === 0) {
-                selectT3Version.prepend("<option value=" + el + " selected>Typo3 " + el + "</option>");
-            } else {
-                selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
-            }
+        label_info_version.text("Please wait");
 
+        $.post('api/index.php', '{ "formtype":"ajaxpost", "ajax_function":"getTypo3Json" }', function(returnedData) {
+            returnedData = JSON.parse(returnedData);
+            var items = [];
+            $.each(returnedData, function(key, val) {
+                i++;
+                $.each(val.releases, function(k, v) {
+                    var s = v.version.toString();
+                    if(validate(s)) {
+                    items.push(v.version);
+                    }
+                });
+                if(i > 3) {
+                    return false;
+                }
+            });
+            items.sort().reverse();
+
+            var selectT3Version = $("#t3_version");
+            selectT3Version.html("");
+            $.each(items, function(i, el) {
+                if (i === 0) {
+                    selectT3Version.prepend("<option value=" + el + " selected>Typo3 " + el + "</option>");
+                } else {
+                    selectT3Version.prepend("<option value=" + el + ">Typo3 " + el + "</option>");
+                }
+
+            });
+            $("#s2id_t3_version").find("span").text($("#t3_version").find("option:last-child").text());
+        }).fail(function(e) {
+            alert( "Can't load json from http://get.typo3.org/json: " + e );
         });
-        $("#s2id_t3_version").find("span").text($("#t3_version").find("option:last-child").text());
-    }).fail(function() {
-        alert( "error" );
     });
 })(jQuery);
 
