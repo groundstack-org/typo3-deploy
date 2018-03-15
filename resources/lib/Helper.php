@@ -632,12 +632,13 @@ if (!defined('TYPO3_MODE')) {
      * [Gets the TYPO3 original json info file]
      */
     public function getTypo3Json() {
-        $json = file_get_contents('https://get.typo3.org/json');
+        $url = "http://get.typo3.org/json";
+        $json = file_get_contents($url);
         if($json) {
             echo $json;
             return true;
         } else {
-            echo "<span class='error'>Can't get json!</span>";
+            echo "<span class='error'>Can't get TYPO3 versions json from 'http://get.typo3.org/json'!</span>";
             return false;
         }
     }
