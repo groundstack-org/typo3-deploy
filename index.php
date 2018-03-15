@@ -315,7 +315,7 @@
                   <input type='hidden' name='t3_version' value='' />
                   <input type='hidden' name='formtype' value='deletetypo3temp' />
                   <div class="form-actions">
-                    <button id="submit" class="btn btn-success" type="submit" name="deletetypo3temp" value="Senden" data-translate="_deletetempfiles">Delete Typo3 temp files</button>
+                    <button id="submit-temp" class="btn btn-success" type="submit" name="deletetypo3temp" value="Senden" data-translate="_deletetempfiles">Delete Typo3 temp files</button>
                   </div>
                 </form>
               </div>
