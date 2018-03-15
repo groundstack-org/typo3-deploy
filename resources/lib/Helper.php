@@ -637,6 +637,7 @@ if (!defined('TYPO3_MODE')) {
             echo $json;
             return true;
         } else {
+            echo "<span class='error'>Can't get json!</span>";
             return false;
         }
     }

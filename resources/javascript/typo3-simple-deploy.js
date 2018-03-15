@@ -41,6 +41,8 @@
 
         });
         $("#s2id_t3_version").find("span").text($("#t3_version").find("option:last-child").text());
+    }).fail(function() {
+        alert( "error" );
     });
 })(jQuery);
 
