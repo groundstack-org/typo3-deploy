@@ -293,15 +293,15 @@ class Deployer extends Helper {
                     if (file_put_contents($pathToTypo3conf."/AdditionalConfiguration.php", "
 <?php
 if (!defined('TYPO3_MODE')) {
-  die('Access denied.');
+    die('Access denied.');
 }
 /*
-  !IMPORTANT!
-  The file '\$databaseCredentialsFile' is not versioned and must be created and changed!
-  For security reasons please create the database accesses outside the document roots!
+    !IMPORTANT!
+    The file '\$databaseCredentialsFile' is not versioned and must be created and changed!
+    For security reasons please create the database accesses outside the document roots!
 
-  Die Datei '\$databaseCredentialsFile' wird nicht mit Versioniert und muss extra angelegt und geändert werden!
-  aus Sicherheitsgründen bitte die Datenbank zugänge außerhalb des document roots anlegen!
+    Die Datei '\$databaseCredentialsFile' wird nicht mit Versioniert und muss extra angelegt und geändert werden!
+    aus Sicherheitsgründen bitte die Datenbank zugänge außerhalb des document roots anlegen!
 */
 
 
@@ -309,37 +309,37 @@ if (!defined('TYPO3_MODE')) {
 if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredentialsFile); }
 
 // Production / Live:
-\$customChanges = array(
-  'BE' => array(
-    'compressionLevel' => '0',
-    'lockSSL' => 0, // if https is on set this to 1
-    'versionNumberInFilename' => 0,
-  ),
-  'FE' => array(
-    'compressionLevel' => '0',
-    'noPHPscriptInclude' => '1',
-    'pageNotFound_handling' => '404.html',
-    'pageUnavailable_handling' => '503.html',
-    'disableNoCacheParameter' => 1
-  ),
-  'EXT' => array(
-    'extConf' => array(
-      // 'realurl' => serialize(array(
-      //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-      //     'enableAutoConf' => 1,
-      //     'enableDevLog' => 0,
-      //     'enableChashUrlDebug' => 0
-      // ))
-    )
-  ),
-  'SYS' => array(
-    'UTF8filesystem' => 1,
-    'clearCacheSystem' => 1,
-    'enableDeprecationLog' => 0,
-    'phpTimeZone' => 'Europe/Berlin',
-    'systemLocale' => 'de_DE.UTF-8'
-  )
-);
+\$customChanges = [
+    'BE' => [
+        'compressionLevel' => '0',
+        'lockSSL' => 0, // if https is on set this to 1
+        'versionNumberInFilename' => 0,
+    ],
+    'FE' => [
+        'compressionLevel' => '0',
+        'noPHPscriptInclude' => '1',
+        'pageNotFound_handling' => '404.html',
+        'pageUnavailable_handling' => '503.html',
+        'disableNoCacheParameter' => 1
+    ],
+    'EXT' => [
+        'extConf' => [
+            // 'realurl' => serialize([
+            //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+            //     'enableAutoConf' => 1,
+            //     'enableDevLog' => 0,
+            //     'enableChashUrlDebug' => 0
+            // ])
+        ]
+    ],
+    'SYS' => [
+        'UTF8filesystem' => 1,
+        'clearCacheSystem' => 1,
+        'enableDeprecationLog' => 0,
+        'phpTimeZone' => 'Europe/Berlin',
+        'systemLocale' => 'de_DE.UTF-8'
+    ]
+];
 
 \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customChanges);
 
@@ -347,37 +347,37 @@ if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredential
 // Developement:
 if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopment()) {
 
-  \$customDevelopmentChanges = array(
-    'BE' => array(
-      'compressionLevel' => '0',
-      'lockSSL' => 0, // if https is on set this to 1
-      'versionNumberInFilename' => 0,
-    ),
-    'FE' => array(
-      'compressionLevel' => '0',
-      'debug' => 1,
-      'noPHPscriptInclude' => 1
-    ),
-    'EXT' => array(
-      'extConf' => array(
-        // 'realurl' => serialize(array(
-        //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-        //     'enableAutoConf' => 0,
-        //     'enableDevLog' => 1,
-        //     'enableChashUrlDebug' => 1
-        // ))
-      )
-    ),
-    'SYS' => array(
-      'displayErrors' => 1,
-      'sqlDebug' => 1,
-      'systemLog' => 'error_log',
-      'systemLogLevel' => '2',
-      'enableDeprecationLog' => 'file'
-    )
-  );
+    \$customDevelopmentChanges = [
+        'BE' => [
+            'compressionLevel' => '0',
+            'lockSSL' => 0, // if https is on set this to 1
+            'versionNumberInFilename' => 0,
+        ],
+        'FE' => [
+            'compressionLevel' => '0',
+            'debug' => 1,
+            'noPHPscriptInclude' => 1
+        ],
+        'EXT' => [
+            'extConf' => [
+                // 'realurl' => serialize([
+                //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+                //     'enableAutoConf' => 0,
+                //     'enableDevLog' => 1,
+                //     'enableChashUrlDebug' => 1
+                // ])
+            ]
+        ],
+        'SYS' => [
+            'displayErrors' => 1,
+            'sqlDebug' => 1,
+            'systemLog' => 'error_log',
+            'systemLogLevel' => '2',
+            'enableDeprecationLog' => 'file'
+        ]
+    ];
 
-  \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customDevelopmentChanges);
+    \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customDevelopmentChanges);
 }
 
 ")) {
