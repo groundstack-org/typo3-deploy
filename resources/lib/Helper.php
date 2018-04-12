@@ -462,29 +462,29 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-\$customChanges = array(
-'DB' => array(
-    'Connections' => array(
-        'Default' => array(
-            'charset' => 'utf8',
-            'driver' => 'mysqli',
-            'dbname' => '{$t3_db_name}',
-            'host' => '{$t3_db_host}',
-            'password' => '{$t3_db_password}',
-            'user' => '{$t3_db_user}',
-            'unix_socket' => '{$t3_db_socket}',
-            'port' => '3306'
-        )
-    )
-),
-'BE' => array(
-    'installToolPassword' => '{$t3_install_tool}'
-),
-// 'GFX' => array(
-//   'im_path' = '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
-//   'processor_path' = '' // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
-// )
-);
+\$customChanges = [
+    'DB' => [
+        'Connections' => [
+            'Default' => [
+                'charset' => 'utf8',
+                'driver' => 'mysqli',
+                'dbname' => '{$t3_db_name}',
+                'host' => '{$t3_db_host}',
+                'password' => '{$t3_db_password}',
+                'user' => '{$t3_db_user}',
+                'unix_socket' => '{$t3_db_socket}',
+                'port' => '3306'
+            ]
+        ]
+    ],
+    'BE' => [
+        'installToolPassword' => '{$t3_install_tool}'
+    ],
+    // 'GFX' => [
+    //   'im_path' = '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+    //   'processor_path' = '' // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+    // ]
+];
 
 \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customChanges);
 
@@ -632,13 +632,13 @@ if (!defined('TYPO3_MODE')) {
      * [Gets the TYPO3 original json info file]
      */
     public function getTypo3Json() {
-        $url = "http://get.typo3.org/json";
+        $url = "https://get.typo3.org/json";
         $json = file_get_contents($url);
         if($json) {
             echo $json;
             return true;
         } else {
-            echo "<span class='error'>Can't get TYPO3 versions json from 'http://get.typo3.org/json'!</span>";
+            echo "<span class='error'>Can't get TYPO3 versions json from 'https://get.typo3.org/json'!</span>";
             return false;
         }
     }
