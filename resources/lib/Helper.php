@@ -632,14 +632,44 @@ if (!defined('TYPO3_MODE')) {
      * [Gets the TYPO3 original json info file]
      */
     public function getTypo3Json() {
-        $url = "https://get.typo3.org/json";
-        $json = file_get_contents($url);
-        if($json) {
-            echo $json;
-            return true;
+        $url = 'https://get.typo3.org/json';
+        $data = "";
+
+        if(function_exists('curl_version')) {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            if($_SERVER['SERVER_ADDR'] === $_SERVER['REMOTE_ADDR']) {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
+            } else {
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+            }
+            curl_setopt($ch, CURLOPT_AUTOREFERER, true);
+            var_dump($ch);
+            return curl_exec($ch);
         } else {
-            echo "<span class='error'>Can't get TYPO3 versions json from 'https://get.typo3.org/json'!</span>";
-            return false;
+            $header = "Content-type: application/json\r\n";
+            $method = "POST";
+
+            // use key 'http' even if you send the request to https://...
+            $options = array(
+                'http' => array(
+                    'header'  => $header,
+                    'method'  => $method,
+                    'content' => $content
+                )
+            );
+            $context  = stream_context_create($options);
+            $result = @file_get_contents($url, false, $context);
+            if ($result === FALSE) {
+                echo "<span class='error'>Can't get TYPO3 versions json from 'https://get.typo3.org/json'!</span>";
+                return false;
+            } else {
+                echo $result;
+                return true;
+            }
         }
     }
 }
