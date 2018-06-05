@@ -356,7 +356,8 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
         'FE' => [
             'compressionLevel' => '0',
             'debug' => 1,
-            'noPHPscriptInclude' => 1
+            'noPHPscriptInclude' => 1,
+            'disableNoCacheParameter' => 0
         ],
         'EXT' => [
             'extConf' => [

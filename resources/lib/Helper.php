@@ -632,7 +632,14 @@ if (!defined('TYPO3_MODE')) {
      * [Gets the TYPO3 original json info file]
      */
     public function getTypo3Json() {
-        $url = 'https://get.typo3.org/json';
+        if($_SERVER['SERVER_ADDR'] === $_SERVER['REMOTE_ADDR']) {
+            $url = 'http://get.typo3.org/json';
+            $SSLverify = 0;
+        } else {
+            $url = 'https://get.typo3.org/json';
+            $SLLverify = 1;
+        }
+
         $data = "";
 
         if(function_exists('curl_version')) {
@@ -641,14 +648,10 @@ if (!defined('TYPO3_MODE')) {
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($ch, CURLOPT_POST, 1);
-            if($_SERVER['SERVER_ADDR'] === $_SERVER['REMOTE_ADDR']) {
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // On dev server only!
-            } else {
-                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
-            }
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $SSLverify);
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);
-            var_dump($ch);
-            return curl_exec($ch);
+            echo curl_exec($ch);
+            return true;
         } else {
             $header = "Content-type: application/json\r\n";
             $method = "POST";
