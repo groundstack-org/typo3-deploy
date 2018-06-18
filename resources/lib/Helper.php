@@ -284,6 +284,8 @@ class Helper {
 
         $newfname = $pathToSafeFile.$outputFilename;
 
+        var_dump($newfname);
+
         if (file_exists($newfname)) {
             echo "<span class='warning'>File: {$filename} already exists in {$pathToSafeFile}.</span>";
             return true;
@@ -353,7 +355,7 @@ class Helper {
         foreach ($tmpArray as &$arr) {
             $tmp_str_replace_orig = array('"', "'", "<", ">", " ");
             $tmp_str_replace_target = array('', "", "", "", "");
-            $arr = str_replace($tmp_str_replace_orig, $tmp_str_replace_target, htmlspecialchars(stripslashes(trim($arr))));
+            $arr = str_replace($tmp_str_replace_orig, $tmp_str_replace_target, stripslashes(trim($arr)));
         }
 
         return $tmpArray;
