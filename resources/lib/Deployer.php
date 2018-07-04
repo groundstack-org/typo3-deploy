@@ -337,7 +337,8 @@ if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredential
         'clearCacheSystem' => 1,
         'enableDeprecationLog' => 0,
         'phpTimeZone' => 'Europe/Berlin',
-        'systemLocale' => 'de_DE.UTF-8'
+        'systemLocale' => 'de_DE.UTF-8',
+        'ipAnonymization' => '2'
     ]
 ];
 
