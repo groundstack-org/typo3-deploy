@@ -375,7 +375,48 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             'sqlDebug' => 1,
             'systemLog' => 'error_log',
             'systemLogLevel' => '2',
-            'enableDeprecationLog' => 'file'
+            'enableDeprecationLog' => 'file',
+            // disable Caching: https://usetypo3.com/did-you-know.html
+            'caching' => [
+                'cacheConfigurations' => [
+                    'cache_core' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_hash' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_pages' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_pagesection' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_phpcode' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_runtime' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\TransientMemoryBackend::class
+                    ],
+                    'cache_rootline' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'cache_imagesizes' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'l10n' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'extbase_object' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'extbase_reflection' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ],
+                    'extbase_datamapfactory_datamap' => [
+                        'backend' => \TYPO3\CMS\Core\Cache\Backend\NullBackend::class
+                    ]
+                ]
+            ]
         ]
     ];
 
