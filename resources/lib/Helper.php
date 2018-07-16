@@ -483,8 +483,8 @@ if (!defined('TYPO3_MODE')) {
         'installToolPassword' => '{$t3_install_tool}'
     ],
     // 'GFX' => [
-    //   'im_path' = '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
-    //   'processor_path' = '' // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+    //   'im_path' => '', // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
+    //   'processor_path' => '' // e.g. OSX Mamp '/Applications/MAMP/Library/bin/'
     // ]
 ];
 
