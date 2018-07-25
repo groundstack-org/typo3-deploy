@@ -12,4 +12,4 @@ Disallow: /print/
 
 User-agent: googlebot
 
-Sitemap: http://www.example.de/sitemap.xml
+Sitemap: http://www.YOUR_DOMAIN.TLD/sitemap.xml
