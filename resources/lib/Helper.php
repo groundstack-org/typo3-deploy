@@ -183,11 +183,33 @@ class Helper {
         $target = $this->escape_input($target);
         $target = $target[0];
 
+        function makeWINJunction($target, $link) {
+            if ($_SERVER['WINDIR'] || $_SERVER['windir']) {
+                if(is_dir($target)) {
+                    exec('mklink /j "' . str_replace('/', '\\', $link) . '" "' .str_replace('/', '\\', $target) . '"');
+                } else {
+                    exec('mklink "' . str_replace('/', '\\', $link) . '" "' .str_replace('/', '\\', $target) . '"');
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         // if windows dont create symlinks - show info message
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            echo "<span class='warning'>Link: {$filename} not created! (windows?)</span>";
-            echo "<span class='warning'>Please create that symlink manually: {$filename}!</span>";
-            return false;
+            echo "<span class='warning'>Symlink: {$filename} not created! (windows?)</span>";
+            echo "<span class='warning'>Try to create Windows Junction</span>";
+            if(makeWINJunction($target, $filename)) {
+                echo "<span class='warning'></span>";
+                // TODO: test if junction works well
+                
+                return true;
+            } else {
+                echo "<span class='warning'>Please create that symlink/junction manually: {$filename}!</span>";
+                echo "<span class='warning'><a href='https://wiki.typo3.org/Symlinks_on_Windows' title='create symlinks on windows'>Create symlinks on windows.</a></span>";
+                return false;
+            }
         } else {
             if ($this->deleteLink($filename) && symlink($target, $filename)) {
                 echo "<span class='successful'>Link: {$filename} successfully created.</span>";
