@@ -309,7 +309,7 @@ class Helper {
                 echo "<span class='successful'>File: {$filename} successfully downloaded to '{$pathToSafeFile}{$filename}'!</span>";
                 return true;
             } else {
-                echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from '{$pathToExternalFile}'!</span>";
+                echo "<span class='error'>File: {$pathToSafeFile}{$filename} can't downloaded from <a href=\"'{$pathToExternalFile}'\">'{$pathToExternalFile}'</a>!</span>";
                 return false;
             }
         }
