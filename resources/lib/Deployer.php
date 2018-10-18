@@ -290,8 +290,7 @@ class Deployer extends Helper {
                 echo "<span class='successful'>Dir 'typo3conf' successfully created.</span>";
 
                 if (!file_exists($pathToTypo3conf."/AdditionalConfiguration.php")) {
-                    if (file_put_contents($pathToTypo3conf."/AdditionalConfiguration.php", "
-<?php
+                    if (file_put_contents($pathToTypo3conf."/AdditionalConfiguration.php", "<?php
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
@@ -322,16 +321,6 @@ if (file_exists(\$databaseCredentialsFile)) { require_once (\$databaseCredential
         'pageUnavailable_handling' => '503.html',
         'disableNoCacheParameter' => 1
     ],
-    'EXT' => [
-        'extConf' => [
-            // 'realurl' => serialize([
-            //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-            //     'enableAutoConf' => 1,
-            //     'enableDevLog' => 0,
-            //     'enableChashUrlDebug' => 0
-            // ])
-        ]
-    ],
     'SYS' => [
         'UTF8filesystem' => 1,
         'clearCacheSystem' => 1,
@@ -359,16 +348,6 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             'debug' => 1,
             'noPHPscriptInclude' => 1,
             'disableNoCacheParameter' => 0
-        ],
-        'EXT' => [
-            'extConf' => [
-                // 'realurl' => serialize([
-                //     'configFile' => 'typo3conf/ext/YOURTHEME/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
-                //     'enableAutoConf' => 0,
-                //     'enableDevLog' => 1,
-                //     'enableChashUrlDebug' => 1
-                // ])
-            ]
         ],
         'SYS' => [
             'displayErrors' => 1,
@@ -423,6 +402,22 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
     \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customDevelopmentChanges);
 }
 
+\$realurlConfig = PATH_site . './typo3conf/ext/YOUR_THEME_EXT_KEY/Resources/Private/Extensions/realurl/realurl_theme_conf.php';
+if (file_exists(\$realurlConfig)) {
+    \$customRealurl = array(
+        'EXT' => array(
+            'extConf' => array(
+                'realurl' => serialize(array(
+                    'configFile' => 'typo3conf/ext/YOUR_THEME_EXT_KEY/Resources/Private/Extensions/realurl/realurl_theme_conf.php',
+                    'enableAutoConf' => 1,
+                    'enableDevLog' => 0,
+                    'enableChashUrlDebug' => 0
+                ))
+            )
+        ),
+    );
+    \$GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(\$GLOBALS['TYPO3_CONF_VARS'], (array)\$customRealurl);
+}
 ")) {
                         echo "<span class='successful'>File 'AdditionalConfiguration.php' successfully created.</span>";
 
