@@ -1,22 +1,25 @@
-### Typo3 ###
-# Ignore Constants.ts
-/fileadmin/template/TypoScript/Constants.ts
+/.idea
+Homestead.json
+Homestead.yaml
+.env
 
-# Ignore cache folders
-/typo3temp/*
-/fileadmin/_processed_/
-/fileadmin/_temp_/
+### MAC ###
+*.DS_Store
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# Ignore cache
-/typo3conf/temp_CACHED*
-/typo3conf/temp_fieldInfo.php
-/typo3conf/deprecation_*.log
-/typo3conf/ENABLE_INSTALL_TOOL
-
-# Ignore system folders, you should have them symlinked.
-# If not comment out the following entries.
-/typo3/typo3/
-/typo3_src/
-!/index.php
-/uploads/
-/.project
+# test
+### other ###
+._*
+Desktop.ini
+Thumbs.db
+.Spotlight-V100
+.Trashes
+*.pyc
+*.out
+venv
+node_modules
+.sass-cache
+.vscode/
+.githooks/
