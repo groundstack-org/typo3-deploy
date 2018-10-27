@@ -15,14 +15,17 @@ $router->get('/', function() {
     return view('app');
 });
 
-$router->group(['prefix' => 'api'], function ($router) {
+$router->group(['prefix' => 'api','namespace' => '\App\Http'], function($router) {
 
-    $router->group(['prefix' => 'v1'], function ($router) {
+    $router->group(['prefix' => 'v1','namespace' => 'V1\Controllers'], function($router) {
+
         $router->get('/deploy','DeployController@indexAction');
 
-        $router->get('/typo3/{id}','DeployController@getTypo3Action');
+        $router->get('/deploy/{id}','DeployController@indexAction');
 
-        $router->post('/typo3','DeployController@createTypo3Action');
+        $router->get('/download/typo3/{version}','DeployController@downloadTypo3VersionAction');
+
+        $router->post('/extract/{version}','DeployController@extractTypo3ArchiveAction');
 
         $router->put('/typo3/{id}','DeployController@updateTypo3Action');
 
