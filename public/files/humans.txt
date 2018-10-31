@@ -1,0 +1,19 @@
+/* TEAM */
+    Chef:
+    Contact: www.example.de
+    From: Passau, Bavaria, Germany
+
+    Web designer:
+    Contact: www.example.de
+    From: Bavaria, Germany
+
+    Developer: NAME
+    Contact: www.example.de
+    Facebook: FACEBOOK_LINK
+    From: Passau, Bavaria, Germany
+
+/* SITE */
+    Last update: 2018/02/04
+    Language: Deutsch / English
+    Standards: HTML5, CSS3
+    Software: Visual Studio Code, SourceTree, Chrome
