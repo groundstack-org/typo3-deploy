@@ -20,7 +20,7 @@ class ValidateHelper {
 
     }
 
-    private function valid_passord(string $password) {
+    static function valid_password(string $password) {
         // allowed: a - z, A - Z, 0 - 9, ?!#%$@-_
         $re = '/^(?=.*\d)(?=.*[@#\-_$%^&+=§!\?])(?=.*[a-z])(?=.*[A-Z])[0-9A-Za-z@#\-_$%^&+=§!\?]{8,200}$/m';
 

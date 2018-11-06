@@ -31,6 +31,10 @@ $router->group(['prefix' => 'api','namespace' => '\App\Http'], function($router)
 
         $router->post('/fileupload', 'DeployController@fileUploadAction');
 
+        $router->get("/test/system", "DeployController@testSystem");
+
+        $router->post("/test/db", "DeployController@testDB");
+
         // $router->post('/fileupload', function (Illuminate\Http\Request $request) {
         //     $file = $request->input('file');
         //     $result = App\Http\V1\Controllers\DeployController::fileUpload($file);
@@ -46,8 +50,6 @@ $router->group(['prefix' => 'api','namespace' => '\App\Http'], function($router)
         $router->delete('/typo3/{id}','DeployController@deleteTypo3Action');
 
         $router->get("/test/system/{arguments}/{test}", "DeployController@testSystem");
-
-        $router->get("/test/system", "DeployController@testSystem");
 
     });
 });

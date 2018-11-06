@@ -22,9 +22,24 @@
             <input type="submit" value="Hochladen">
         </form>
 
+        <form action="/api/v1/test/db" method="post" enctype="multipart/form-data">
+            <label for="dbname">Database name</label>
+            <input type="text" name="dbname" id="dbname"><br>
+            <label for="dbname">Database user</label>
+            <input type="text" name="dbuser" id="dbuser"><br>
+            <label for="dbname">Database password // allowed: a - z, A - Z, 0 - 9, ?!#%$@-_ // minimum 8 characters</label>
+            <input type="password" name="dbpassword" id="dbpassword"><br>
+            <label for="dbname">Database host</label>
+            <input type="text" name="dbhost" id="dbhost"><br>
+            <label for="dbname">Database port</label>
+            <input type="number" name="dbport" id="dbport"><br>
+            <input type="submit" value="testDB">
+        </form>
+
         <div class="">
             <!-- !! = for raw output without escaping -->
             @isset($message) {!! $message !!} @endisset
+            @isset($messageinfo) <div class="message-info">{!! $messageinfo !!}</div> @endisset
         </div>
 
         <router-view></router-view>

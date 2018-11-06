@@ -32,12 +32,12 @@ class testHelper extends Helper  {
         }
 
         try {
-            $conn = new PDO("mysql:host={$host}; dbname={$dbName}; port={$port}", $user, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+            $conn = new PDO("mysql:host={$host}; dbname={$dbName}; port={$port}", $user, $password,
+                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING)
+            );
             return true;
-        } catch(PDOException $e) {
-            return false;
+        } catch(\PDOException $e) {
+            return $e;
         }
     }
 }

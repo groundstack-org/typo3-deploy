@@ -4,6 +4,7 @@ namespace App\Http\V1\Controllers;
 
 use App\Http\V1\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\V1\Helpers\ValidateHelper as Validate;
 use App\Http\V1\Helpers\MessageHelper as Message;
 use App\Http\V1\Helpers\Helper;
 use App\Http\V1\Helpers\FilesHelper as Files;
@@ -78,11 +79,9 @@ class DeployController extends Controller
         $allowedFileType = "image/png";
 
         if(Files::fileUpload($request, "file", $destinationPath, $targetFileName, $allowedFileType)) {
-            return redirect()->route("app", [
-                "message" => Message::message("success", "File uploaded")
+            return view("app", [
+                "message" => Message::message("success", "File uploaded!")
             ]);
-
-            return redirect()->route("/")->with("message", "Login failed!");
         } else {
             return view("app", [
                 "message" => Message::message("error", "File not uploaded!")
@@ -95,12 +94,60 @@ class DeployController extends Controller
             echo $arg;
         }
 
-        // return view("app", ["test" => $arguments[0]]);
-
-        if(Test::testDBConnection("db", "root", "root", "localhost")) {
-            echo "geht";
+        $maxExecutionTime = ini_get('max_execution_time');
+        if ($maxExecutionTime < 240) {
+            echo "<p class='warning'>max_execution_time = {$maxExecutionTime} <span>(should be 240!)</span></p>";
         } else {
-            echo "geht nicht";
+            echo "<p class='success'>max_execution_time = {$maxExecutionTime}</p>";
+        }
+
+        $memory_limit = ini_get('memory_limit');
+        if ($memory_limit < 128) {
+            echo "<p class='warning'>memory_limit = {$memory_limit} <span>(should be 128!)</span></p>";
+        } else {
+            echo "<p class='success'>memory_limit = {$memory_limit}</p>";
+        }
+
+        $max_input_vars = ini_get('max_input_vars');
+        if ($max_input_vars < 1500) {
+            echo "<p class='warning'>max_input_vars = {$max_input_vars} <span>(should be 1500!)</span></p>";
+        } else {
+            echo "<p class='success'>max_input_vars = {$max_input_vars}</p>";
+        }
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            echo "<p class='warning'>Warning: it seems like this script is running under windows. Symlinks may not work! More info: <a href='https://wiki.typo3.org/Symlinks_on_Windows' title='create symlinks on windows'>Create symlinks on windows.</a></span></p>";
+        }
+    }
+
+    /**
+     *
+     */
+    public function testDB(Request $request) {
+        if ($request->isMethod('post')) {
+            $dbname = $request->input('dbname');
+            $dbuser = $request->input('dbuser');
+            $dbpassword = Validate::valid_password($request->input('dbpassword'));
+            $dbhost = $request->input('dbhost');
+            $dbport = $request->input('dbport');
+
+            $connection = Test::testDBConnection($dbname, $dbuser, $dbpassword, $dbhost, $dbport);
+
+            if($connection === true) {
+                return view("app", [
+                    "message" => Message::message("success", "Database connection established.")
+                ]);
+            } else {
+                $error = $connection->getMessage();
+                return view("app", [
+                    "message" => Message::message("error", "Database connection not established!"),
+                    "messageinfo" => Message::message("error", $error)
+                ]);
+            }
+        } else {
+            return view("app", [
+                "message" => Message::message("error", "only POST allowed!")
+            ]);
         }
     }
 }
