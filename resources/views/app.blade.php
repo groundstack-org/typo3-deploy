@@ -11,11 +11,21 @@
 <body>
     <h1>My App</h1>
     <div id="app">
-        <h1>Hello App! {{$test}}</h1>
+        <h1>Hello App! @isset($test) {{$test}} @endisset</h1>
         <p>
             <router-link to="/foo">Go to Foo</router-link>
             <router-link to="/bar">Go to Bar</router-link>
         </p>
+
+        <form action="/api/v1/fileupload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file"><br>
+            <input type="submit" value="Hochladen">
+        </form>
+
+        <div class="">
+            <!-- !! = for raw output without escaping -->
+            @isset($message) {!! $message !!} @endisset
+        </div>
 
         <router-view></router-view>
     </div>
