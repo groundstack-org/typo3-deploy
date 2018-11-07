@@ -23,23 +23,23 @@ class MessageHelper {
     static function message($class, $message) {
         switch ($class) {
             case 'info':
-                echo "<span class='info-msg'><i class='fa fa-info-circle'></i>{$message}</span>";
+                return "<span class='info-msg'><i class='fa fa-info-circle'></i>{$message}</span>";
                 break;
 
             case 'success':
-                echo "<span class='success-msg'><i class='fa fa-check'></i>{$message}</span>";
+                return "<span class='success-msg'><i class='fa fa-check'></i>{$message}</span>";
                 break;
 
             case 'warning':
-                echo "<span class='warning-msg'><i class='fa fa-warning'></i>{$message}</span>";
+                return "<span class='warning-msg'><i class='fa fa-warning'></i>{$message}</span>";
                 break;
 
             case 'error':
-                echo "<span class='error-msg'><i class='fa fa-times-circle'></i>{$message}</span>";
+                return "<span class='error-msg'><i class='fa fa-times-circle'></i>{$message}</span>";
                 break;
 
             default:
-                echo "<span class='{$class}'>{$message}</span>";
+                return "<span class='{$class}'>{$message}</span>";
                 break;
         }
     }

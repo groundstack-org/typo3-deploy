@@ -11,24 +11,45 @@
 |
 */
 
-$router->get('/', function() {
-    return view('app');
+// $router->get('/', function() {
+//     return view('app');
+// });
+
+$router->group(['namespace' => '\App\Http\V1\Controllers'], function($group) {
+    // id = optional parameter
+    // $group->get('/[{id}]', 'DeployController@indexAction');
+    $group->get('/', 'DeployController@indexAction');
 });
 
 $router->group(['prefix' => 'api','namespace' => '\App\Http'], function($router) {
 
     $router->group(['prefix' => 'v1','namespace' => 'V1\Controllers'], function($router) {
 
-        $router->get('/deploy','DeployController@indexAction');
-
-        $router->get('/deploy/{id}','DeployController@indexAction');
-
         $router->get('/download/typo3/{version}','DeployController@downloadTypo3VersionAction');
 
         $router->post('/extract/{version}','DeployController@extractTypo3ArchiveAction');
 
+        $router->post('/fileupload', 'DeployController@fileUploadAction');
+
+        $router->get("/test/system", "DeployController@testSystem");
+
+        $router->post("/test/db", "DeployController@testDB");
+
+        // $router->post('/fileupload', function (Illuminate\Http\Request $request) {
+        //     $file = $request->input('file');
+        //     $result = App\Http\V1\Controllers\DeployController::fileUpload($file);
+        //     return var_dump($result);
+        // });
+
+
+
+
+
         $router->put('/typo3/{id}','DeployController@updateTypo3Action');
 
         $router->delete('/typo3/{id}','DeployController@deleteTypo3Action');
+
+        $router->get("/test/system/{arguments}/{test}", "DeployController@testSystem");
+
     });
 });
