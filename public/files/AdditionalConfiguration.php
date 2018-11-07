@@ -74,6 +74,7 @@ if(\TYPO3\CMS\Core\Utility\GeneralUtility::getApplicationContext()->isDevelopmen
             'systemLog' => 'error_log',
             'systemLogLevel' => '2',
             'enableDeprecationLog' => 'file',
+            'cookieSecure' => 0,
             // disable Caching: https://usetypo3.com/did-you-know.html
             'caching' => [
                 'cacheConfigurations' => [
