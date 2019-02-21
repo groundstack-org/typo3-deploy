@@ -18,10 +18,10 @@ ServerSignature Off
 
 RewriteRule .? - [E=TYPO3_CONTEXT:Production]
 
-RewriteCond %{HTTP_HOST} ^(www\.)?preview.DOMAIN.TLD$
+RewriteCond %{HTTP_HOST} ^(www\.)?preview.(.*).TLD$
 RewriteRule .? - [E=TYPO3_CONTEXT:Development/Server]
 
-RewriteCond %{HTTP_HOST} ^(www\.)?DOMAIN\.localhost$ [NC]
+RewriteCond %{HTTP_HOST} ^(www\.)?(.*)\.localhost$ [NC]
 RewriteRule (.*) $1 [E=TYPO3_CONTEXT:Development]
 
 #####
